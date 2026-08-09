@@ -1811,4 +1811,13 @@ iframe {
     }
 }
 
+/* Global Website (Desktop Webview) Logo Sizing */
+.navbar .logo img {
+    height: 52px !important;
+    width: auto !important;
+    object-fit: contain !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+}
+
 

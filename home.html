@@ -38,11 +38,6 @@
 <body>
     <!-- Welcome Splash Screen Overlay -->
     <div id="welcome-splash" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f0fdf4; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: all;">
-        <script>
-            if (localStorage.getItem('cupcake_welcomed')) {
-                document.getElementById('welcome-splash').style.display = 'none';
-            }
-        </script>
         <div style="text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
             <!-- Logo image with scale-up and pulse animation -->
             <img src="assets/s7logo.png" alt="Welcome to Cupcake" class="splash-logo" style="width: 260px; max-width: 80%; object-fit: contain; filter: drop-shadow(0 10px 25px rgba(5, 150, 105, 0.15)); opacity: 0; transform: scale(0.85); animation: splashAppear 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, splashPulse 2s infinite ease-in-out 1.2s;">
@@ -121,7 +116,7 @@
 
     <nav class="navbar glass">
         <div class="logo">
-            <img src="smacklogo_home.png" alt="SMACK" style="height: 36px; object-fit: contain; background: transparent;">
+            <img src="smacklogo_home.png" alt="SMACK" style="height: 52px; object-fit: contain; background: transparent;">
         </div>
         <div class="nav-links">
             <a href="home.html" class="active">Home</a>
@@ -299,19 +294,14 @@
             // Welcome Splash Control
             const splash = document.getElementById('welcome-splash');
             if (splash) {
-                if (!localStorage.getItem('cupcake_welcomed')) {
-                    // Show splash screen for 3 seconds, then fade out
+                // Show splash screen for 2.5 seconds, then fade out
+                setTimeout(() => {
+                    splash.style.opacity = '0';
+                    splash.style.pointerEvents = 'none';
                     setTimeout(() => {
-                        splash.style.opacity = '0';
-                        splash.style.pointerEvents = 'none';
-                        setTimeout(() => {
-                            splash.remove();
-                        }, 800);
-                        localStorage.setItem('cupcake_welcomed', 'true');
-                    }, 3000);
-                } else {
-                    splash.remove();
-                }
+                        splash.remove();
+                    }, 800);
+                }, 2500);
             }
 
             // 1. Fetch User Data from Firestore
