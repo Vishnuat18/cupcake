@@ -1044,7 +1044,22 @@
                     }, remaining);
                 }).catch(err => {
                     console.error("PDF Load error:", err);
-                    loadingStatus.textContent = "Error loading PDF. Please try again.";
+                    setTimeout(() => {
+                        loadingOverlay.innerHTML = `
+                            <div style="text-align: center; padding: 2rem; animation: fadeIn 0.5s ease-out; max-width: 400px; margin: auto;">
+                                <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #f59e0b; margin-bottom: 1.5rem; display: block;"></i>
+                                <h2 style="font-family: 'Outfit'; font-weight: 700; font-size: 1.5rem; margin-bottom: 0.5rem; color: white;">Material Not Found</h2>
+                                <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.5rem;">The file for this resource has not been uploaded to the server yet.</p>
+                                <div style="font-size: 0.75rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 0.8rem; border-radius: 8px; color: var(--text-muted); text-align: left; margin-bottom: 2rem;">
+                                    <strong style="color: white; display: block; margin-bottom: 0.3rem;">Instructions for Admin:</strong>
+                                    Upload the PDF file to this path: <code style="color: var(--primary-light); font-weight: 700; word-break: break-all;">${url}</code>
+                                </div>
+                                <a href="subject_details.html?subject=${subject || ''}" class="glass" style="display: inline-block; padding: 0.8rem 1.5rem; border-radius: 12px; color: white; text-decoration: none; font-weight: 600; transition: var(--transition);">
+                                    <i class="fas fa-arrow-left" style="margin-right: 6px;"></i> Go Back
+                                </a>
+                            </div>
+                        `;
+                    }, 500);
                 });
 
             }
