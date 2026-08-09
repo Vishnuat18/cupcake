@@ -59,19 +59,26 @@ self.addEventListener('fetch', event => {
 
   event.respondWith(
     caches.open(CACHE_NAME).then(cache => {
-      return cache.match(event.request).then(response => {
-        const fetchPromise = fetch(event.request).then(networkResponse => {
-          // If network request is successful, update the cache
+      return cache.match(event.request).then(cachedResponse => {
+        if (cachedResponse) {
+          // If found in cache, return it immediately, and fetch new version in the background
+          fetch(event.request).then(networkResponse => {
+            if (networkResponse && networkResponse.status === 200) {
+              cache.put(event.request, networkResponse.clone());
+            }
+          }).catch(err => {
+              console.log('Background fetch failed:', err);
+          });
+          return cachedResponse;
+        }
+
+        // If not in cache, fetch from network and cache it
+        return fetch(event.request).then(networkResponse => {
           if (networkResponse && networkResponse.status === 200) {
             cache.put(event.request, networkResponse.clone());
           }
           return networkResponse;
-        }).catch(() => {
-            // If network fails, we already have the 'response' from cache if it existed
         });
-
-        // Return the cached response if available, else wait for the network
-        return response || fetchPromise;
       });
     })
   );
