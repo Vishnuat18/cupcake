@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users Info - Admin Console</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="smacklogo.png">
+</head>
+<body>
+    <header class="app-header glass">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <a href="admin.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <img src="smacklogo.png" alt="SMACK" class="mobile-hide-logo" style="width: 150px; object-fit: contain; border-radius: 6px;">
+            <div style="font-family: 'Outfit'; font-weight: 700; font-size: 1.1rem;">Users</div>
+        </div>
+        <div class="badge" style="background: rgba(99, 102, 241, 0.1); color: var(--primary-light); border: 1px solid var(--glass-border);">Students List</div>
+    </header>
+
+    <div class="container" style="padding-top: 1rem; padding-bottom: 5rem;">
+        <div class="dashboard-header" style="margin-bottom: 1.5rem;">
+            <h1>Registered Users</h1>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">View and manage portal students and administrators.</p>
+        </div>
+
+        <div id="tables-container">
+            <div style="text-align: center; padding: 3rem;">Loading Users Info...</div>
+        </div>
+    </div>
+
+    <!-- Admin Mobile Nav -->
+    <!-- Premium Mobile Nav -->
+    <div class="mobile-nav">
+        <a href="home.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="resources.html" class="nav-item">
+            <i class="fas fa-book-open"></i>
+            <span>Materials</span>
+        </a>
+        <a href="admin.html" class="nav-item active">
+            <i class="fas fa-user-shield"></i>
+            <span>Admin</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+        </a>
+    </div>
+
+    <script type="module" src="script.js"></script>
+    <script type="module">
+        import { auth, fs, doc, getDoc, collection, getDocs, updateDoc } from "./firebase-config.js";
+        import { girlEmails } from "./materials.js";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const tablesContainer = document.getElementById('tables-container');
+
+            auth.onAuthStateChanged(async (user) => {
+                if (user) {
+                    try {
+                        const isAdmin = user.email === 'vishnurajan24766@gmail.com';
+                        if (isAdmin) {
+                            syncUsersList();
+                        } else {
+                            location.href = "home.html";
+                        }
+                    } catch (error) {
+                        console.error("Admin check error:", error);
+                        location.href = "home.html";
+                    }
+                } else {
+                    location.href = "index.html";
+                }
+            });
+
+            window.assignGender = async function(uid, gender) {
+                try {
+                    await updateDoc(doc(fs, "users", uid), { gender: gender });
+                    alert(`Assigned user as ${gender.toUpperCase()}!`);
+                    syncUsersList();
+                } catch (error) {
+                    console.error("Error assigning gender:", error);
+                    alert("Failed to assign gender.");
+                }
+            };
+
+            function renderUserRow(u, isNew) {
+                const joinedDate = u.createdAt ? new Date(u.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '---';
+                
+                // Strictly enforce role display: Only one specific email is admin
+                const userRole = u.email === 'vishnurajan24766@gmail.com' ? 'admin' : 'student';
+                const badgeColor = userRole === 'admin' ? '#10b981' : 'var(--primary)';
+                const badgeBg = userRole === 'admin' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(99, 102, 241, 0.1)';
+
+                let actionBtn = `<button class="btn glass" onclick="alert('User editing not yet enabled')" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; width: auto;">Edit</button>`;
+                if (isNew) {
+                    actionBtn = `
+                        <button class="btn" onclick="window.assignGender('${u.uid}', 'boy')" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; background: #3b82f6; border: none; color: white;">Boy</button>
+                        <button class="btn" onclick="window.assignGender('${u.uid}', 'girl')" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; background: #ec4899; border: none; color: white; margin-left: 0.5rem;">Girl</button>
+                    `;
+                }
+
+                return `
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 1rem; font-weight: 600;">${u.name || 'Anonymous'}</td>
+                        <td style="padding: 1rem; color: var(--text-muted);">${u.email}</td>
+                        <td style="padding: 1rem;">
+                            <div class="role-badge" style="background: ${badgeBg}; color: ${badgeColor}; border: 1px solid ${badgeColor}40;">
+                                ${userRole.toUpperCase()}
+                            </div>
+                        </td>
+                        <td style="padding: 1rem; font-size: 0.85rem; color: var(--text-muted);">${joinedDate}</td>
+                        <td style="padding: 1rem;">
+                            <div style="font-weight: 800; color: var(--accent); font-size: 1rem;">${u.latestCGPA || '0.00'}</div>
+                            <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">
+                                ${[1,2,3,4,5,6,7,8].map(i => u[`sem${i}GPA`] ? `S${i}:${u[`sem${i}GPA`]}` : '').filter(v => v).join(' | ')}
+                            </div>
+                        </td>
+                        <td style="padding: 1rem; display: flex; align-items: center; gap: 0.5rem;">${actionBtn}</td>
+                    </tr>
+                `;
+            }
+
+            function generateTableHTML(title, users, color, id, isVisible, isNew) {
+                let rows = '';
+                if (users.length > 0) {
+                    users.forEach(u => { rows += renderUserRow(u, isNew); });
+                } else {
+                    rows = `<tr><td colspan="5" style="text-align: center; padding: 2rem;">No users found in this category.</td></tr>`;
+                }
+
+                return `
+                    <div id="${id}" class="glass" style="border-radius: var(--radius-lg); overflow-x: auto; padding: 1rem; margin-bottom: 2rem; display: ${isVisible ? 'block' : 'none'};">
+                        <h2 style="padding: 1rem; margin: 0; color: ${color}; font-family: 'Outfit';">${title} (${users.length})</h2>
+                        <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                            <thead style="border-bottom: 1px solid var(--glass-border);">
+                                <tr>
+                                    <th style="padding: 1rem; text-align: left; color: var(--text-muted);">Name</th>
+                                    <th style="padding: 1rem; text-align: left; color: var(--text-muted);">Email</th>
+                                    <th style="padding: 1rem; text-align: left; color: var(--text-muted);">Role</th>
+                                    <th style="padding: 1rem; text-align: left; color: var(--text-muted);">Joined</th>
+                                    <th style="padding: 1rem; text-align: left; color: var(--text-muted);">Academic Standing</th>
+                                    <th style="padding: 1rem; text-align: left; color: var(--text-muted);">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${rows}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+
+            async function syncUsersList() {
+                try {
+                    const querySnapshot = await getDocs(collection(fs, "users"));
+                    if (!querySnapshot.empty) {
+                        const boys = [];
+                        const girls = [];
+                        const newUsers = [];
+                        
+                        querySnapshot.forEach((doc) => {
+                            const u = doc.data();
+                            u.uid = doc.id;
+                            
+                            if (u.gender === 'unassigned') {
+                                newUsers.push(u);
+                            } else if (u.gender === 'girl' || (!u.gender && girlEmails.includes(u.email))) {
+                                girls.push(u);
+                            } else {
+                                boys.push(u);
+                            }
+                        });
+
+                        tablesContainer.innerHTML = `
+                            <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                                <button id="toggle-boys" class="btn" style="background: #3b82f6; border-radius: 50px; padding: 0.5rem 2.5rem; color: white; border: none; font-weight: 600; cursor: pointer; transition: var(--transition);">Boys</button>
+                                <button id="toggle-girls" class="btn glass" style="border-radius: 50px; padding: 0.5rem 2.5rem; color: var(--text-main); font-weight: 600; cursor: pointer; transition: var(--transition);">Girls</button>
+                                <button id="toggle-new" class="btn glass" style="border-radius: 50px; padding: 0.5rem 2.5rem; color: var(--text-main); font-weight: 600; cursor: pointer; transition: var(--transition); position: relative;">
+                                    New Users 
+                                    ${newUsers.length > 0 ? `<span style="background: #ef4444; color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.7rem; position: absolute; top: -5px; right: -5px;">${newUsers.length}</span>` : ''}
+                                </button>
+                            </div>
+                        ` + 
+                        generateTableHTML('Boys', boys, '#3b82f6', 'table-boys', true, false) +
+                        generateTableHTML('Girls', girls, '#ec4899', 'table-girls', false, false) +
+                        generateTableHTML('New Users', newUsers, '#10b981', 'table-new', false, true);
+
+                        const toggleBoys = document.getElementById('toggle-boys');
+                        const toggleGirls = document.getElementById('toggle-girls');
+                        const toggleNew = document.getElementById('toggle-new');
+                        const tableBoys = document.getElementById('table-boys');
+                        const tableGirls = document.getElementById('table-girls');
+                        const tableNew = document.getElementById('table-new');
+
+                        function resetToggles() {
+                            toggleBoys.className = 'btn glass';
+                            toggleBoys.style.background = 'transparent';
+                            toggleBoys.style.color = 'var(--text-main)';
+                            
+                            toggleGirls.className = 'btn glass';
+                            toggleGirls.style.background = 'transparent';
+                            toggleGirls.style.color = 'var(--text-main)';
+                            
+                            toggleNew.className = 'btn glass';
+                            toggleNew.style.background = 'transparent';
+                            toggleNew.style.color = 'var(--text-main)';
+                            
+                            tableBoys.style.display = 'none';
+                            tableGirls.style.display = 'none';
+                            tableNew.style.display = 'none';
+                        }
+
+                        toggleBoys.addEventListener('click', () => {
+                            resetToggles();
+                            tableBoys.style.display = 'block';
+                            toggleBoys.className = 'btn';
+                            toggleBoys.style.background = '#3b82f6';
+                            toggleBoys.style.color = 'white';
+                            toggleBoys.style.border = 'none';
+                        });
+
+                        toggleGirls.addEventListener('click', () => {
+                            resetToggles();
+                            tableGirls.style.display = 'block';
+                            toggleGirls.className = 'btn';
+                            toggleGirls.style.background = '#ec4899';
+                            toggleGirls.style.color = 'white';
+                            toggleGirls.style.border = 'none';
+                        });
+
+                        toggleNew.addEventListener('click', () => {
+                            resetToggles();
+                            tableNew.style.display = 'block';
+                            toggleNew.className = 'btn';
+                            toggleNew.style.background = '#10b981';
+                            toggleNew.style.color = 'white';
+                            toggleNew.style.border = 'none';
+                        });
+
+                    } else {
+                        tablesContainer.innerHTML = '<div style="text-align: center; padding: 3rem;">No users found.</div>';
+                    }
+                } catch (error) {
+                    console.error("Error fetching users:", error);
+                    tablesContainer.innerHTML = '<div style="text-align: center; padding: 3rem; color: #ef4444;">Error loading users list.</div>';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+

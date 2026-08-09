@@ -1,0 +1,21 @@
+{
+  "name": "Cupcake Semester 7 Notes",
+  "short_name": "Cupcake",
+  "description": "Semester 7 Notes Portal with dark glassmorphism UI.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "smacklogo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "smacklogo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

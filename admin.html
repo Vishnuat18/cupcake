@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Cupcake Notes</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="smacklogo.png">
+</head>
+<body>
+    <nav class="navbar glass">
+        <div class="logo">
+            <img src="smacklogo_home.png" alt="SMACK" style="width: 140px; object-fit: contain; border-radius: 8px;">
+        </div>
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="resources.html">Materials</a>
+            <a href="admin.html" class="active">Admin Panel</a>
+        </div>
+        <div class="nav-right">
+            <a href="profile.html" class="profile-link" style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-main); font-weight: 600; text-decoration: none;">
+                <div id="nav-avatar" style="width: 42px; aspect-ratio: 1/1; object-fit: contain; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: white;">U</div>
+                <span id="nav-user-name" style="font-size: 0.9rem;">Profile</span>
+            </a>
+            <a href="index.html" class="logout" style="color: var(--text-muted); font-size: 1.1rem; transition: var(--transition);"><i class="fas fa-sign-out-alt"></i></a>
+        </div>
+    </nav>
+
+    <header class="app-header glass">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <a href="home.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <img src="smacklogo_home.png" alt="SMACK" class="mobile-hide-logo" style="width: 150px; object-fit: contain; border-radius: 6px;">
+            <div style="font-family: 'Outfit'; font-weight: 700; font-size: 1.1rem;">Admin</div>
+        </div>
+        <div class="badge" style="background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2);">Live Stats</div>
+    </header>
+
+    <div class="container" style="padding-top: 1rem; padding-bottom: 5rem;">
+        <div class="dashboard-header" style="margin-bottom: 2rem;">
+            <h1>Management Overview</h1>
+            <p style="color: var(--text-muted);">Real-time statistics and portal analytics for the admin.</p>
+        </div>
+
+        <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+            <div class="stat-card glass" style="padding: 1.5rem; border-radius: var(--radius-md); text-align: center;">
+                <h2 id="stat-users" style="font-size: 2rem; color: var(--primary-light);">...</h2>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Total Users</p>
+            </div>
+            <div class="stat-card glass" style="padding: 1.5rem; border-radius: var(--radius-md); text-align: center;">
+                <h2 style="font-size: 2rem; color: var(--secondary);">42</h2>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Materials</p>
+            </div>
+            <div class="stat-card glass" style="padding: 1.5rem; border-radius: var(--radius-md); text-align: center;">
+                <h2 style="font-size: 2rem; color: var(--accent);">6</h2>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Subjects</p>
+            </div>
+        </div>
+
+        <div class="glass" style="padding: 1.5rem; border-radius: var(--radius-lg);">
+            <h3 style="margin-bottom: 1rem;"><i class="fas fa-bolt" style="color: #fbbf24;"></i> Quick Actions</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
+                <a href="admin_users.html" class="menu-item glass" style="padding: 1rem; text-decoration: none; display: flex; align-items: center; gap: 1rem; border-radius: var(--radius-sm); color: var(--text-main);">
+                    <i class="fas fa-users" style="color: var(--primary-light);"></i>
+                    <span>Manage Users</span>
+                </a>
+                <a href="admin_upload.html" class="menu-item glass" style="padding: 1rem; text-decoration: none; display: flex; align-items: center; gap: 1rem; border-radius: var(--radius-sm); color: var(--text-main);">
+                    <i class="fas fa-cloud-upload-alt" style="color: var(--secondary);"></i>
+                    <span>Upload New</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Feedback Display Section -->
+        <div class="glass" style="padding: 1.5rem; border-radius: var(--radius-lg); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem;">
+                <h3 style="margin: 0;"><i class="fas fa-comments" style="color: var(--secondary);"></i> User Feedback</h3>
+                <span id="feedback-count" class="badge" style="background: rgba(236, 72, 153, 0.1); color: var(--secondary);">0 Total</span>
+            </div>
+            <div id="feedback-list" style="display: flex; flex-direction: column; gap: 1rem; max-height: 400px; overflow-y: auto; padding-right: 0.5rem;" class="no-scrollbar">
+                <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+                    <p>Loading feedback...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exam Reviews Section -->
+        <div class="glass" style="padding: 1.5rem; border-radius: var(--radius-lg); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem;">
+                <h3 style="margin: 0;"><i class="fas fa-graduation-cap" style="color: #fbbf24;"></i> Post-Exam Reviews</h3>
+                <span id="exam-reviews-count" class="badge" style="background: rgba(251, 191, 36, 0.1); color: #fbbf24;">0 Total</span>
+            </div>
+            <div id="exam-reviews-list" style="display: flex; flex-direction: column; gap: 1rem; max-height: 400px; overflow-y: auto; padding-right: 0.5rem;" class="no-scrollbar">
+                <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+                    <p>Loading reviews...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Premium Mobile Nav -->
+    <div class="mobile-nav">
+        <a href="home.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="resources.html" class="nav-item">
+            <i class="fas fa-book-open"></i>
+            <span>Materials</span>
+        </a>
+        <a href="admin.html" class="nav-item active">
+            <i class="fas fa-user-shield"></i>
+            <span>Admin</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+        </a>
+    </div>
+
+    <script type="module" src="script.js"></script>
+    <script type="module">
+        import { auth, fs, doc, getDoc, collection, getDocs, query, orderBy, deleteDoc, where } from "./firebase-config.js";
+        import { subjectMaterials } from "./materials.js";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Guard Logic: Check Firestore role
+            auth.onAuthStateChanged(async (user) => {
+                if (user) {
+                    try {
+                        const isAdmin = user.email === 'vishnurajan24766@gmail.com';
+                        
+                        if (isAdmin) {
+                            syncDashboard();
+                        } else {
+                            location.href = "home.html";
+                        }
+                    } catch (error) {
+                        console.error("Admin check error:", error);
+                        location.href = "home.html";
+                    }
+                } else {
+                    location.href = "index.html";
+                }
+            });
+
+            async function syncDashboard() {
+                const statsUsers = document.getElementById('stat-users');
+                const statsMaterials = document.querySelectorAll('.stat-card h2')[1];
+                const statsSubjects = document.querySelectorAll('.stat-card h2')[2];
+
+                try {
+                    // 1. Fetch Users count
+                    const usersSnap = await getDocs(collection(fs, "users"));
+                    statsUsers.textContent = usersSnap.size;
+
+                    // 2. Calculate Materials & Subjects
+                    const subjects = Object.keys(subjectMaterials);
+                    let totalMaterials = 0;
+                    subjects.forEach(sub => {
+                        if (subjectMaterials[sub] && subjectMaterials[sub].materials) {
+                            totalMaterials += subjectMaterials[sub].materials.length;
+                        }
+                    });
+
+                    statsSubjects.textContent = subjects.length;
+                    statsMaterials.textContent = totalMaterials;
+
+                    // 3. Fetch and render feedback
+                    syncFeedback();
+
+                    // 4. Fetch and render exam reviews
+                    syncExamReviews();
+                } catch (error) {
+                    console.error("Error fetching stats:", error);
+                    statsUsers.textContent = "0";
+                    statsMaterials.textContent = "42"; // Fallback
+                    statsSubjects.textContent = "6"; // Fallback
+                }
+            }
+
+            async function syncFeedback() {
+                const feedbackList = document.getElementById('feedback-list');
+                const feedbackCount = document.getElementById('feedback-count');
+
+                try {
+                    const q = query(collection(fs, "feedback"), orderBy("timestamp", "desc"));
+                    const querySnapshot = await getDocs(q);
+                    
+                    feedbackCount.textContent = `${querySnapshot.size} Total`;
+                    feedbackList.innerHTML = '';
+                    
+                    if (querySnapshot.empty) {
+                        feedbackList.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--text-muted);">No feedback yet.</div>';
+                        return;
+                    }
+
+                    querySnapshot.forEach((doc) => {
+                        const feedback = doc.data();
+                        const dateStr = feedback.timestamp ? feedback.timestamp.toDate().toLocaleString() : "Recently";
+                        
+                        const item = document.createElement('div');
+                        item.className = 'glass';
+                        item.style.padding = '1rem';
+                        item.style.borderRadius = 'var(--radius-sm)';
+                        item.style.borderLeft = '3px solid var(--secondary)';
+                        
+                        item.innerHTML = `
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+                                <strong>${feedback.userName}</strong>
+                                <span style="font-size: 0.8rem; color: var(--text-muted);">${dateStr}</span>
+                            </div>
+                            <div style="color: var(--text-main); font-size: 0.95rem; line-height: 1.5; word-wrap: break-word;">
+                                ${feedback.message}
+                            </div>
+                        `;
+                        feedbackList.appendChild(item);
+                    });
+                } catch (error) {
+                    console.error("Error fetching feedback:", error);
+                    feedbackList.innerHTML = '<div style="text-align: center; padding: 2rem; color: #ef4444;">Error loading feedback. Check Firestore permissions.</div>';
+                }
+            }
+
+            async function syncExamReviews() {
+                const reviewsList = document.getElementById('exam-reviews-list');
+                const reviewsCount = document.getElementById('exam-reviews-count');
+
+                try {
+                    // One-time cleanup for old VCE Exam data
+                    try {
+                        const oldQ1 = query(collection(fs, "exam_reviews"), where("examName", "==", "VCE Exam"));
+                        const oldQ2 = query(collection(fs, "exam_reviews"), where("examName", "==", "VCE Exam "));
+                        
+                        const [snap1, snap2] = await Promise.all([getDocs(oldQ1), getDocs(oldQ2)]);
+                        const delPromises = [];
+                        
+                        snap1.forEach(d => delPromises.push(deleteDoc(doc(fs, "exam_reviews", d.id))));
+                        snap2.forEach(d => delPromises.push(deleteDoc(doc(fs, "exam_reviews", d.id))));
+                        
+                        if (delPromises.length > 0) {
+                            await Promise.all(delPromises);
+                        }
+                    } catch(e) { console.error("Auto delete failed", e); }
+
+                    const querySnapshot = await getDocs(collection(fs, "exam_reviews"));
+                    
+                    reviewsCount.textContent = `${querySnapshot.size} Total`;
+                    
+                    if (querySnapshot.empty) {
+                        reviewsList.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--text-muted);">No exam reviews yet.</div>';
+                        return;
+                    }
+
+                    // Group by exam name
+                    const examsMap = {};
+                    querySnapshot.forEach((doc) => {
+                        const review = doc.data();
+                        
+                        // Ignore any stragglers immediately
+                        if (review.examName === "VCE Exam" || review.examName === "VCE Exam ") return;
+
+                        if (!examsMap[review.examName]) {
+                            examsMap[review.examName] = [];
+                        }
+                        examsMap[review.examName].push(review);
+                    });
+
+                    reviewsList.innerHTML = '';
+                    
+                    // Render grouped UI (Clickable cards to separate pages)
+                    Object.keys(examsMap).forEach(examName => {
+                        const reviews = examsMap[examName];
+                        
+                        const examCard = document.createElement('div');
+                        examCard.className = 'glass';
+                        examCard.style.marginBottom = '1rem';
+                        examCard.style.borderRadius = 'var(--radius-md)';
+                        examCard.style.padding = '1rem 1.2rem';
+                        examCard.style.display = 'flex';
+                        examCard.style.justifyContent = 'space-between';
+                        examCard.style.alignItems = 'center';
+                        examCard.style.cursor = 'pointer';
+                        examCard.style.background = 'rgba(255, 255, 255, 0.05)';
+                        examCard.style.transition = 'transform 0.2s ease, border-color 0.2s ease';
+                        
+                        // Add hover effect
+                        examCard.onmouseover = () => { examCard.style.borderColor = 'rgba(251, 191, 36, 0.5)'; };
+                        examCard.onmouseout = () => { examCard.style.borderColor = 'var(--glass-border)'; };
+
+                        examCard.onclick = () => {
+                            location.href = `admin_exam_reviews.html?examName=${encodeURIComponent(examName)}`;
+                        };
+
+                        examCard.innerHTML = `
+                            <div style="display: flex; align-items: center; gap: 0.8rem;">
+                                <i class="fas fa-graduation-cap" style="color: #fbbf24; font-size: 1.2rem;"></i>
+                                <span style="font-weight: 700; color: white;">${examName}</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <span class="badge" style="background: rgba(251, 191, 36, 0.2); color: #fbbf24;">${reviews.length} Reviews</span>
+                                <i class="fas fa-chevron-right" style="color: var(--text-muted);"></i>
+                            </div>
+                        `;
+
+                        reviewsList.appendChild(examCard);
+                    });
+                } catch (error) {
+                    console.error("Error fetching exam reviews:", error);
+                    reviewsList.innerHTML = '<div style="text-align: center; padding: 2rem; color: #ef4444;">Error loading reviews. Check Firestore permissions.</div>';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+

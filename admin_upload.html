@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Material - Admin Console</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="smacklogo.png">
+</head>
+<body>
+    <header class="app-header glass">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <a href="admin.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <img src="smacklogo_home.png" alt="SMACK" class="mobile-hide-logo" style="width: 150px; object-fit: contain; border-radius: 6px;">
+            <div style="font-family: 'Outfit'; font-weight: 700; font-size: 1.1rem;">Upload</div>
+        </div>
+        <div class="badge" style="background: rgba(236, 72, 153, 0.1); color: var(--secondary); border: 1px solid var(--glass-border);">New Upload</div>
+    </header>
+
+    <div class="container" style="padding-top: 1rem; padding-bottom: 5rem;">
+        <div class="dashboard-header" style="margin-bottom: 1.5rem;">
+            <h1>Upload Study Material</h1>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Add new resources, PDFs, or previous year question papers.</p>
+        </div>
+
+        <div class="glass" style="padding: 2.5rem; border-radius: var(--radius-lg); max-width: 650px; margin: 0 auto;">
+            <form id="admin-upload-form">
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display:block; margin-bottom: 0.5rem; font-weight: 600;">Material Title</label>
+                    <input type="text" id="upload-title" placeholder="e.g. Unit 4 - Risk Management" required>
+                </div>
+                
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display:block; margin-bottom: 0.5rem; font-weight: 600;">Select Subject</label>
+                    <select id="upload-subject" required 
+                        style="width: 100%; padding: 0.8rem; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); border-radius: var(--radius-sm); color: var(--text-main); font-family: inherit;">
+                        <optgroup label="Semester 7" style="background: #0f172a; color: var(--primary-light);">
+                            <option value="itas">ITAS - IT in Agricultural System (AI3021)</option>
+                            <option value="pom">PoM - Principles of Management (GE3751)</option>
+                            <option value="hve">HVE - Human Values and Ethics (GE3791)</option>
+                            <option value="prw">PRW - Project Report Writing (OHS352)</option>
+                            <option value="ece">ECE - English for Competitive Examinations (OHS551)</option>
+                        </optgroup>
+                        <optgroup label="Semester 6" style="background: #0f172a; color: var(--text-muted);">
+                            <option value="oose">OOSE - Object Oriented Software Engineering (CCS356)</option>
+                            <option value="vce">VCE - Video Creation and Editing (CCS371)</option>
+                            <option value="esia">ESIA - Environmental and Social Impact Assessment (OCE351)</option>
+                            <option value="ppl">PPL - Principles of Programming Language (CCS358)</option>
+                            <option value="ba">BA - Business Analytics (CCW331)</option>
+                            <option value="eh">EH - Ethical Hacking (CCS344)</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display:block; margin-bottom: 0.5rem; font-weight: 600;">File Selection (PDF)</label>
+                    <input type="file" id="upload-file" accept=".pdf" required
+                        style="padding: 0.6rem; background: transparent; border: 1px dashed var(--glass-border); cursor: pointer;">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 2rem;">
+                    <label style="display:block; margin-bottom: 0.5rem; font-weight: 600;">Short Description</label>
+                    <textarea id="upload-desc" rows="3" placeholder="Brief summary of the document contents..."
+                        style="width: 100%; padding: 0.8rem; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); border-radius: var(--radius-sm); color: var(--text-main); font-family: inherit;"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; border-radius: var(--radius-md);">
+                    <i class="fas fa-cloud-upload-alt"></i> Publish to Portal
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Mobile Nav -->
+    <!-- Premium Mobile Nav -->
+    <div class="mobile-nav">
+        <a href="home.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="resources.html" class="nav-item">
+            <i class="fas fa-book-open"></i>
+            <span>Materials</span>
+        </a>
+        <a href="admin.html" class="nav-item active">
+            <i class="fas fa-user-shield"></i>
+            <span>Admin</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+        </a>
+    </div>
+
+    <script type="module" src="script.js"></script>
+    <script type="module">
+        import { auth, fs, doc, getDoc } from "./firebase-config.js";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const uploadForm = document.getElementById('admin-upload-form');
+
+            auth.onAuthStateChanged(async (user) => {
+                if (user) {
+                    try {
+                        const isAdmin = user.email === 'vishnurajan24766@gmail.com';
+                        if (isAdmin) {
+                            // Authorized admin
+                        } else {
+                            location.href = "home.html";
+                        }
+                    } catch (error) {
+                        console.error("Admin check error:", error);
+                        location.href = "home.html";
+                    }
+                } else {
+                    location.href = "index.html";
+                }
+            });
+
+            uploadForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert(`Upload Simulation: Successfully published your new material to the portal database.`);
+                uploadForm.reset();
+            });
+        });
+    </script>
+</body>
+</html>
+

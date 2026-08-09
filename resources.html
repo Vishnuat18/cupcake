@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tools - Cupcake Notes</title>
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Resource Hints for Ultra-Fast Loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="preload" href="smacklogo_home.png" as="image">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="smacklogo.png">
+</head>
+<body>
+    <nav class="navbar glass">
+        <div class="logo">
+            <img src="smacklogo_home.png" alt="SMACK" style="width: 140px; object-fit: contain; border-radius: 8px;">
+        </div>
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="resources.html" class="active">Tools</a>
+            <a href="admin.html" class="admin-only" style="display: none;">Admin Panel</a>
+        </div>
+        <div class="nav-right">
+            <a href="profile.html" class="profile-link" style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-main); font-weight: 600; text-decoration: none;">
+                <div id="nav-avatar" style="width: 42px; aspect-ratio: 1/1; object-fit: contain; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: white;">U</div>
+                <span id="nav-user-name" style="font-size: 0.9rem;">Profile</span>
+            </a>
+            <a href="index.html" class="logout" style="color: var(--text-muted); font-size: 1.1rem; transition: var(--transition);"><i class="fas fa-sign-out-alt"></i></a>
+        </div>
+    </nav>
+
+    <header class="app-header glass">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <a href="home.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <img src="smacklogo_home.png" alt="SMACK" class="mobile-hide-logo" style="width: 150px; object-fit: contain; border-radius: 6px;">
+            <div style="font-family: 'Outfit'; font-weight: 700; font-size: 1.1rem;">Tools</div>
+        </div>
+        <a href="profile.html" id="nav-avatar-header" style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; font-weight: 700;">?</a>
+    </header>
+
+    <div class="container" style="padding-bottom: 5rem;">
+        <div class="dashboard-header" style="margin-bottom: 2rem;">
+            <h1>Academic Tools</h1>
+            <p style="color: var(--text-muted);">Access your GPA Companion, previous year papers, and specialized revision notes.</p>
+        </div>
+
+        <div class="subject-grid" id="resources-grid">
+            <!-- Academic Companion (GPA/CGPA) Card -->
+            <div class="subject-card glass" id="gpa-card" onclick="location.href='gpa.html'" style="cursor: pointer; border: 1px solid rgba(5, 150, 105, 0.2); background: rgba(5, 150, 105, 0.05);">
+                <div class="badge-premium" style="color: var(--primary); border-color: rgba(5, 150, 105, 0.2); background: rgba(5, 150, 105, 0.1);">Premium</div>
+                <i class="fas fa-chart-pie" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+                <h3>Academic Companion</h3>
+                <p>Track your GPA/CGPA, analyze performance trends, and manage your profile.</p>
+                <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem;">
+                    <span style="color: var(--text-muted);">IT Dept Tool</span>
+                    <span style="color: var(--primary); font-weight: 700;">Launch App <i class="fas fa-external-link-alt" style="font-size: 0.7rem; margin-left: 4px;"></i></span>
+                </div>
+            </div>
+
+            <!-- Previous Year QPs Card -->
+            <div class="subject-card glass" id="prev-year-card" style="cursor: pointer;">
+                <div class="badge-premium" style="color: var(--secondary); border-color: rgba(244, 63, 94, 0.3);">Active</div>
+                <i class="fas fa-file-signature"></i>
+                <h3>Previous Year QPs</h3>
+                <p>Access university question papers from previous years for all subjects.</p>
+                <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem;">
+                    <span style="color: var(--text-muted);">Question Bank</span>
+                    <span style="color: var(--secondary); font-weight: 700;">View all <i class="fas fa-arrow-right" style="font-size: 0.7rem; margin-left: 4px;"></i></span>
+                </div>
+            </div>
+
+            <!-- Important Qns Card -->
+            <div class="subject-card glass" id="important-card" style="cursor: pointer;">
+                <div class="badge-premium" style="color: var(--accent); border-color: rgba(16, 185, 129, 0.3);">Active</div>
+                <i class="fas fa-award"></i>
+                <h3>Important Qns</h3>
+                <p>Hand-picked questions based on frequency and university importance.</p>
+                <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem;">
+                    <span style="color: var(--text-muted);">Exam Focus</span>
+                    <span style="color: var(--accent); font-weight: 700;">View all <i class="fas fa-arrow-right" style="font-size: 0.7rem; margin-left: 4px;"></i></span>
+                </div>
+            </div>
+
+            <!-- 2-Mark Notes Card -->
+            <div class="subject-card glass" id="2marks-card" style="cursor: pointer;">
+                <div class="badge-premium" style="color: var(--primary-light); border-color: rgba(129, 140, 248, 0.3);">Active</div>
+                <i class="fas fa-bolt"></i>
+                <h3>2-Mark Notes</h3>
+                <p>Concise notes specifically targeted for Part-A (2 marks) questions.</p>
+                <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem;">
+                    <span style="color: var(--text-muted);">Quick Revision</span>
+                    <span style="color: var(--primary-light); font-weight: 700;">View all <i class="fas fa-arrow-right" style="font-size: 0.7rem; margin-left: 4px;"></i></span>
+                </div>
+            </div>
+
+            <!-- Semester 6 Archives Card -->
+            <div class="subject-card glass" id="sem6-archive-card" style="cursor: pointer; border: 1px solid rgba(5, 150, 105, 0.2); background: rgba(5, 150, 105, 0.05);">
+                <div class="badge-premium" style="color: var(--primary); border-color: rgba(5, 150, 105, 0.2); background: rgba(5, 150, 105, 0.1);">Archive</div>
+                <i class="fas fa-folder-open" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+                <h3>Semester 6 Archives</h3>
+                <p>Access notes, question banks, and revision materials for Semester 6 subjects.</p>
+                <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem;">
+                    <span style="color: var(--text-muted);">S6 Materials</span>
+                    <span style="color: var(--primary); font-weight: 700;">Explore Folder <i class="fas fa-arrow-right" style="font-size: 0.7rem; margin-left: 4px;"></i></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dynamic List Section -->
+        <div id="filtered-resources-section" style="display: none; margin-top: 3rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+                <h2 id="filtered-title" style="font-family: 'Outfit';">2-Mark Master List</h2>
+                <button id="close-filtered" class="glass" style="padding: 0.5rem 1rem; border: none; border-radius: 8px; color: var(--text-main); cursor: pointer;">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            <div id="filtered-list" class="resource-list">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Nav Foot -->
+    <div class="mobile-nav">
+        <a href="home.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="resources.html" class="nav-item active">
+            <i class="fas fa-wrench"></i>
+            <span>Tools</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+        </a>
+    </div>
+
+    <script type="module" src="script.js"></script>
+    <script type="module">
+        import { auth, fs, doc, getDoc } from "./firebase-config.js";
+        import { subjectMaterials } from "./materials.js";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            auth.onAuthStateChanged(async (user) => {
+                if (user) {
+                    try {
+                        const userDoc = await getDoc(doc(fs, "users", user.uid));
+                        if (userDoc.exists()) {
+                            const data = userDoc.data();
+                             document.getElementById('nav-avatar-header').textContent = data.name.charAt(0).toUpperCase();
+                            
+                            // Role-based UI visibility
+                            const adminLinks = document.querySelectorAll('a[href="admin.html"]');
+                            const adminBtn = document.getElementById('mobile-admin-btn');
+                            if (data.role === 'admin') {
+                                adminLinks.forEach(link => link.style.display = 'flex');
+                                if (adminBtn) adminBtn.style.display = 'flex';
+                            } else {
+                                adminLinks.forEach(link => link.style.display = 'none');
+                                if (adminBtn) adminBtn.style.display = 'none';
+                            }
+                        }
+                    } catch (error) {
+                        console.error("Error loading profile:", error);
+                    }
+                }
+            });
+
+            // Filtering Logic
+            const marksCard = document.getElementById('2marks-card');
+            const prevYearCard = document.getElementById('prev-year-card');
+            const importantCard = document.getElementById('important-card');
+            const filteredSection = document.getElementById('filtered-resources-section');
+            const filteredList = document.getElementById('filtered-list');
+            const filteredTitle = document.getElementById('filtered-title');
+            const closeBtn = document.getElementById('close-filtered');
+            const resourcesGrid = document.getElementById('resources-grid');
+
+            // 2-Mark Filtering
+            marksCard.addEventListener('click', () => {
+                const results = [];
+                Object.entries(subjectMaterials).forEach(([key, subject]) => {
+                    subject.materials.forEach(m => {
+                        const fileName = m.file.toLowerCase();
+                        const name = m.name.toLowerCase();
+                        if (fileName.includes('2m') || fileName.includes('2marks') || 
+                            name.includes('2-mark') || name.includes('2 mark')) {
+                            results.push({ ...m, subjectKey: key, subjectName: subject.fullName });
+                        }
+                    });
+                });
+                renderFilteredList(results, "2-Mark Master List", "fas fa-marker", "var(--primary-light)");
+            });
+
+            // Previous Year Filtering
+            prevYearCard.addEventListener('click', () => {
+                const results = [];
+                Object.entries(subjectMaterials).forEach(([key, subject]) => {
+                    if (subject.previousYearQuestions) {
+                        subject.previousYearQuestions.forEach(m => {
+                            results.push({ name: m.year, file: m.file, subjectKey: key, subjectName: subject.fullName });
+                        });
+                    }
+                });
+                renderFilteredList(results, "Previous Year Papers", "fas fa-history", "var(--accent)");
+            });
+
+            // Important Questions Filtering
+            importantCard.addEventListener('click', () => {
+                // Since Important Questions are units/text, we'll link to subject details for now
+                // Or list subjects that have important questions
+                const subjectsWithImportant = [];
+                Object.entries(subjectMaterials).forEach(([key, subject]) => {
+                    if (subject.importantQuestions && subject.importantQuestions.length > 0) {
+                        subjectsWithImportant.push({ key, name: subject.fullName });
+                    }
+                });
+
+                filteredList.innerHTML = subjectsWithImportant.map(s => `
+                    <div class="resource-card glass" onclick="location.href='subject_details.html?subject=${s.key}'" style="cursor: pointer;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <i class="fas fa-star" style="font-size: 1.5rem; color: #fbbf24;"></i>
+                            <div>
+                                <span style="font-weight: 600; display: block;">${s.name}</span>
+                                <span style="font-size: 0.75rem; color: var(--text-muted);">View Important Questions</span>
+                            </div>
+                        </div>
+                        <div class="arrow-btn">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                `).join('');
+                
+                filteredTitle.textContent = "Important Questions (by Subject)";
+                filteredSection.style.display = 'block';
+                resourcesGrid.style.display = 'none';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            function renderFilteredList(results, title, iconClass, iconColor) {
+                if (results.length > 0) {
+                    filteredList.innerHTML = results.map(m => {
+                        let tagHTML = '';
+                        if (m.tag) {
+                            const tagColor = m.tag === 'Timesaver' ? '#8b5cf6' : '#10b981';
+                            const tagBg = m.tag === 'Timesaver' ? 'rgba(139, 92, 246, 0.15)' : 'rgba(16, 185, 129, 0.15)';
+                            tagHTML = `<span style="font-size: 0.65rem; font-weight: 800; background: ${tagBg}; color: ${tagColor}; padding: 2px 6px; border-radius: 4px; white-space: nowrap;">${m.tag.toUpperCase()}</span>`;
+                        } else if (m.isUpdated) {
+                            tagHTML = `<span style="font-size: 0.65rem; font-weight: 800; background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 2px 6px; border-radius: 4px; white-space: nowrap;">UPDATED</span>`;
+                        }
+                        
+                        return `
+                            <div class="resource-card glass" onclick="location.href='viewer.html?file=${encodeURIComponent(m.file)}&title=${encodeURIComponent(m.name)}&subject=${m.subjectKey}'" style="cursor: pointer;">
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <i class="${iconClass}" style="font-size: 1.5rem; color: ${iconColor};"></i>
+                                    <div>
+                                        <span style="font-weight: 600; display: block;">${m.name}</span>
+                                        <span style="font-size: 0.75rem; color: var(--text-muted);">${m.subjectName}</span>
+                                    </div>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    ${tagHTML}
+                                    <div class="arrow-btn">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    filteredList.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--text-muted);">No resources found yet.</div>';
+                }
+
+                filteredTitle.textContent = title;
+                filteredSection.style.display = 'block';
+                resourcesGrid.style.display = 'none';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // Semester 6 Archive Card Logic
+            const sem6Card = document.getElementById('sem6-archive-card');
+            if (sem6Card) {
+                sem6Card.addEventListener('click', () => {
+                    const s6Keys = ['oose', 'vce', 'esia', 'ppl', 'ba', 'eh'];
+                    const subjects = [];
+                    Object.entries(subjectMaterials).forEach(([key, subject]) => {
+                        if (s6Keys.includes(key)) {
+                            subjects.push({ key, name: subject.fullName });
+                        }
+                    });
+
+                    filteredList.innerHTML = subjects.map(s => `
+                        <div class="resource-card glass" onclick="location.href='subject_details.html?subject=${s.key}'" style="cursor: pointer;">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <i class="fas fa-book" style="font-size: 1.5rem; color: var(--primary);"></i>
+                                <div>
+                                    <span style="font-weight: 600; display: block;">${s.name}</span>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">View Semester 6 Material</span>
+                                </div>
+                            </div>
+                            <div class="arrow-btn">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                    `).join('');
+                    
+                    filteredTitle.textContent = "Semester 6 Archives";
+                    filteredSection.style.display = 'block';
+                    resourcesGrid.style.display = 'none';
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+
+            closeBtn.addEventListener('click', () => {
+                filteredSection.style.display = 'none';
+                resourcesGrid.style.display = 'grid';
+            });
+        });
+    </script>
+</body>
+</html>
+

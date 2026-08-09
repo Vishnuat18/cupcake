@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Companion</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="gpa_style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link rel="icon" type="image/png" href="smacklogo.png">
+</head>
+<body>
+    <header class="app-header glass">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <a href="home.html" class="back-btn" style="width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 255, 255, 0.05); display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease;">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <img src="smacklogo_home.png" alt="SMACK" class="mobile-hide-logo" style="width: 140px; object-fit: contain;">
+            <div style="font-family: 'Outfit'; font-weight: 700; font-size: 1.1rem;">Companion</div>
+        </div>
+        <div id="profile-trigger" style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; cursor: pointer;">
+            <i class="fas fa-user-graduate"></i>
+        </div>
+    </header>
+
+    <div class="gpa-wrapper">
+        <!-- Navigation -->
+        <div class="f-tabs">
+            <div class="f-tab active" data-tab="dashboard">
+                <i class="fas fa-th-large"></i> <span>Dash</span>
+            </div>
+            <div class="f-tab" data-tab="calculator">
+                <i class="fas fa-calculator"></i> <span>GPA</span>
+            </div>
+            <div class="f-tab" data-tab="cgpacalc">
+                <i class="fas fa-graduation-cap"></i> <span>CGPA</span>
+            </div>
+            <div class="f-tab" data-tab="history">
+                <i class="fas fa-history"></i> <span>History</span>
+            </div>
+        </div>
+
+        <div class="container gpa-container">
+        <!-- Tab 1: Dashboard -->
+        <div id="tab-dashboard" class="tab-content active">
+            <div class="cgpa-orbit">
+                <svg class="orbit-svg" width="200" height="200">
+                    <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle class="orbit-bg" cx="100" cy="100" r="90" />
+                    <circle id="cgpa-progress" class="orbit-progress" cx="100" cy="100" r="90" stroke-dasharray="565" stroke-dashoffset="565" />
+                </svg>
+                <div class="cgpa-value">
+                    <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Current CGPA</span>
+                    <h1 id="display-cgpa">0.00</h1>
+                </div>
+            </div>
+
+            <div class="f-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 style="font-size: 1.1rem;">Performance Trend</h3>
+                    <div class="badge" style="background: rgba(16, 185, 129, 0.1); color: var(--accent);">Analytics Active</div>
+                </div>
+                <canvas id="gpaChart" height="150"></canvas>
+            </div>
+
+            <div class="f-card" style="margin-top: 1.5rem; background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%); border: 1px solid rgba(255,255,255,0.05);">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                    <div style="width: 36px; height: 36px; border-radius: 10px; background: var(--f-primary); display: flex; align-items: center; justify-content: center; color: white;">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3 style="font-size: 1rem;">Academic Insights</h3>
+                </div>
+                <div id="performance-msg" style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.2rem;">
+                    Loading your academic performance analysis...
+                </div>
+                <div class="insight-row" style="display: flex; justify-content: space-between; padding-top: 0.8rem; border-top: 1px solid rgba(255,255,255,0.05);">
+                    <div style="text-align: center; flex: 1;">
+                        <p style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.3rem;">Best Sem</p>
+                        <p id="insight-best-sem" style="font-weight: 700; color: var(--f-accent);">S0</p>
+                    </div>
+                    <div style="width: 1px; background: rgba(255,255,255,0.1);"></div>
+                    <div style="text-align: center; flex: 1;">
+                        <p style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.3rem;">Total Credits</p>
+                        <p id="insight-credits" style="font-weight: 700; color: white;">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="f-card" style="margin-top: 1.5rem; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--f-border);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 style="font-size: 1rem;"><i class="fas fa-bullseye" style="color: var(--f-secondary);"></i> Target Tracker</h3>
+                    <div style="font-size: 0.7rem; color: var(--text-muted);">Goal: 8.50</div>
+                </div>
+                <div id="target-prediction" style="font-size: 0.85rem; padding: 1rem; background: rgba(139, 92, 246, 0.05); border-radius: 12px; border-left: 4px solid var(--f-primary);">
+                    Calculate at least 2 semesters to enable target prediction.
+                </div>
+            </div>
+
+            <!-- Calculation Guide Trigger -->
+            <div class="f-card" style="margin-top: 1.5rem; background: rgba(255, 255, 255, 0.03); border: 1px dashed var(--f-border); cursor: pointer;" onclick="showCalculationGuide()">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(139, 92, 246, 0.1); display: flex; align-items: center; justify-content: center; color: var(--f-primary);">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div>
+                        <h4 style="font-size: 0.9rem; margin-bottom: 0.2rem;">How it's calculated?</h4>
+                        <p style="font-size: 0.75rem; color: var(--text-muted);">Learn to calculate GPA & CGPA manually</p>
+                    </div>
+                    <i class="fas fa-chevron-right" style="margin-left: auto; color: var(--text-muted); font-size: 0.8rem;"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Calculator -->
+        <div id="tab-calculator" class="tab-content" style="display: none;">
+            <div class="f-card">
+                <h3 style="margin-bottom: 1.2rem;">GPA Calculator</h3>
+                <div class="form-group">
+                    <label>Select Semester</label>
+                    <select id="sem-selector">
+                        <option value="1">Semester 1</option>
+                        <option value="2">Semester 2</option>
+                        <option value="3">Semester 3</option>
+                        <option value="4">Semester 4</option>
+                        <option value="5">Semester 5</option>
+                        <option value="6">Semester 6</option>
+                    </select>
+                </div>
+                
+                <div id="subjects-container" style="margin-top: 1.5rem;">
+                    <!-- Dynamic subjects -->
+                </div>
+
+                <button id="add-subject" class="btn" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--f-border); margin-top: 1rem;">
+                    <i class="fas fa-plus"></i> Add Elective
+                </button>
+
+                <div class="form-group" style="margin-top: 1.5rem;">
+                    <label>Note / Friend's Name (Optional)</label>
+                    <input type="text" id="save-note" class="note-input" placeholder="e.g. Rahul's Sem 6 or My Mock Result">
+                </div>
+            </div>
+
+            <div class="f-card" style="background: var(--f-primary);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div id="gpa-result-area" style="opacity: 0; transform: translateY(10px); transition: all 0.4s ease;">
+                        <span style="font-size: 0.8rem; opacity: 0.8;">Calculated GPA</span>
+                        <h2 id="live-gpa" style="margin: 0; font-size: 2.2rem; font-weight: 800;">0.00</h2>
+                    </div>
+                    <div style="display: flex; gap: 0.8rem;">
+                        <button id="calculate-btn" class="btn" style="width: auto; padding: 0.8rem 1.5rem; background: rgba(255,255,255,0.2); color: white; border-radius: 100px;">
+                            <i class="fas fa-play"></i> Calculate
+                        </button>
+                        <button id="save-gpa" class="btn" style="display: none; width: auto; padding: 0.8rem 1.5rem; background: white; color: var(--f-primary); border-radius: 100px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                            <i class="fas fa-save"></i> Save
+                        </button>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 4: CGPA Calc -->
+        <div id="tab-cgpacalc" class="tab-content" style="display: none;">
+            <div class="f-card">
+                <h3 style="margin-bottom: 1.2rem;">CGPA Calculator</h3>
+                <div class="form-group">
+                    <label>Calculate CGPA upto</label>
+                    <select id="cgpa-sem-selector">
+                        <option value="1">Semester 1</option>
+                        <option value="2">Semester 2</option>
+                        <option value="3">Semester 3</option>
+                        <option value="4">Semester 4</option>
+                        <option value="5">Semester 5</option>
+                        <option value="6">Semester 6</option>
+                        <option value="7">Semester 7</option>
+                        <option value="8">Semester 8</option>
+                    </select>
+                </div>
+                
+                <div id="cgpa-inputs-container" style="margin-top: 1.5rem;">
+                    <!-- Dynamic GPA inputs -->
+                </div>
+            </div>
+
+            <div class="f-card" style="background: linear-gradient(45deg, var(--f-secondary), #f472b6);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <span style="font-size: 0.8rem; opacity: 0.8;">Manual CGPA</span>
+                        <h2 id="manual-cgpa-val" style="margin: 0; font-size: 2rem;">0.00</h2>
+                    </div>
+                    <i class="fas fa-graduation-cap" style="font-size: 2rem; opacity: 0.3;"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: History -->
+        <div id="tab-history" class="tab-content" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="margin: 20px; margin-top: -20px;">Academic History</h3>
+                <button id="clear-history-btn" class="btn" style="width: auto; padding: 0.5rem 1rem; font-size: 0.75rem; background: rgba(244, 63, 94, 0.1); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.2); border-radius: 8px; margin-right: 30px; margin-top: -40px;">
+                    <i class="fas fa-trash-alt"></i> Clear All
+                </button>
+            </div>
+            <div id="history-list">
+                <!-- Dynamic cards -->
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Popup Modal -->
+    <div id="f-modal-overlay" class="f-modal-overlay">
+        <div class="f-modal">
+            <button id="modal-close-x" class="modal-close-x" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div id="modal-icon" style="font-size: 3rem; color: var(--f-accent); margin-bottom: 1rem;">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2 id="modal-title">Success</h2>
+            <div id="modal-body" style="text-align: left; max-height: 60vh; overflow-y: auto; padding-right: 0.5rem; scrollbar-width: thin;">
+                Your GPA has been saved successfully.
+            </div>
+            <div id="modal-actions" style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                <button id="modal-cancel-btn" class="btn" style="background: rgba(255,255,255,0.05); display: none;">Cancel</button>
+                <button id="modal-confirm-btn" class="btn btn-primary" onclick="closeModal()">Great!</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { gpaEngine } from './gpa_engine.js';
+        import { itSyllabus } from './syllabus_data.js';
+
+        let chart;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await gpaEngine.init();
+            initTabs();
+            initCalculator();
+            initCGPACalculator();
+            initHistory();
+            renderDashboard();
+            
+            window.addEventListener('gpa-update', () => {
+                renderDashboard();
+                renderHistory();
+            });
+        });
+
+        window.showModal = function(title, body, type = 'success', onConfirm = null) {
+            const overlay = document.getElementById('f-modal-overlay');
+            const icon = document.getElementById('modal-icon');
+            const confirmBtn = document.getElementById('modal-confirm-btn');
+            const cancelBtn = document.getElementById('modal-cancel-btn');
+            const bodyEl = document.getElementById('modal-body');
+            
+            document.getElementById('modal-title').textContent = title;
+            
+            if (typeof body === 'string') {
+                bodyEl.innerHTML = `<p>${body}</p>`;
+                bodyEl.style.textAlign = 'center';
+            } else {
+                bodyEl.innerHTML = '';
+                bodyEl.appendChild(body);
+                bodyEl.style.textAlign = 'left';
+            }
+            
+            confirmBtn.onclick = () => { closeModal(); if(onConfirm) onConfirm(); };
+            
+            if (type === 'confirm') {
+                icon.innerHTML = '<i class="fas fa-question-circle"></i>';
+                icon.style.color = 'var(--f-primary)';
+                cancelBtn.style.display = 'block';
+                cancelBtn.onclick = closeModal;
+                confirmBtn.textContent = 'Save to Profile';
+            } else if (type === 'success') {
+                icon.innerHTML = '<i class="fas fa-check-circle"></i>';
+                icon.style.color = 'var(--f-accent)';
+                cancelBtn.style.display = 'none';
+                confirmBtn.textContent = 'Great!';
+            } else if (type === 'info') {
+                icon.innerHTML = '<i class="fas fa-info-circle"></i>';
+                icon.style.color = 'var(--f-primary)';
+                cancelBtn.style.display = 'none';
+                confirmBtn.textContent = 'Got it!';
+            } else {
+                icon.innerHTML = '<i class="fas fa-calculator"></i>';
+                icon.style.color = 'var(--f-primary)';
+                cancelBtn.style.display = 'none';
+                confirmBtn.textContent = 'Close';
+            }
+            
+            overlay.style.display = 'flex';
+            gsap.fromTo('.f-modal', 
+                { scale: 0.8, opacity: 0, y: 20 },
+                { scale: 1, opacity: 1, y: 0, duration: 0.4, ease: 'back.out' }
+            );
+        };
+
+        window.showCalculationGuide = function() {
+            const div = document.createElement('div');
+            div.innerHTML = `
+                <div style="margin-bottom: 1.5rem;">
+                    <p style="font-weight: 700; color: white; margin-bottom: 0.5rem;">1. GPA Calculation</p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">
+                        Multiply each subject's <strong>Credits</strong> by its <strong>Grade Points</strong>. Sum them up and divide by the <strong>Total Credits</strong> of that semester.
+                    </p>
+                    <div style="background: rgba(255,255,255,0.05); padding: 0.8rem; border-radius: 8px; margin-top: 0.8rem; font-family: monospace; font-size: 0.8rem;">
+                        GPA = Σ (Grade Points × Credits) / Σ Credits
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <p style="font-weight: 700; color: white; margin-bottom: 0.5rem;">2. CGPA Calculation</p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">
+                        Add the GPA of all semesters you have completed and divide it by the total number of semesters.
+                    </p>
+                    <div style="background: rgba(255,255,255,0.05); padding: 0.8rem; border-radius: 8px; margin-top: 0.8rem; font-family: monospace; font-size: 0.8rem;">
+                        CGPA = Sum of all Semester GPAs / No. of Semesters
+                    </div>
+                </div>
+
+                <div>
+                    <p style="font-weight: 700; color: white; margin-bottom: 0.5rem;">3. Grade Points Scale</p>
+                    <table style="width: 100%; font-size: 0.85rem; color: var(--text-muted); border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <td style="padding: 0.4rem 0;">O (Outstanding)</td>
+                            <td style="text-align: right; color: var(--accent); font-weight: 800;">10</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <td style="padding: 0.4rem 0;">A+ (Excellent)</td>
+                            <td style="text-align: right; color: var(--accent); font-weight: 800;">9</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <td style="padding: 0.4rem 0;">A (Very Good)</td>
+                            <td style="text-align: right; color: var(--accent); font-weight: 800;">8</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <td style="padding: 0.4rem 0;">B+ (Good)</td>
+                            <td style="text-align: right; color: var(--accent); font-weight: 800;">7</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <td style="padding: 0.4rem 0;">B (Average)</td>
+                            <td style="text-align: right; color: var(--accent); font-weight: 800;">6</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <td style="padding: 0.4rem 0;">C (Satisfactory)</td>
+                            <td style="text-align: right; color: var(--accent); font-weight: 800;">5</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.4rem 0;">U / RA (Re-Appearance)</td>
+                            <td style="text-align: right; color: #f43f5e; font-weight: 800;">0</td>
+                        </tr>
+                    </table>
+                </div>
+            `;
+            showModal("Calculation Guide", div, "guide");
+        };
+
+        window.closeModal = function() {
+            document.getElementById('f-modal-overlay').style.display = 'none';
+        };
+
+        function initTabs() {
+            const tabs = document.querySelectorAll('.f-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const target = tab.dataset.tab;
+                    document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+                    document.getElementById(`tab-${target}`).style.display = 'block';
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    if (target === 'dashboard') renderDashboard();
+                    if (target === 'history') renderHistory();
+                    if (target === 'cgpacalc') renderCGPACalculatorInputs();
+                });
+            });
+        }
+
+        function initCGPACalculator() {
+            const semSelector = document.getElementById('cgpa-sem-selector');
+            semSelector.addEventListener('change', renderCGPACalculatorInputs);
+        }
+
+        function renderCGPACalculatorInputs() {
+            const count = parseInt(document.getElementById('cgpa-sem-selector').value);
+            const container = document.getElementById('cgpa-inputs-container');
+            const data = gpaEngine.userData.semesters;
+
+            container.innerHTML = '';
+            for (let i = 1; i <= count; i++) {
+                const existingGPA = data[i] ? data[i].gpa : '';
+                const div = document.createElement('div');
+                div.className = 'form-group';
+                div.style.marginBottom = '1rem';
+                div.innerHTML = `
+                    <label>GPA for Semester ${i}</label>
+                    <input type="number" step="0.01" class="manual-gpa-input" data-sem="${i}" value="${existingGPA}" placeholder="e.g. 8.5" 
+                           style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid var(--f-border); border-radius: 12px; color: white;">
+                `;
+                container.appendChild(div);
+            }
+
+            document.querySelectorAll('.manual-gpa-input').forEach(input => {
+                input.addEventListener('input', calculateManualCGPA);
+            });
+            calculateManualCGPA();
+        }
+
+        function calculateManualCGPA() {
+            const inputs = document.querySelectorAll('.manual-gpa-input');
+            const gpas = [];
+            inputs.forEach(input => {
+                const val = parseFloat(input.value);
+                if (!isNaN(val)) gpas.push(val);
+            });
+
+            const cgpa = gpaEngine.calculateManualCGPA(gpas);
+            document.getElementById('manual-cgpa-val').textContent = cgpa;
+        }
+
+        function initHistory() {
+            document.getElementById('clear-history-btn').addEventListener('click', () => {
+                if (Object.keys(gpaEngine.userData.semesters).length === 0) return;
+                
+                showModal(
+                    "Clear All Records?", 
+                    "This will permanently delete all your saved GPA history. This action cannot be undone.",
+                    "confirm",
+                    async () => {
+                        await gpaEngine.clearHistory();
+                        showModal("History Cleared", "All academic records have been removed.");
+                    }
+                );
+            });
+        }
+
+        function initCalculator() {
+            const semSelector = document.getElementById('sem-selector');
+            const container = document.getElementById('subjects-container');
+            const saveNote = document.getElementById('save-note');
+
+            const renderSubjects = (sem) => {
+                const subjects = itSyllabus[sem] || [];
+                container.innerHTML = subjects.map((s, i) => `
+                    <div class="subject-row" data-credits="${s.credits}">
+                        <div style="font-size: 0.85rem;">
+                            <span style="color: var(--text-muted); display: block; font-size: 0.7rem;">${s.code}</span>
+                            ${s.subject}
+                        </div>
+                        <div style="color: var(--f-primary); font-weight: 700; text-align: center;">${s.credits}</div>
+                        <select class="grade-input">
+                            <option value="">-</option>
+                            <option value="O">O</option>
+                            <option value="A+">A+</option>
+                            <option value="A">A</option>
+                            <option value="B+">B+</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="U">U</option>
+                        </select>
+                    </div>
+                `).join('');
+
+                // Add listeners
+                document.querySelectorAll('.grade-input').forEach(input => {
+                    input.addEventListener('change', calculateLiveGPA);
+                });
+            };
+
+            semSelector.addEventListener('change', (e) => renderSubjects(e.target.value));
+            renderSubjects(1);
+
+            document.getElementById('add-subject').addEventListener('click', () => {
+                const row = document.createElement('div');
+                row.className = 'subject-row';
+                row.dataset.credits = "3";
+                row.innerHTML = `
+                    <div style="font-size: 0.85rem;">
+                        <input type="text" placeholder="Elective Name" style="width: 100%; border: none; background: transparent; font-size: inherit; color: white;">
+                    </div>
+                    <input type="number" value="3" class="credit-input" style="width: 100%; background: transparent; border: none; text-align: center; color: var(--f-primary); font-weight: 700;">
+                    <select class="grade-input">
+                        <option value="">-</option>
+                        <option value="O">O</option>
+                        <option value="A+">A+</option>
+                        <option value="A">A</option>
+                        <option value="B+">B+</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="U">U</option>
+                    </select>
+                `;
+                container.appendChild(row);
+                row.querySelector('.grade-input').addEventListener('change', calculateLiveGPA);
+                row.querySelector('.credit-input').addEventListener('change', (e) => {
+                    row.dataset.credits = e.target.value;
+                    calculateLiveGPA();
+                });
+            });
+
+            // Calculate and Show Result
+            document.getElementById('calculate-btn').addEventListener('click', () => {
+                const semester = semSelector.value;
+                const subjects = [];
+                document.querySelectorAll('.subject-row').forEach((row, i) => {
+                    const grade = row.querySelector('.grade-input').value;
+                    if (grade) {
+                        subjects.push({
+                            code: itSyllabus[semester] ? (itSyllabus[semester][i]?.code || 'ELEC') : 'ELEC',
+                            credits: parseFloat(row.dataset.credits),
+                            grade: grade
+                        });
+                    }
+                });
+
+                if (subjects.length > 0) {
+                    // Update live display
+                    let totalPoints = 0;
+                    let totalCredits = 0;
+                    subjects.forEach(sub => {
+                        const points = gpaEngine.getGradePoint(sub.grade);
+                        totalPoints += (points * sub.credits);
+                        totalCredits += sub.credits;
+                    });
+                    const gpa = (totalPoints / totalCredits).toFixed(2);
+                    document.getElementById('live-gpa').textContent = gpa;
+                    
+                    // Reveal result and save button
+                    const resultArea = document.getElementById('gpa-result-area');
+                    resultArea.style.opacity = '1';
+                    resultArea.style.transform = 'translateY(0)';
+                    document.getElementById('save-gpa').style.display = 'block';
+                    document.getElementById('calculate-btn').innerHTML = '<i class="fas fa-sync"></i> Recalculate';
+                } else {
+                    showModal("No Grades", "Please select at least one grade to calculate.", "info");
+                }
+            });
+
+            document.getElementById('save-gpa').addEventListener('click', () => {
+                const semester = semSelector.value;
+                const subjects = [];
+                document.querySelectorAll('.subject-row').forEach((row, i) => {
+                    const grade = row.querySelector('.grade-input').value;
+                    if (grade) {
+                        subjects.push({
+                            code: itSyllabus[semester] ? (itSyllabus[semester][i]?.code || 'ELEC') : 'ELEC',
+                            credits: parseFloat(row.dataset.credits),
+                            grade: grade
+                        });
+                    }
+                });
+                
+                if (subjects.length > 0) {
+                    const note = saveNote.value.trim();
+                    const gpa = document.getElementById('live-gpa').textContent;
+                    const nickname = note || "Me";
+                    
+                    showModal(
+                        "Add to Profile?", 
+                        `Save Semester ${semester} GPA (${gpa}) to ${nickname}'s records?`,
+                        'confirm',
+                        () => {
+                            gpaEngine.updateSemester(semester, subjects, note);
+                            showModal("Saved successfully!", `Result has been added to ${nickname}'s history.`);
+                            saveNote.value = "";
+                            // Reset view
+                            document.getElementById('gpa-result-area').style.opacity = '0';
+                            document.getElementById('save-gpa').style.display = 'none';
+                            document.getElementById('calculate-btn').innerHTML = '<i class="fas fa-play"></i> Calculate';
+                        }
+                    );
+                }
+            });
+        }
+
+        function calculateLiveGPA() {
+            let totalPoints = 0;
+            let totalCredits = 0;
+            const pointsMap = { 'O':10, 'A+':9, 'A':8, 'B+':7, 'B':6, 'C':5, 'U':0, 'RA':0 };
+
+            document.querySelectorAll('.subject-row').forEach(row => {
+                const grade = row.querySelector('.grade-input').value;
+                const credits = parseFloat(row.dataset.credits);
+                if (grade) {
+                    totalPoints += (pointsMap[grade] * credits);
+                    totalCredits += credits;
+                }
+            });
+
+            const gpa = totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : "0.00";
+            document.getElementById('live-gpa').textContent = gpa;
+        }
+
+        function renderDashboard() {
+            const data = gpaEngine.userData;
+            const cgpa = parseFloat(data.cgpa || 0);
+            
+            // Progress Orbit
+            const circle = document.getElementById('cgpa-progress');
+            const radius = 90;
+            const circumference = 2 * Math.PI * radius;
+            const offset = circumference - (cgpa / 10) * circumference;
+            circle.style.strokeDasharray = `${circumference}`;
+            circle.style.strokeDashoffset = offset;
+            
+            document.getElementById('display-cgpa').textContent = cgpa.toFixed(2);
+            
+            // Update Insights
+            const sems = Object.keys(data.semesters);
+            const gpas = sems.map(s => parseFloat(data.semesters[s].gpa));
+            const bestGpa = gpas.length > 0 ? Math.max(...gpas) : 0;
+            const bestSem = sems.find(s => parseFloat(data.semesters[s].gpa) === bestGpa) || 0;
+            
+            document.getElementById('insight-best-sem').textContent = bestSem ? `S${bestSem}` : 'N/A';
+            
+            let totalCredits = 0;
+            Object.values(data.semesters).forEach(sem => {
+                sem.subjects.forEach(s => totalCredits += s.credits);
+            });
+            document.getElementById('insight-credits').textContent = totalCredits;
+
+            // Performance Message
+            document.getElementById('performance-msg').textContent = gpaEngine.getPerformanceInsights();
+
+            // Target Prediction (Goal 8.5)
+            const targetEl = document.getElementById('target-prediction');
+            const currentSems = sems.length;
+            const goal = 8.5;
+            const totalSems = 8;
+            
+            if (currentSems > 0 && currentSems < totalSems) {
+                const remaining = totalSems - currentSems;
+                const neededTotal = goal * totalSems;
+                const currentTotal = cgpa * currentSems;
+                const required = (neededTotal - currentTotal) / remaining;
+                
+                if (required <= 10 && required > 0) {
+                    targetEl.innerHTML = `To reach <strong>${goal.toFixed(2)}</strong>, you need an average of <strong>${required.toFixed(2)}</strong> in the remaining ${remaining} semesters.`;
+                } else if (required > 10) {
+                    targetEl.innerHTML = `A goal of ${goal.toFixed(2)} is mathematically impossible from your current standing. Max possible: <strong>${( (10 * remaining + currentTotal) / totalSems ).toFixed(2)}</strong>.`;
+                } else {
+                    targetEl.innerHTML = `You have already surpassed your goal of ${goal.toFixed(2)}! Keep it up.`;
+                }
+            } else if (currentSems >= totalSems) {
+                targetEl.textContent = "You have completed all 8 semesters.";
+            } else {
+                targetEl.textContent = "Calculate at least 1 semester to enable target prediction.";
+            }
+
+            initChart(data);
+        }
+
+        function initChart(data) {
+            const ctx = document.getElementById('gpaChart').getContext('2d');
+            const labels = Object.keys(data.semesters).map(s => `Sem ${s}`);
+            const values = Object.values(data.semesters).map(s => s.gpa);
+
+            if (chart) chart.destroy();
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: 'GPA Trend',
+                        data: values,
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 3,
+                        pointBackgroundColor: '#fff',
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { min: 0, max: 10, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
+                        x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+                    }
+                }
+            });
+        }
+
+        function renderHistory() {
+            const list = document.getElementById('history-list');
+            const sems = Object.entries(gpaEngine.userData.semesters).sort((a,b) => b[0]-a[0]); // Newest first
+            
+            if (sems.length === 0) {
+                list.innerHTML = `
+                    <div class="f-card" style="text-align: center; padding: 3rem 1rem;">
+                        <i class="fas fa-history" style="font-size: 3rem; color: rgba(255,255,255,0.05); margin-bottom: 1rem; display: block;"></i>
+                        <p style="color: var(--text-muted);">No records found yet.</p>
+                        <button class="btn" onclick="document.querySelector('[data-tab=calculator]').click()" style="margin-top: 1rem; background: var(--f-primary); color: white;">Calculate Now</button>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = sems.map(([num, data]) => `
+                <div class="f-card history-card" onclick="showHistoryDetail('${num}')" style="cursor: pointer;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 0.8rem;">
+                            <div class="sem-indicator">S${num}</div>
+                            <div>
+                                <h4 style="margin: 0; font-size: 0.95rem;">Semester ${num}</h4>
+                                <span style="font-size: 0.7rem; color: var(--text-muted);">${data.subjects?.length || 0} Subjects Recorded</span>
+                            </div>
+                        </div>
+                        <div class="gpa-badge">${data.gpa}</div>
+                    </div>
+                    ${data.note ? `
+                        <div class="history-note">
+                            <i class="fas fa-tag" style="font-size: 0.6rem; color: var(--f-primary);"></i>
+                            <span>${data.note}</span>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        window.showHistoryDetail = function(semNum) {
+            const data = gpaEngine.userData.semesters[semNum];
+            if (!data) return;
+
+            const div = document.createElement('div');
+            div.innerHTML = `
+                <div style="margin-bottom: 1.5rem; text-align: center;">
+                    <span style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Detailed Breakdown</span>
+                    <h3 style="margin-top: 0.3rem;">Semester ${semNum}</h3>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                    ${data.subjects.map(s => `
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                            <div style="flex: 1;">
+                                <div style="font-size: 0.85rem; font-weight: 600;">${s.subject || s.code}</div>
+                                <div style="font-size: 0.65rem; color: var(--text-muted);">Credits: ${s.credits}</div>
+                            </div>
+                            <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--f-primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem;">
+                                ${s.grade}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                ${data.note ? `
+                    <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(139, 92, 246, 0.05); border-radius: 12px; border-left: 4px solid var(--f-primary);">
+                        <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.4rem;">Note</p>
+                        <p style="font-size: 0.85rem; color: white;">${data.note}</p>
+                    </div>
+                ` : ''}
+            `;
+
+            showModal("Result Details", div, "detail");
+        };
+    </script>
+</body>
+</html>
+
