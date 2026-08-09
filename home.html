@@ -188,18 +188,10 @@
                 <!-- Results will be injected here -->
             </div>
         </div>
-        
-        <!-- Semester Toggle Header -->
-        <div id="semester-header" style="display: none; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; animation: fadeIn 0.4s ease; width: 100%;">
-            <h2 id="semester-title" style="font-family: 'Outfit'; font-size: 1.4rem; color: white;">Semester 6 Archive</h2>
-            <button id="back-to-sem7" class="glass" style="padding: 0.6rem 1.2rem; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.05); color: white; font-weight: 700; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 0.5rem; font-family: 'Outfit'; font-size: 0.85rem;">
-                <i class="fas fa-arrow-left"></i> Back to Semester 7
-            </button>
-        </div>
 
         <div class="subject-grid" id="main-subject-grid">
             <!-- ITAS Card -->
-            <div class="subject-card glass" onclick="location.href='subject_details.html?subject=itas'" style="background-image: url('itas/itas_bg.png')">
+            <div class="subject-card glass" onclick="handleSubjectClick('itas')" style="background-image: url('itas/itas_bg.png')">
                 <div class="badge badge-abs">AI3021</div>
                 <i class="fas fa-tractor"></i>
                 <h3>IT in Agricultural System</h3>
@@ -210,7 +202,7 @@
             </div>
 
             <!-- PoM Card -->
-            <div class="subject-card glass" onclick="location.href='subject_details.html?subject=pom'" style="background-image: url('pom/pom_bg.png')">
+            <div class="subject-card glass" onclick="handleSubjectClick('pom')" style="background-image: url('pom/pom_bg.png')">
                 <div class="badge badge-abs">GE3751</div>
                 <i class="fas fa-tasks"></i>
                 <h3>Principles of Management</h3>
@@ -221,7 +213,7 @@
             </div>
 
             <!-- HVE Card -->
-            <div class="subject-card glass" onclick="location.href='subject_details.html?subject=hve'" style="background-image: url('hve/hve_bg.png')">
+            <div class="subject-card glass" onclick="handleSubjectClick('hve')" style="background-image: url('hve/hve_bg.png')">
                 <div class="badge badge-abs">GE3791</div>
                 <i class="fas fa-balance-scale"></i>
                 <h3>Human Values and Ethics</h3>
@@ -232,7 +224,7 @@
             </div>
 
             <!-- PRW Card -->
-            <div class="subject-card glass" onclick="location.href='subject_details.html?subject=prw'" style="background-image: url('prw/prw_bg.png')">
+            <div class="subject-card glass" onclick="handleSubjectClick('prw')" style="background-image: url('prw/prw_bg.png')">
                 <div class="badge badge-abs">OHS352</div>
                 <i class="fas fa-file-signature"></i>
                 <h3>Project Report Writing</h3>
@@ -243,7 +235,7 @@
             </div>
 
             <!-- ECE Card -->
-            <div class="subject-card glass" onclick="location.href='subject_details.html?subject=ece'" style="background-image: url('ece/ece_bg.png')">
+            <div class="subject-card glass" onclick="handleSubjectClick('ece')" style="background-image: url('ece/ece_bg.png')">
                 <div class="badge badge-abs">OHS551</div>
                 <i class="fas fa-language"></i>
                 <h3>English for Competitive Examinations</h3>
@@ -252,17 +244,9 @@
                     <i class="fas fa-file-pdf"></i> 0 Files Found
                 </div>
             </div>
-
-            <!-- Semester 6 Folder Card -->
-            <div class="subject-card glass folder-card" id="sem6-folder-btn" style="background: linear-gradient(135deg, rgba(5, 150, 105, 0.08) 0%, rgba(45, 212, 191, 0.05) 100%); border: 1px solid rgba(5, 150, 105, 0.2);">
-                <div class="badge badge-abs" style="background: var(--primary); color: white;">ARCHIVE</div>
-                <i class="fas fa-folder-open" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem; filter: drop-shadow(0 4px 10px rgba(5, 150, 105, 0.2));"></i>
-                <h3>Semester 6 Archives</h3>
-                <p style="color: var(--text-muted);">Access OOSE, VCE, ESIA, PPL, BA & EH materials</p>
-                <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--primary); font-weight: 700;">
-                    Explore Folder <i class="fas fa-chevron-right" style="font-size: 0.75rem; margin-left: 4px;"></i>
-                </div>
+        </div>     </div>
             </div>
+
         </div>
 
     <!-- Mobile Nav Foot -->
@@ -616,12 +600,7 @@
 
             // 2. Dynamic Subject Grid
             const mainGrid = document.getElementById('main-subject-grid');
-            const semesterHeader = document.getElementById('semester-header');
-            const semesterTitle = document.getElementById('semester-title');
-            const backToSem7Btn = document.getElementById('back-to-sem7');
-            
             let allSubjects = [];
-            let currentSemesterState = 7;
 
             async function loadSubjects() {
                 // Performance: Load from cache first for instant rendering
@@ -657,26 +636,16 @@
             }
 
             function renderGrid() {
-                // Filter by active semester
-                const filtered = allSubjects.filter(sub => (sub.semester || 6) === currentSemesterState);
+                // Filter by Semester 7 only
+                const filtered = allSubjects.filter(sub => sub.semester === 7);
                 
-                // Sort
-                if (currentSemesterState === 6) {
-                    const examOrderMap = {};
-                    examEvents.forEach((ev, idx) => {
-                        const subjectKey = ev.id.split('-')[0];
-                        examOrderMap[subjectKey] = idx;
-                    });
-                    filtered.sort((a, b) => (examOrderMap[a.id] ?? 99) - (examOrderMap[b.id] ?? 99));
-                } else {
-                    // Semester 7 sorting order (HVE, PRW, ITAS, PoM, ECE)
-                    const sem7Order = ['hve', 'prw', 'itas', 'pom', 'ece'];
-                    filtered.sort((a, b) => sem7Order.indexOf(a.id) - sem7Order.indexOf(b.id));
-                }
+                // Sort by Semester 7 order (HVE, PRW, ITAS, PoM, ECE)
+                const sem7Order = ['hve', 'prw', 'itas', 'pom', 'ece'];
+                filtered.sort((a, b) => sem7Order.indexOf(a.id) - sem7Order.indexOf(b.id));
 
                 let html = filtered.map(sub => `
                     <div class="subject-card glass" 
-                          onclick="location.href='subject_details.html?subject=${sub.id}'"
+                          onclick="handleSubjectClick('${sub.id}')"
                           style="background-image: url('${sub.bgImage || ''}')">
                         <div class="badge badge-abs">${sub.courseCode || 'N/A'}</div>
                         <i class="${sub.icon || 'fas fa-book'}"></i>
@@ -688,41 +657,7 @@
                     </div>
                 `).join('');
 
-                if (currentSemesterState === 7) {
-                    if (semesterHeader) semesterHeader.style.display = 'none';
-                    // Append Semester 6 Folder Card
-                    html += `
-                        <div class="subject-card glass folder-card" id="sem6-folder-btn" style="background: linear-gradient(135deg, rgba(5, 150, 105, 0.08) 0%, rgba(45, 212, 191, 0.05) 100%); border: 1px solid rgba(5, 150, 105, 0.2);">
-                            <div class="badge badge-abs" style="background: var(--primary); color: white;">ARCHIVE</div>
-                            <i class="fas fa-folder-open" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem; filter: drop-shadow(0 4px 10px rgba(5, 150, 105, 0.2));"></i>
-                            <h3>Semester 6 Archives</h3>
-                            <p style="color: var(--text-muted);">Access OOSE, VCE, ESIA, PPL, BA & EH materials</p>
-                            <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--primary); font-weight: 700;">
-                                Explore Folder <i class="fas fa-chevron-right" style="font-size: 0.75rem; margin-left: 4px;"></i>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    if (semesterHeader) semesterHeader.style.display = 'flex';
-                }
-
                 mainGrid.innerHTML = html;
-
-                // Bind listener for folder card since it's dynamically injected
-                const folderBtn = document.getElementById('sem6-folder-btn');
-                if (folderBtn) {
-                    folderBtn.addEventListener('click', () => {
-                        currentSemesterState = 6;
-                        renderGrid();
-                    });
-                }
-            }
-
-            if (backToSem7Btn) {
-                backToSem7Btn.addEventListener('click', () => {
-                    currentSemesterState = 7;
-                    renderGrid();
-                });
             }
 
 
@@ -924,9 +859,62 @@
                 renderEventCards();
             }
 
+            // Click check for materials soon
+            window.handleSubjectClick = (subjectId) => {
+                const subject = subjectMaterials[subjectId];
+                const hasMaterials = subject && (
+                    (subject.materials && subject.materials.length > 0) || 
+                    (subject.previousYearQuestions && subject.previousYearQuestions.length > 0) || 
+                    (subject.importantQuestions && subject.importantQuestions.length > 0)
+                );
+                
+                if (!hasMaterials) {
+                    showSoonModal(subject ? subject.fullName : "This subject");
+                } else {
+                    location.href = `subject_details.html?subject=${subjectId}`;
+                }
+            };
+
+            window.showSoonModal = (subjectName) => {
+                const modal = document.getElementById('soon-modal');
+                const title = document.getElementById('soon-subject-title');
+                if (modal && title) {
+                    title.textContent = subjectName;
+                    modal.style.display = 'flex';
+                    setTimeout(() => {
+                        modal.style.opacity = '1';
+                    }, 50);
+                }
+            };
+
+            window.closeSoonModal = () => {
+                const modal = document.getElementById('soon-modal');
+                if (modal) {
+                    modal.style.opacity = '0';
+                    setTimeout(() => {
+                        modal.style.display = 'none';
+                    }, 300);
+                }
+            };
+
             // initEvents(); // Commented out to make system later
         });
     </script>
+    <!-- Materials Upload Soon Modal -->
+    <div id="soon-modal" class="glass" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100000; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(8px); align-items: center; justify-content: center; padding: 1.5rem; transition: opacity 0.3s ease; opacity: 0;">
+        <div class="glass" style="max-width: 400px; width: 100%; padding: 2.5rem 2rem; border-radius: var(--radius-lg); border: 1px solid rgba(5, 150, 105, 0.2); text-align: center; background: rgba(255, 255, 255, 0.9); box-shadow: 0 20px 40px rgba(2, 44, 34, 0.12); position: relative; animation: modalAppear 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);">
+            <button onclick="closeSoonModal()" style="position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; font-size: 1.1rem; color: var(--text-muted); cursor: pointer; padding: 0.5rem; transition: var(--transition);"><i class="fas fa-times"></i></button>
+            
+            <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(5, 150, 105, 0.08); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                <i class="fas fa-clock" style="font-size: 1.8rem; color: var(--primary);"></i>
+            </div>
+            <h2 id="soon-subject-title" style="font-family: 'Outfit', sans-serif; font-size: 1.4rem; color: var(--text-main); font-weight: 800; margin-bottom: 0.5rem;">Subject Name</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.5rem;">Materials will be uploaded soon. Our team is actively compiling notes for this subject.</p>
+            <button onclick="closeSoonModal()" class="glass" style="width: 100%; padding: 0.8rem; border-radius: 12px; border: 1px solid var(--primary); background: var(--primary); color: white; font-weight: 700; cursor: pointer; font-family: 'Outfit'; font-size: 0.95rem; transition: var(--transition);">
+                Got it
+            </button>
+        </div>
+    </div>
 </body>
 </html>
 
