@@ -108,6 +108,7 @@ select option {
     line-height: 1;
     background: linear-gradient(to right, var(--text-main), var(--f-primary));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 

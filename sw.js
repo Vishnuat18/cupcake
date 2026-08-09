@@ -9,7 +9,7 @@ const urlsToCache = [
   './style.css',
   './script.js',
   './materials.js',
-  './smacklogo.png',
+  './assets/icon.png',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
   'https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap'
 ];
