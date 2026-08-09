@@ -15,10 +15,51 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preload" href="smacklogo_home.png" as="image">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" type="image/png" href="smacklogo.png">
+    <style>
+        @keyframes splashAppear {
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes splashPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes splashLoading {
+            to { transform: translateX(0); }
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+    </style>
 </head>
 
 <body>
+    <!-- Welcome Splash Screen Overlay -->
+    <div id="welcome-splash" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f0fdf4; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: all;">
+        <script>
+            if (localStorage.getItem('cupcake_welcomed')) {
+                document.getElementById('welcome-splash').style.display = 'none';
+            }
+        </script>
+        <div style="text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+            <!-- Logo image with scale-up and pulse animation -->
+            <img src="assets/s7logo.png" alt="Welcome to Cupcake" class="splash-logo" style="width: 260px; max-width: 80%; object-fit: contain; filter: drop-shadow(0 10px 25px rgba(5, 150, 105, 0.15)); opacity: 0; transform: scale(0.85); animation: splashAppear 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, splashPulse 2s infinite ease-in-out 1.2s;">
+            
+            <!-- Animated title/subtitle -->
+            <div class="splash-text" style="opacity: 0; transform: translateY(15px); animation: fadeInUp 0.8s ease-out 0.6s forwards; text-align: center;">
+                <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.8rem; color: #059669; font-weight: 800; margin-bottom: 0.3rem;">Welcome to Cupcake</h2>
+                <p style="font-size: 0.95rem; color: #475569; font-weight: 600;">Your Academic Companion for Semester 7</p>
+            </div>
+            
+            <!-- Sleek Loader animation -->
+            <div style="width: 148px; height: 3px; background: rgba(5, 150, 105, 0.1); border-radius: 10px; overflow: hidden; margin-top: 1rem; opacity: 0; animation: fadeIn 0.5s ease-out 1s forwards;">
+                <div style="width: 100%; height: 100%; background: #059669; transform: translateX(-100%); animation: splashLoading 2s cubic-bezier(0.4, 0, 0.2, 1) forwards 1s;"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Post-Exam Review Modal (Commented out to make system later)
     <div id="exam-review-modal" class="glass" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem;">
         <div class="glass" style="max-width: 400px; width: 100%; padding: 2rem; border-radius: var(--radius-lg); border: 1px solid rgba(251, 191, 36, 0.3); text-align: center; position: relative;">
@@ -98,7 +139,7 @@
 
     <header class="app-header glass">
         <div style="display: flex; align-items: center; gap: 0.8rem;">
-            <img src="smacklogo_home.png" alt="SMACK" style="height: 36px; object-fit: contain; background: transparent;">
+            <img src="smacklogo.png" alt="SMACK" style="height: 36px; object-fit: contain; background: transparent;">
         </div>
         <div style="display: flex; align-items: center; gap: 0.8rem;">
             <div style="text-align: right;">
@@ -255,6 +296,24 @@
         import { subjectMaterials, examEvents, girlEmails } from "./materials.js";
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Welcome Splash Control
+            const splash = document.getElementById('welcome-splash');
+            if (splash) {
+                if (!localStorage.getItem('cupcake_welcomed')) {
+                    // Show splash screen for 3 seconds, then fade out
+                    setTimeout(() => {
+                        splash.style.opacity = '0';
+                        splash.style.pointerEvents = 'none';
+                        setTimeout(() => {
+                            splash.remove();
+                        }, 800);
+                        localStorage.setItem('cupcake_welcomed', 'true');
+                    }, 3000);
+                } else {
+                    splash.remove();
+                }
+            }
+
             // 1. Fetch User Data from Firestore
             auth.onAuthStateChanged(async (user) => {
                 if (user) {
