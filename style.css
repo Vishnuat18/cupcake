@@ -1682,7 +1682,7 @@ iframe {
         padding: 0.5rem 0 !important;
     }
 
-    /* Make subject cards fit the same text contents as desktop */
+    /* Make subject cards much more compact (logo + course name only) */
     .subject-card {
         padding: 1rem !important;
         border-radius: var(--radius-md) !important;
@@ -1691,23 +1691,17 @@ iframe {
         align-items: center !important;
         justify-content: center !important;
         text-align: center !important;
-        aspect-ratio: auto !important; /* Adapt height to contents */
-        min-height: 150px !important;
+        aspect-ratio: 1 / 1 !important; /* Make it a square box! */
+        min-height: auto !important;
     }
 
-    /* Display description and file counts on mobile like webview */
+    /* Hide unnecessary details to make it simple and neat */
     .subject-card p {
-        display: block !important;
-        font-size: 0.7rem !important;
-        color: var(--text-muted) !important;
-        margin-top: 0.25rem !important;
-        line-height: 1.3 !important;
+        display: none !important; /* Hide "Course Code: GE..." text */
     }
     
     .subject-card div {
-        display: block !important;
-        font-size: 0.7rem !important;
-        margin-top: 0.5rem !important;
+        display: none !important; /* Hide "0 Files Found" text */
     }
 
     .subject-card .badge-abs {
