@@ -771,7 +771,10 @@ export const subjectMaterials = {
                 topics: 'Proof reading a report – Avoiding Typographical Errors – Bibliography in required Format – Font – Spacing – Checking Tables and Illustrations – Presenting a Report Orally – Techniques.'
             }
         ],
-        materials: [],
+        materials: [
+            { name: 'Unit 1: Writing Skills', file: 'prw/notes/PRW_unit_1.pdf', isUpdated: true },
+            { name: 'Unit 2: Project Report Fundamentals', file: 'prw/notes/PRW_unit_2.pdf', isUpdated: true }
+        ],
         previousYearQuestions: [],
         importantQuestions: []
     },
