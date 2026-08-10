@@ -773,7 +773,8 @@ export const subjectMaterials = {
         ],
         materials: [
             { name: 'Unit 1: Writing Skills', file: 'prw/notes/PRW_unit_1.pdf', isUpdated: true },
-            { name: 'Unit 2: Project Report Fundamentals', file: 'prw/notes/PRW_unit_2.pdf', isUpdated: true }
+            { name: 'Unit 2: Project Report Fundamentals', file: 'prw/notes/PRW_unit_2.pdf', isUpdated: true },
+            { name: 'Unit 3: Structure of the Report (Part 1)', file: 'prw/notes/PRW_unit_3.pdf', isUpdated: true }
         ],
         previousYearQuestions: [],
         importantQuestions: []
