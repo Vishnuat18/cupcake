@@ -817,7 +817,8 @@ export const subjectMaterials = {
             { name: 'Unit 1: Precision Farming (Part 1)', file: 'itas/notes/ITAS_unit_1.pdf', isUpdated: true },
             { name: 'Unit 1: Precision Farming (Part 2)', file: 'itas/notes/itas_u1_part2.pdf', isUpdated: true },
             { name: 'Unit 2: Environment Control Systems (Part 1)', file: 'itas/notes/ITAS_unit_2.pdf', isUpdated: true },
-            { name: 'Unit 2: Environment Control Systems (Part 2)', file: 'itas/notes/itas_u2_part2.pdf', isUpdated: true }
+            { name: 'Unit 2: Environment Control Systems (Part 2)', file: 'itas/notes/itas_u2_part2.pdf', isUpdated: true },
+            { name: 'Unit 3: Agricultural Systems Management', file: 'itas/notes/ITAS_unit_3.pdf', isUpdated: true }
         ],
         previousYearQuestions: [],
         importantQuestions: []
