@@ -813,7 +813,10 @@ export const subjectMaterials = {
                 topics: 'Expert systems, decision support systems, Agricultural and biological databases, e-commerce, e-business systems & applications, Technology enhanced learning systems and solutions, e-learning, Rural development and information society.'
             }
         ],
-        materials: [],
+        materials: [
+            { name: 'Unit 1: Precision Farming', file: 'itas/notes/ITAS_unit_1.pdf', isUpdated: true },
+            { name: 'Unit 2: Environment Control Systems', file: 'itas/notes/ITAS_unit_2.pdf', isUpdated: true }
+        ],
         previousYearQuestions: [],
         importantQuestions: []
     },
