@@ -857,7 +857,11 @@ export const subjectMaterials = {
                 topics: 'System and process of controlling – Budgetary and non - Budgetary control techniques – Use of computers and IT in Management control – Productivity problems and management – Control and performance – Direct and preventive control – Reporting.'
             }
         ],
-        materials: [],
+        materials: [
+            { name: 'Unit 1: Introduction to Management and Organizations', file: 'pom/notes/POM_unit_1.pdf', isUpdated: true },
+            { name: 'Unit 2: Planning', file: 'pom/notes/POM_unit_2.pdf', isUpdated: true },
+            { name: 'Unit 3: Organising', file: 'pom/notes/POM_unit_3.pdf', isUpdated: true }
+        ],
         previousYearQuestions: [],
         importantQuestions: []
     },
