@@ -190,14 +190,33 @@
             marksCard.addEventListener('click', () => {
                 const results = [];
                 Object.entries(subjectMaterials).forEach(([key, subject]) => {
-                    subject.materials.forEach(m => {
-                        const fileName = m.file.toLowerCase();
-                        const name = m.name.toLowerCase();
-                        if (fileName.includes('2m') || fileName.includes('2marks') || 
-                            name.includes('2-mark') || name.includes('2 mark')) {
-                            results.push({ ...m, subjectKey: key, subjectName: subject.fullName });
-                        }
-                    });
+                    if (key === 'ece') {
+                        subject.materials.forEach(group => {
+                            if (group.topics) {
+                                group.topics.forEach(m => {
+                                    if (m.file) {
+                                        const fileName = m.file.toLowerCase();
+                                        const name = m.name.toLowerCase();
+                                        if (fileName.includes('2m') || fileName.includes('2marks') || 
+                                            name.includes('2-mark') || name.includes('2 mark')) {
+                                            results.push({ ...m, subjectKey: key, subjectName: subject.fullName });
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        subject.materials.forEach(m => {
+                            if (m.file) {
+                                const fileName = m.file.toLowerCase();
+                                const name = m.name.toLowerCase();
+                                if (fileName.includes('2m') || fileName.includes('2marks') || 
+                                    name.includes('2-mark') || name.includes('2 mark')) {
+                                    results.push({ ...m, subjectKey: key, subjectName: subject.fullName });
+                                }
+                            }
+                        });
+                    }
                 });
                 renderFilteredList(results, "2-Mark Master List", "fas fa-marker", "var(--primary-light)");
             });

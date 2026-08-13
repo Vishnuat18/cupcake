@@ -1288,61 +1288,7 @@
                 }
             });
 
-            // Delegated click handler for HTML notes interactive elements
-            document.addEventListener('click', (e) => {
-                const toggleBtn = e.target.closest('#toggle-exercises-btn');
-                const backBtn = e.target.closest('#back-to-study-btn');
-                const answerBtn = e.target.closest('.show-answers-btn');
-                const container = document.getElementById('html-content-container');
 
-                if (toggleBtn) {
-                    const study = document.getElementById('study-notes-section');
-                    const exercises = document.getElementById('exercises-section');
-                    if (study && exercises) {
-                        study.style.display = 'none';
-                        exercises.style.display = 'block';
-                        if (container) {
-                            container.scrollTop = 0;
-                        } else {
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                        }
-                    }
-                }
-
-                if (backBtn) {
-                    const study = document.getElementById('study-notes-section');
-                    const exercises = document.getElementById('exercises-section');
-                    if (study && exercises) {
-                        exercises.style.display = 'none';
-                        study.style.display = 'block';
-                        if (container) {
-                            container.scrollTop = 0;
-                        } else {
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                        }
-                    }
-                }
-
-                if (answerBtn) {
-                    const targetId = answerBtn.dataset.target;
-                    const ans = document.getElementById(targetId);
-                    if (ans) {
-                        if (ans.style.display === 'none' || ans.style.display === '') {
-                            ans.style.display = 'block';
-                            answerBtn.textContent = 'Hide Answer';
-                            answerBtn.style.background = 'rgba(239, 68, 68, 0.1)';
-                            answerBtn.style.borderColor = 'rgba(239, 68, 68, 0.3)';
-                            answerBtn.style.color = '#f87171';
-                        } else {
-                            ans.style.display = 'none';
-                            answerBtn.textContent = 'Show Answer';
-                            answerBtn.style.background = 'rgba(5, 150, 105, 0.1)';
-                            answerBtn.style.borderColor = 'rgba(5, 150, 105, 0.3)';
-                            answerBtn.style.color = 'var(--primary-light)';
-                        }
-                    }
-                }
-            });
         });
     </script>
 </body>

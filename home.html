@@ -623,8 +623,12 @@
                         <i class="${sub.icon || 'fas fa-book'}"></i>
                         <h3>${sub.fullName || sub.name}</h3>
                         <p>Course Code: ${sub.courseCode || 'N/A'}</p>
-                        <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--primary);">
-                            <i class="fas fa-file-pdf"></i> ${sub.materials ? sub.materials.length : 0} Files Found
+                         <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--primary);">
+                            <i class="fas fa-file-pdf"></i> ${
+                                sub.id === 'ece' 
+                                ? (sub.materials ? sub.materials.reduce((acc, g) => acc + (g.topics ? g.topics.length : 0), 0) : 0)
+                                : (sub.materials ? sub.materials.length : 0)
+                            } Files Found
                         </div>
                     </div>
                 `).join('');

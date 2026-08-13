@@ -1,7 +1,7 @@
-<div style="font-family: 'Plus Jakarta Sans', sans-serif;">
+<div style="font-family: 'Plus Jakarta Sans', sans-serif; position: relative;">
 
     <!-- ================= STUDY NOTES SECTION ================= -->
-    <div id="study-notes-section">
+    <div id="study-notes-section" style="padding-bottom: 100px;">
         <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 800; color: white; margin-bottom: 0.5rem; text-align: center;">Tenses</h1>
         <p style="color: var(--text-muted); text-align: center; margin-bottom: 2rem; font-size: 1rem;">Unit II: Grammar and Sentence Structure (Study Notes)</p>
         
@@ -289,19 +289,19 @@
             </div>
         </div>
 
-        <!-- BUTTON TO TOGGLE TO EXERCISES VIEW -->
-        <div style="text-align: center; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.05);">
-            <button id="toggle-exercises-btn" style="background: linear-gradient(135deg, var(--primary), #6366f1); color: white; border: none; padding: 1rem 2rem; border-radius: 12px; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; box-shadow: 0 8px 20px rgba(99, 102, 241, 0.25); transition: all 0.3s ease;">
-                <i class="fas fa-edit" style="margin-right: 8px;"></i> Go to Practice Exercises
+        <!-- BOTTOM FIXED FLOATING BUTTON -->
+        <div style="position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 100; pointer-events: none;">
+            <button onclick="document.getElementById('study-notes-section').style.display='none'; document.getElementById('exercises-section').style.display='block'; const c = document.getElementById('html-content-container'); if(c) c.scrollTop = 0;" style="pointer-events: auto; background: linear-gradient(135deg, var(--primary, #059669), #6366f1); color: white; border: none; padding: 0.9rem 2.2rem; border-radius: 30px; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.95rem; cursor: pointer; box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4); transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-edit"></i> Go to Exercise
             </button>
         </div>
     </div>
 
 
     <!-- ================= EXERCISES SECTION ================= -->
-    <div id="exercises-section" style="display: none;">
+    <div id="exercises-section" style="display: none; padding-bottom: 80px;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
-            <button id="back-to-study-btn" style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); padding: 0.6rem 1.2rem; border-radius: 8px; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease;">
+            <button onclick="document.getElementById('exercises-section').style.display='none'; document.getElementById('study-notes-section').style.display='block'; const c = document.getElementById('html-content-container'); if(c) c.scrollTop = 0;" style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); padding: 0.6rem 1.2rem; border-radius: 8px; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease;">
                 <i class="fas fa-arrow-left" style="margin-right: 6px;"></i> Back to Study Notes
             </button>
             <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 800; color: white; margin: 0;">Tenses &ndash; Exercise Questions</h2>
@@ -323,7 +323,7 @@
                 <li style="margin-bottom: 0.8rem;">By next month, he _______ the project. (finish)</li>
             </ol>
             
-            <button class="show-answers-btn" data-target="answers-a" style="background: rgba(5, 150, 105, 0.1); border: 1px solid rgba(5, 150, 105, 0.3); color: var(--primary-light); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; transition: all 0.3s ease;">
+            <button class="show-answers-btn" onclick="const ans = document.getElementById('answers-a'); if (ans.style.display === 'none' || ans.style.display === '') { ans.style.display = 'block'; this.textContent = 'Hide Answer'; this.style.background = 'rgba(239, 68, 68, 0.1)'; this.style.color = '#f87171'; } else { ans.style.display = 'none'; this.textContent = 'Show Answer'; this.style.background = 'rgba(5, 150, 105, 0.1)'; this.style.color = 'var(--primary-light)'; }" style="background: rgba(5, 150, 105, 0.1); border: 1px solid rgba(5, 150, 105, 0.3); color: var(--primary-light); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; transition: all 0.3s ease;">
                 Show Answer
             </button>
             
@@ -344,7 +344,7 @@
 
         <!-- Part B -->
         <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); padding: 1.8rem; border-radius: 12px; margin-bottom: 2rem;">
-            <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.2rem; color: var(--primary-light); margin-top: 0; margin-bottom: 0.5rem; font-weight: 700;">Part B &ndash; Choose the Correct Option</h3>
+            <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; color: var(--primary-light); margin-top: 0; margin-bottom: 0.5rem; font-weight: 700;">Part B &ndash; Choose the Correct Option</h3>
             <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; font-style: italic;">Select the right tense construction for the following statements.</p>
             
             <ol style="padding-left: 1.2rem; margin-bottom: 1.8rem; line-height: 1.8; color: #e2e8f0;">
@@ -353,7 +353,7 @@
                     <div style="margin-top: 0.4rem; padding-left: 0.5rem; display: flex; flex-direction: column; gap: 0.3rem; color: var(--text-muted);">
                         <span>a) writes</span>
                         <span>b) wrote</span>
-                        <span><span>c) has written</span></span>
+                        <span>c) has written</span>
                         <span>d) is writing</span>
                     </div>
                 </li>
@@ -395,7 +395,7 @@
                 </li>
             </ol>
             
-            <button class="show-answers-btn" data-target="answers-b" style="background: rgba(5, 150, 105, 0.1); border: 1px solid rgba(5, 150, 105, 0.3); color: var(--primary-light); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; transition: all 0.3s ease;">
+            <button class="show-answers-btn" onclick="const ans = document.getElementById('answers-b'); if (ans.style.display === 'none' || ans.style.display === '') { ans.style.display = 'block'; this.textContent = 'Hide Answer'; this.style.background = 'rgba(239, 68, 68, 0.1)'; this.style.color = '#f87171'; } else { ans.style.display = 'none'; this.textContent = 'Show Answer'; this.style.background = 'rgba(5, 150, 105, 0.1)'; this.style.color = 'var(--primary-light)'; }" style="background: rgba(5, 150, 105, 0.1); border: 1px solid rgba(5, 150, 105, 0.3); color: var(--primary-light); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; transition: all 0.3s ease;">
                 Show Answer
             </button>
             
@@ -425,7 +425,7 @@
                 <li style="margin-bottom: 0.8rem;">They <span style="text-decoration: underline; text-underline-offset: 4px; font-weight: 600; color: white;">have been working</span> since morning.</li>
             </ol>
             
-            <button class="show-answers-btn" data-target="answers-c" style="background: rgba(5, 150, 105, 0.1); border: 1px solid rgba(5, 150, 105, 0.3); color: var(--primary-light); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; transition: all 0.3s ease;">
+            <button class="show-answers-btn" onclick="const ans = document.getElementById('answers-c'); if (ans.style.display === 'none' || ans.style.display === '') { ans.style.display = 'block'; this.textContent = 'Hide Answer'; this.style.background = 'rgba(239, 68, 68, 0.1)'; this.style.color = '#f87171'; } else { ans.style.display = 'none'; this.textContent = 'Show Answer'; this.style.background = 'rgba(5, 150, 105, 0.1)'; this.style.color = 'var(--primary-light)'; }" style="background: rgba(5, 150, 105, 0.1); border: 1px solid rgba(5, 150, 105, 0.3); color: var(--primary-light); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; transition: all 0.3s ease;">
                 Show Answer
             </button>
             
@@ -456,7 +456,7 @@
                 <li style="margin-bottom: 0.8rem;">She will finish the work.</li>
             </ol>
             
-            <button class="show-answers-btn" data-target="answers-d" style="background: rgba(5, 150, 105, 0.1); border: 1px solid rgba(5, 150, 105, 0.3); color: var(--primary-light); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; transition: all 0.3s ease;">
+            <button class="show-answers-btn" onclick="const ans = document.getElementById('answers-d'); if (ans.style.display === 'none' || ans.style.display === '') { ans.style.display = 'block'; this.textContent = 'Hide Answer'; this.style.background = 'rgba(239, 68, 68, 0.1)'; this.style.color = '#f87171'; } else { ans.style.display = 'none'; this.textContent = 'Show Answer'; this.style.background = 'rgba(5, 150, 105, 0.1)'; this.style.color = 'var(--primary-light)'; }" style="background: rgba(5, 150, 105, 0.1); border: 1px solid rgba(5, 150, 105, 0.3); color: var(--primary-light); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; transition: all 0.3s ease;">
                 Show Answer
             </button>
             
@@ -486,7 +486,7 @@
                 <li style="margin-bottom: 0.8rem;">The match will be watched by thousands of people.</li>
             </ol>
             
-            <button class="show-answers-btn" data-target="answers-e" style="background: rgba(5, 150, 105, 0.1); border: 1px solid rgba(5, 150, 105, 0.3); color: var(--primary-light); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; transition: all 0.3s ease;">
+            <button class="show-answers-btn" onclick="const ans = document.getElementById('answers-e'); if (ans.style.display === 'none' || ans.style.display === '') { ans.style.display = 'block'; this.textContent = 'Hide Answer'; this.style.background = 'rgba(239, 68, 68, 0.1)'; this.style.color = '#f87171'; } else { ans.style.display = 'none'; this.textContent = 'Show Answer'; this.style.background = 'rgba(5, 150, 105, 0.1)'; this.style.color = 'var(--primary-light)'; }" style="background: rgba(5, 150, 105, 0.1); border: 1px solid rgba(5, 150, 105, 0.3); color: var(--primary-light); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; transition: all 0.3s ease;">
                 Show Answer
             </button>
             
@@ -515,7 +515,7 @@
                 <li style="margin-bottom: 0.8rem;">She will goes tomorrow.</li>
             </ol>
             
-            <button class="show-answers-btn" data-target="answers-f" style="background: rgba(5, 150, 105, 0.1); border: 1px solid rgba(5, 150, 105, 0.3); color: var(--primary-light); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; transition: all 0.3s ease;">
+            <button class="show-answers-btn" onclick="const ans = document.getElementById('answers-f'); if (ans.style.display === 'none' || ans.style.display === '') { ans.style.display = 'block'; this.textContent = 'Hide Answer'; this.style.background = 'rgba(239, 68, 68, 0.1)'; this.style.color = '#f87171'; } else { ans.style.display = 'none'; this.textContent = 'Show Answer'; this.style.background = 'rgba(5, 150, 105, 0.1)'; this.style.color = 'var(--primary-light)'; }" style="background: rgba(5, 150, 105, 0.1); border: 1px solid rgba(5, 150, 105, 0.3); color: var(--primary-light); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; transition: all 0.3s ease;">
                 Show Answer
             </button>
             

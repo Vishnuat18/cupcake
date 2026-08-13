@@ -900,8 +900,52 @@ export const subjectMaterials = {
             }
         ],
         materials: [
-            { name: 'Unit 2: Grammar and Sentence Structure (Tenses)', file: 'ece/notes/ECE_unit_2.html', isUpdated: true },
-            { name: 'Unit 2: Grammar and Sentence Structure (Prepositions)', file: 'ece/notes/ECE_prepositions.html', isUpdated: true }
+            { name: 'Complete ECE Course Notes (PDF)', file: 'ece/notes/ECE Notes.pdf', isUpdated: true },
+            {
+                unit: 1,
+                unitTitle: 'Vocabulary and Verbal Ability',
+                topics: [
+                    { name: 'Essential Words & Usage', file: '#' },
+                    { name: 'Synonyms & Antonyms', file: '#' },
+                    { name: 'Idioms and Phrases', file: '#' },
+                    { name: 'Word Analogies', file: '#' }
+                ]
+            },
+            {
+                unit: 2,
+                unitTitle: 'Grammar and Sentence Structure',
+                topics: [
+                    { name: 'Tenses (Interactive Notes & Exercises)', file: 'ece/notes/ECE_unit_2.html', isUpdated: true },
+                    { name: 'Prepositions (Interactive Notes & Exercises)', file: 'ece/notes/ECE_prepositions.html', isUpdated: true },
+                    { name: 'Reported Speech', file: '#' },
+                    { name: 'Voice (Active & Passive)', file: '#' },
+                    { name: 'Subject-Verb Agreement', file: '#' }
+                ]
+            },
+            {
+                unit: 3,
+                unitTitle: 'Reading and Comprehension',
+                topics: [
+                    { name: 'Reading Techniques & Skimming', file: '#' },
+                    { name: 'Summarising & Argument Mapping', file: '#' }
+                ]
+            },
+            {
+                unit: 4,
+                unitTitle: 'Writing and Argumentation',
+                topics: [
+                    { name: 'Essay & Paragraph Writing', file: '#' },
+                    { name: 'Statements of Purpose (SOP)', file: '#' }
+                ]
+            },
+            {
+                unit: 5,
+                unitTitle: 'Listening and Speaking',
+                topics: [
+                    { name: 'Listening Comprehension', file: '#' },
+                    { name: 'Group Discussion (GD) Formats', file: '#' }
+                ]
+            }
         ],
         previousYearQuestions: [],
         importantQuestions: []
