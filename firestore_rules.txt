@@ -16,7 +16,7 @@ service cloud.firestore {
     }
 
     // 1. Subjects Collection (The missing link!)
-    match /subjects/{subjectId} {
+    match /cupcake_subjects/{subjectId} {
       allow read: if isAuthenticated();
       allow write: if isAdmin();
     }

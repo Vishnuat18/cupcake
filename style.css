@@ -1734,6 +1734,80 @@ iframe {
     .subject-card.folder-card div {
         display: none !important; /* Hide "Explore Folder >" link */
     }
+
+    /* Hotstar-style portrait card overrides for main subjects grid on homepage */
+    #main-subject-grid .subject-card {
+        padding: 0.8rem !important;
+        border-radius: 12px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-end !important;
+        align-items: flex-start !important;
+        text-align: left !important;
+        aspect-ratio: 2 / 3 !important; /* Portrait poster layout */
+        min-height: auto !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5) !important;
+        position: relative !important;
+    }
+
+    #main-subject-grid .subject-card::before {
+        background: linear-gradient(to top, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.5) 45%, rgba(15, 23, 42, 0) 100%) !important;
+        border-radius: 12px !important;
+    }
+
+    #main-subject-grid .subject-card div {
+        display: none !important;
+    }
+
+    #main-subject-grid .subject-card i {
+        position: absolute !important;
+        top: 12px !important;
+        left: 12px !important;
+        font-size: 1.1rem !important;
+        margin-bottom: 0 !important;
+        background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%) !important;
+        -webkit-background-clip: text !important;
+        background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        filter: drop-shadow(0 2px 4px rgba(5, 150, 105, 0.3)) !important;
+    }
+
+    #main-subject-grid .subject-card .badge-abs {
+        font-size: 0.6rem !important;
+        padding: 0.2rem 0.5rem !important;
+        top: 10px !important;
+        right: 10px !important;
+        position: absolute !important;
+        background: rgba(255, 255, 255, 0.15) !important;
+        backdrop-filter: blur(4px) !important;
+        -webkit-backdrop-filter: blur(4px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 6px !important;
+        color: white !important;
+    }
+
+    #main-subject-grid .subject-card p {
+        display: block !important;
+        font-size: 0.62rem !important;
+        color: rgba(255, 255, 255, 0.6) !important;
+        margin-bottom: 3px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.05em !important;
+        font-weight: 700 !important;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+        order: -1 !important;
+    }
+
+    #main-subject-grid .subject-card h3 {
+        font-size: 0.82rem !important;
+        font-weight: 800 !important;
+        color: white !important;
+        line-height: 1.3 !important;
+        margin: 0 !important;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8) !important;
+        word-break: break-word !important;
+    }
 }
 
 /* ── News Banner Styling ──────────────────────────────── */
