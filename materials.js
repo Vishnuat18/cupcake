@@ -899,7 +899,10 @@ export const subjectMaterials = {
                 topics: 'Listening and Speaking – Contextual listening – Listening to instructions – Listening for specific information – Identifying detail, main ideas – Following signpost words – Stress, rhythm and intonation - Speaking to respond and elicit ideas – Guided speaking – Opening phrases – Interactive communication – Dysfluency - Sentence stress – Speaking on a topic – Giving opinions – Giving an oral presentation – Telling a story or a personal anecdote – Talking about oneself - Utterance – Speech acts- Brainstorming ideas – Group discussion.'
             }
         ],
-        materials: [],
+        materials: [
+            { name: 'Unit 2: Grammar and Sentence Structure (Tenses)', file: 'ece/notes/ECE_unit_2.html', isUpdated: true },
+            { name: 'Unit 2: Grammar and Sentence Structure (Prepositions)', file: 'ece/notes/ECE_prepositions.html', isUpdated: true }
+        ],
         previousYearQuestions: [],
         importantQuestions: []
     }
