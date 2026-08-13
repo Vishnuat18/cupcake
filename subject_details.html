@@ -9,6 +9,7 @@
     <!-- Resource Hints for Ultra-Fast Loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
     
@@ -413,17 +414,19 @@
                                 individualCard.style.display = 'flex';
                                 individualCard.style.alignItems = 'center';
                                 individualCard.style.justifyContent = 'space-between';
-                                individualCard.style.border = '1px solid rgba(255, 255, 255, 0.08)';
-                                individualCard.style.background = 'linear-gradient(135deg, rgba(5, 150, 105, 0.1) 0%, rgba(99, 102, 241, 0.05) 100%)';
+                                individualCard.style.border = '1px solid var(--glass-border)';
+                                individualCard.style.background = 'linear-gradient(135deg, rgba(5, 150, 105, 0.08) 0%, rgba(99, 102, 241, 0.04) 100%)';
                                 individualCard.style.transition = 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)';
                                 
                                 individualCard.onmouseenter = () => {
                                     individualCard.style.transform = 'translateY(-2px)';
                                     individualCard.style.borderColor = 'rgba(5, 150, 105, 0.4)';
+                                    individualCard.style.background = 'linear-gradient(135deg, rgba(5, 150, 105, 0.12) 0%, rgba(99, 102, 241, 0.06) 100%)';
                                 };
                                 individualCard.onmouseleave = () => {
                                     individualCard.style.transform = 'none';
-                                    individualCard.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                                    individualCard.style.borderColor = 'var(--glass-border)';
+                                    individualCard.style.background = 'linear-gradient(135deg, rgba(5, 150, 105, 0.08) 0%, rgba(99, 102, 241, 0.04) 100%)';
                                 };
                                 
                                 individualCard.onclick = () => {
@@ -432,18 +435,18 @@
                                 
                                 individualCard.innerHTML = `
                                     <div style="display: flex; align-items: center; gap: 1rem;">
-                                        <div style="background: rgba(5, 150, 105, 0.2); width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                                            <i class="fas fa-file-pdf" style="font-size: 1.4rem; color: var(--primary-light);"></i>
+                                        <div style="background: rgba(5, 150, 105, 0.15); width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="fas fa-file-pdf" style="font-size: 1.4rem; color: var(--primary);"></i>
                                         </div>
                                         <div>
-                                            <h4 style="font-family: 'Outfit', sans-serif; font-size: 1.05rem; font-weight: 700; color: white; margin: 0 0 2px 0;">${group.name}</h4>
+                                            <h4 style="font-family: 'Outfit', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--text-main); margin: 0 0 2px 0;">${group.name}</h4>
                                             <span style="font-size: 0.75rem; color: var(--text-muted);">Comprehensive ECE Study Handout</span>
                                         </div>
                                     </div>
                                     <div style="display: flex; align-items: center; gap: 0.8rem;">
-                                        <span style="font-size: 0.6rem; font-weight: 800; background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 2px 6px; border-radius: 4px; white-space: nowrap;">UPDATED</span>
-                                        <div class="arrow-btn" style="background: rgba(255,255,255,0.05); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                                            <i class="fas fa-chevron-right" style="font-size: 0.8rem; color: white;"></i>
+                                        <span style="font-size: 0.6rem; font-weight: 800; background: rgba(16, 185, 129, 0.15); color: #047857; padding: 2px 6px; border-radius: 4px; white-space: nowrap;">UPDATED</span>
+                                        <div class="arrow-btn" style="background: rgba(5, 150, 105, 0.1); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                            <i class="fas fa-chevron-right" style="font-size: 0.8rem; color: var(--primary);"></i>
                                         </div>
                                     </div>
                                 `;
@@ -455,18 +458,18 @@
                             groupContainer.className = 'ece-unit-group glass';
                             groupContainer.style.padding = '1.5rem';
                             groupContainer.style.borderRadius = '16px';
-                            groupContainer.style.border = '1px solid rgba(255, 255, 255, 0.05)';
-                            groupContainer.style.background = 'rgba(30, 41, 59, 0.4)';
+                            groupContainer.style.border = '1px solid var(--glass-border)';
+                            groupContainer.style.background = 'rgba(255, 255, 255, 0.4)';
                             groupContainer.style.backdropFilter = 'blur(10px)';
                             
                             // Unit Header
                             const header = document.createElement('div');
                             header.style.marginBottom = '1.2rem';
-                            header.style.borderBottom = '1px solid rgba(255, 255, 255, 0.08)';
+                            header.style.borderBottom = '1px solid rgba(5, 150, 105, 0.1)';
                             header.style.paddingBottom = '0.6rem';
                             header.innerHTML = `
-                                <span style="font-size: 0.8rem; font-weight: 800; color: var(--primary-light); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 2px;">UNIT ${group.unit}</span>
-                                <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 700; color: white; margin: 0;">${group.unitTitle}</h3>
+                                <span style="font-size: 0.8rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 2px;">UNIT ${group.unit}</span>
+                                <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin: 0;">${group.unitTitle}</h3>
                             `;
                             groupContainer.appendChild(header);
                             
@@ -486,18 +489,18 @@
                                 topicCard.style.justifyContent = 'space-between';
                                 topicCard.style.cursor = 'pointer';
                                 topicCard.style.transition = 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)';
-                                topicCard.style.border = '1px solid rgba(255, 255, 255, 0.03)';
-                                topicCard.style.background = 'rgba(255, 255, 255, 0.01)';
+                                topicCard.style.border = '1px solid rgba(5, 150, 105, 0.05)';
+                                topicCard.style.background = 'rgba(255, 255, 255, 0.5)';
                                 
                                 // Dynamic hover states
                                 topicCard.addEventListener('mouseenter', () => {
                                     topicCard.style.background = 'rgba(5, 150, 105, 0.08)';
-                                    topicCard.style.borderColor = 'rgba(5, 150, 105, 0.3)';
+                                    topicCard.style.borderColor = 'rgba(5, 150, 105, 0.25)';
                                     topicCard.style.transform = 'translateX(4px)';
                                 });
                                 topicCard.addEventListener('mouseleave', () => {
-                                    topicCard.style.background = 'rgba(255, 255, 255, 0.01)';
-                                    topicCard.style.borderColor = 'rgba(255, 255, 255, 0.03)';
+                                    topicCard.style.background = 'rgba(255, 255, 255, 0.5)';
+                                    topicCard.style.borderColor = 'rgba(5, 150, 105, 0.05)';
                                     topicCard.style.transform = 'translateX(0)';
                                 });
                                 
@@ -507,15 +510,15 @@
                                 
                                 let tagHTML = '';
                                 if (topic.isUpdated) {
-                                    tagHTML = `<span style="font-size: 0.6rem; font-weight: 800; background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 2px 6px; border-radius: 4px; margin-right: 0.8rem; white-space: nowrap;">UPDATED</span>`;
+                                    tagHTML = `<span style="font-size: 0.6rem; font-weight: 800; background: rgba(16, 185, 129, 0.15); color: #047857; padding: 2px 6px; border-radius: 4px; margin-right: 0.8rem; white-space: nowrap;">UPDATED</span>`;
                                 } else if (topic.file === '#') {
-                                    tagHTML = `<span style="font-size: 0.6rem; font-weight: 800; background: rgba(245, 158, 11, 0.1); color: #f59e0b; padding: 2px 6px; border-radius: 4px; margin-right: 0.8rem; white-space: nowrap;">SOON</span>`;
+                                    tagHTML = `<span style="font-size: 0.6rem; font-weight: 800; background: rgba(245, 158, 11, 0.1); color: #b45309; padding: 2px 6px; border-radius: 4px; margin-right: 0.8rem; white-space: nowrap;">SOON</span>`;
                                 }
                                 
                                 topicCard.innerHTML = `
                                     <div style="display: flex; align-items: center; gap: 0.8rem;">
-                                        <i class="fas ${topic.file === '#' ? 'fa-hourglass-start' : 'fa-file-alt'}" style="font-size: 1rem; color: ${topic.file === '#' ? '#f59e0b' : 'var(--primary-light)'};"></i>
-                                        <span style="font-weight: 600; font-size: 0.95rem; color: #f1f5f9;">${topic.name}</span>
+                                        <i class="fas ${topic.file === '#' ? 'fa-hourglass-start' : 'fa-file-alt'}" style="font-size: 1rem; color: ${topic.file === '#' ? '#b45309' : 'var(--primary)'};"></i>
+                                        <span style="font-weight: 600; font-size: 0.95rem; color: var(--text-main);">${topic.name}</span>
                                     </div>
                                     <div style="display: flex; align-items: center;">
                                         ${tagHTML}
