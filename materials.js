@@ -906,10 +906,10 @@ export const subjectMaterials = {
                 unit: 1,
                 unitTitle: 'Vocabulary and Verbal Ability',
                 topics: [
-                    { name: 'Essential Words & Usage', file: '#' },
-                    { name: 'Synonyms & Antonyms', file: '#' },
-                    { name: 'Idioms and Phrases', file: '#' },
-                    { name: 'Word Analogies', file: '#' }
+                    { name: 'Essential Words & Usage', file: 'ece/notes/ECE_vocabulary.html', isUpdated: true },
+                    { name: 'Synonyms & Antonyms', file: 'ece/notes/ECE_synonyms_antonyms.html', isUpdated: true },
+                    { name: 'Idioms and Phrases', file: 'ece/notes/ECE_idioms_phrases.html', isUpdated: true },
+                    { name: 'Word Analogies', file: 'ece/notes/ECE_word_analogies.html', isUpdated: true }
                 ]
             },
             {
@@ -918,9 +918,9 @@ export const subjectMaterials = {
                 topics: [
                     { name: 'Tenses (Interactive Notes & Exercises)', file: 'ece/notes/ECE_unit_2.html', isUpdated: true },
                     { name: 'Prepositions (Interactive Notes & Exercises)', file: 'ece/notes/ECE_prepositions.html', isUpdated: true },
-                    { name: 'Reported Speech', file: '#' },
-                    { name: 'Voice (Active & Passive)', file: '#' },
-                    { name: 'Subject-Verb Agreement', file: '#' }
+                    { name: 'Reported Speech', file: 'ece/notes/ECE_reported_speech.html', isUpdated: true },
+                    { name: 'Voice (Active & Passive)', file: 'ece/notes/ECE_voice.html', isUpdated: true },
+                    { name: 'Subject-Verb Agreement', file: 'ece/notes/ECE_subject_verb_agreement.html', isUpdated: true }
                 ]
             },
             {
