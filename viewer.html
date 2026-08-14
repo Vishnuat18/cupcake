@@ -624,6 +624,17 @@
                 display: none;
             }
         }
+
+        @keyframes toastSlideUp {
+            from {
+                transform: translateX(-50%) translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
@@ -689,16 +700,10 @@
     <!-- Toast -->
     <div id="cg-toast"></div>
 
-    <!-- Security Overlay -->
-    <div id="security-alert-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 99999; align-items: center; justify-content: center; text-align: center; color: white; font-family: 'Plus Jakarta Sans', sans-serif;">
-        <div style="max-width: 400px; padding: 2.5rem; border-radius: 24px; border: 1px solid rgba(239, 68, 68, 0.2); background: rgba(255, 255, 255, 0.03); box-shadow: 0 20px 50px rgba(0,0,0,0.5); transform: scale(0.9); animation: successPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;">
-            <i class="fas fa-shield-alt" style="font-size: 4.5rem; color: #ef4444; margin-bottom: 1.5rem; display: block;"></i>
-            <h2 style="font-family: 'Outfit'; font-weight: 800; font-size: 1.8rem; margin-bottom: 1rem; color: #ef4444;">Security Alert</h2>
-            <p style="color: #94a3b8; font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem;">Screenshots and screen recordings are strictly restricted on this platform to protect copyrighted notes.</p>
-            <div style="font-size: 0.8rem; color: #64748b; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1.5rem;">
-                Click anywhere on the screen to restore the content.
-            </div>
-        </div>
+    <!-- Security Toast -->
+    <div id="security-alert-overlay" style="display: none; position: fixed; bottom: 5.5rem; left: 50%; transform: translateX(-50%); z-index: 99999; align-items: center; gap: 10px; padding: 0.75rem 1.25rem; border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.25); background: rgba(15, 23, 42, 0.95); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); color: white; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.85rem; font-weight: 600; pointer-events: none; animation: toastSlideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;">
+        <i class="fas fa-shield-alt" style="color: #ef4444; font-size: 1rem;"></i>
+        <span>Screenshots and recordings are strictly restricted.</span>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
@@ -1209,16 +1214,23 @@
 
             // Security screenshot/recording prevention listeners
             const secOverlay = document.getElementById('security-alert-overlay');
+            let securityAlertTimeout = null;
 
             function showSecurityAlert() {
                 if (secOverlay) {
                     secOverlay.style.display = 'flex';
+                    if (securityAlertTimeout) clearTimeout(securityAlertTimeout);
+                    securityAlertTimeout = setTimeout(hideSecurityAlert, 3000);
                 }
             }
 
             function hideSecurityAlert() {
                 if (secOverlay) {
                     secOverlay.style.display = 'none';
+                    if (securityAlertTimeout) {
+                        clearTimeout(securityAlertTimeout);
+                        securityAlertTimeout = null;
+                    }
                 }
             }
 

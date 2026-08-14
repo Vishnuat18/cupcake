@@ -901,7 +901,7 @@ export const subjectMaterials = {
         ],
         materials: [
             { name: 'Complete ECE Course Notes (PDF)', file: 'ece/notes/ECE Notes.pdf', isUpdated: true },
-            { name: 'Part A Notes', file: 'ece/notes/ECE_partA.pdf', isUpdated: true},
+            { name: 'Part A Notes', file: 'ece/notes/ECE_Part_A.pdf', isUpdated: true},
             {
                 unit: 1,
                 unitTitle: 'Vocabulary and Verbal Ability',
