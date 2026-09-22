@@ -61,6 +61,10 @@
                 <h2 style="font-size: 2rem; color: var(--accent);">6</h2>
                 <p style="font-size: 0.8rem; color: var(--text-muted);">Subjects</p>
             </div>
+            <div class="stat-card glass" style="padding: 1.5rem; border-radius: var(--radius-md); text-align: center;">
+                <h2 id="stat-downloads" style="font-size: 2rem; color: #10b981;">0</h2>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Downloads</p>
+            </div>
         </div>
 
         <div class="glass" style="padding: 1.5rem; border-radius: var(--radius-lg);">
@@ -101,6 +105,46 @@
                 <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
                     <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
                     <p>Loading reviews...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Download Analytics Section -->
+        <div class="glass" style="padding: 1.5rem; border-radius: var(--radius-lg); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem;">
+                <h3 style="margin: 0;"><i class="fas fa-download" style="color: #10b981;"></i> Material Downloads</h3>
+                <span id="downloads-badge" class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">0 Total</span>
+            </div>
+            <div id="downloads-list" style="display: flex; flex-direction: column; gap: 0.85rem; max-height: 440px; overflow-y: auto; padding-right: 0.5rem;" class="no-scrollbar">
+                <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+                    <p>Loading download analytics...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Who Downloaded Inspector Modal -->
+    <div id="download-users-modal" class="dl-game-backdrop" style="display: none;">
+        <div class="dl-game-card glass" style="max-width: 520px;">
+            <div class="dl-game-card-header">
+                <div>
+                    <h3 id="modal-file-title" style="margin: 0; font-size: 1.15rem; color: #047857; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-file-download"></i> Download History
+                    </h3>
+                    <p id="modal-file-sub" style="margin: 0.35rem 0 0 0; font-size: 0.82rem; color: #065f46; opacity: 0.85;"></p>
+                </div>
+                <button type="button" class="dl-game-close-btn" id="close-download-users-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div style="padding: 1.2rem 1.4rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
+                    <span style="font-size: 0.82rem; font-weight: 600; color: #065f46; text-transform: uppercase; letter-spacing: 0.5px;">Learners Who Downloaded</span>
+                    <span id="modal-users-count" class="dl-count-pill">0</span>
+                </div>
+                <div id="download-users-list" style="max-height: 340px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.6rem; padding-right: 0.3rem;">
+                    <!-- User rows injected dynamically -->
                 </div>
             </div>
         </div>
@@ -179,6 +223,9 @@
 
                     // 4. Fetch and render exam reviews
                     syncExamReviews();
+
+                    // 5. Fetch and render download analytics
+                    syncDownloads();
                 } catch (error) {
                     console.error("Error fetching stats:", error);
                     statsUsers.textContent = "0";
@@ -317,6 +364,139 @@
                     console.error("Error fetching exam reviews:", error);
                     reviewsList.innerHTML = '<div style="text-align: center; padding: 2rem; color: #ef4444;">Error loading reviews. Check Firestore permissions.</div>';
                 }
+            }
+
+            async function syncDownloads() {
+                const downloadsList = document.getElementById('downloads-list');
+                const downloadsBadge = document.getElementById('downloads-badge');
+                const statDownloads = document.getElementById('stat-downloads');
+
+                try {
+                    const snap = await getDocs(collection(fs, "file_downloads"));
+                    const totalDownloads = snap.size;
+                    if (statDownloads) statDownloads.textContent = totalDownloads;
+                    if (downloadsBadge) downloadsBadge.textContent = `${totalDownloads} Total`;
+
+                    if (snap.empty) {
+                        downloadsList.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--text-muted);">No downloads recorded yet.</div>';
+                        return;
+                    }
+
+                    // Group downloads by fileTitle
+                    const fileMap = {};
+                    snap.forEach(docSnap => {
+                        const data = docSnap.data();
+                        const fileKey = data.fileTitle || "Untitled Resource";
+                        if (!fileMap[fileKey]) {
+                            fileMap[fileKey] = {
+                                fileTitle: fileKey,
+                                subject: data.subject || "Resource",
+                                fileUrl: data.fileUrl || "",
+                                downloaders: []
+                            };
+                        }
+                        fileMap[fileKey].downloaders.push({
+                            userName: data.userName || "Anonymous",
+                            userEmail: data.userEmail || "No Email",
+                            timestamp: data.timestamp || ""
+                        });
+                    });
+
+                    // Sort files by total downloads descending
+                    const sortedFiles = Object.values(fileMap).sort((a, b) => b.downloaders.length - a.downloaders.length);
+
+                    downloadsList.innerHTML = '';
+                    sortedFiles.forEach(item => {
+                        // Sort downloaders newest first
+                        item.downloaders.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+                        const card = document.createElement('div');
+                        card.className = 'dl-admin-item-card glass';
+                        card.innerHTML = `
+                            <div class="dl-admin-item-left">
+                                <div class="dl-admin-file-icon">
+                                    <i class="fas fa-file-pdf"></i>
+                                </div>
+                                <div class="dl-admin-file-details">
+                                    <div class="dl-admin-file-name">${item.fileTitle}</div>
+                                    <div class="dl-admin-file-meta">${item.subject} • ${item.downloaders.length} download${item.downloaders.length === 1 ? '' : 's'}</div>
+                                </div>
+                            </div>
+                            <div class="dl-admin-item-right">
+                                <span class="dl-count-pill">${item.downloaders.length}</span>
+                                <button type="button" class="dl-inspect-users-btn">
+                                    <i class="fas fa-users"></i>
+                                    <span>Who</span>
+                                </button>
+                            </div>
+                        `;
+
+                        const inspectBtn = card.querySelector('.dl-inspect-users-btn');
+                        inspectBtn.onclick = () => {
+                            openDownloadUsersModal(item);
+                        };
+
+                        downloadsList.appendChild(card);
+                    });
+                } catch (error) {
+                    console.error("Error fetching download analytics:", error);
+                    downloadsList.innerHTML = '<div style="text-align: center; padding: 2rem; color: #ef4444;">Error loading download analytics. Check Firestore permissions.</div>';
+                }
+            }
+
+            function openDownloadUsersModal(item) {
+                const modal = document.getElementById('download-users-modal');
+                const titleEl = document.getElementById('modal-file-title');
+                const subEl = document.getElementById('modal-file-sub');
+                const countEl = document.getElementById('modal-users-count');
+                const listEl = document.getElementById('download-users-list');
+
+                titleEl.innerHTML = `<i class="fas fa-file-alt"></i> ${item.fileTitle}`;
+                subEl.textContent = `Subject: ${item.subject} • Total: ${item.downloaders.length}`;
+                countEl.textContent = `${item.downloaders.length} Downloads`;
+                listEl.innerHTML = '';
+
+                item.downloaders.forEach(u => {
+                    const row = document.createElement('div');
+                    row.className = 'dl-user-row';
+                    const initial = (u.userName || 'U').charAt(0).toUpperCase();
+                    let dateDisplay = "Recently";
+                    if (u.timestamp) {
+                        try {
+                            const d = new Date(u.timestamp);
+                            dateDisplay = d.toLocaleString();
+                        } catch(e) {
+                            dateDisplay = u.timestamp;
+                        }
+                    }
+                    row.innerHTML = `
+                        <div class="dl-user-row-left">
+                            <div class="dl-user-avatar">${initial}</div>
+                            <div class="dl-user-meta">
+                                <div class="dl-user-name">${u.userName}</div>
+                                <div class="dl-user-email">${u.userEmail}</div>
+                            </div>
+                        </div>
+                        <div class="dl-user-timestamp">${dateDisplay}</div>
+                    `;
+                    listEl.appendChild(row);
+                });
+
+                modal.style.display = 'flex';
+            }
+
+            const closeUsersModalBtn = document.getElementById('close-download-users-modal');
+            if (closeUsersModalBtn) {
+                closeUsersModalBtn.onclick = () => {
+                    const modal = document.getElementById('download-users-modal');
+                    if (modal) modal.style.display = 'none';
+                };
+            }
+            const dlUsersModal = document.getElementById('download-users-modal');
+            if (dlUsersModal) {
+                dlUsersModal.onclick = (e) => {
+                    if (e.target === dlUsersModal) dlUsersModal.style.display = 'none';
+                };
             }
         });
     </script>

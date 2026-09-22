@@ -707,6 +707,7 @@
     </div>
 
     <!-- Guest Download Restriction Modal -->
+    <!-- Guest Download Restriction Modal -->
     <div id="guest-download-modal" class="guest-modal-backdrop">
         <div class="guest-modal-card">
             <button type="button" class="guest-modal-close" id="close-guest-modal" title="Close">
@@ -729,9 +730,108 @@
         </div>
     </div>
 
+    <!-- Download Verification Challenge Modal -->
+    <div id="download-game-modal" class="dl-game-backdrop">
+        <div class="dl-game-card">
+            <div class="dl-game-header">
+                <div class="dl-game-title-group">
+                    <h3 id="dl-game-modal-title"><i class="fas fa-gamepad" style="color: #10b981;"></i> Download Challenge</h3>
+                    <p id="dl-game-modal-sub">Solve the quick challenge below to unlock and download your material</p>
+                </div>
+                <button type="button" class="dl-game-close-btn" id="close-game-modal" title="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Game 1: Math Answer Option then Count Button -->
+            <div id="pane-game-math" class="dl-game-pane">
+                <div class="math-game-box">
+                    <div id="math-equation-display" class="math-equation">8 + 5 = ?</div>
+                    <div id="math-step-label" class="math-step-label">
+                        <i class="fas fa-bullseye" style="color: #10b981;"></i> Step 1: Select the correct answer below
+                    </div>
+                    <div id="math-options-container" class="math-options-grid">
+                        <!-- 4 option chips injected dynamically -->
+                    </div>
+                </div>
+                <!-- Step 2: Only the count present on the button -->
+                <div id="math-clicker-wrapper" style="display: none;">
+                    <div class="math-step-label" style="text-align: center; margin-bottom: 0.6rem;">
+                        <i class="fas fa-hand-pointer" style="color: #10b981;"></i> Step 2: Tap the count down to 0 to unlock
+                    </div>
+                    <button type="button" id="math-count-btn" class="math-count-only-btn" title="Tap repeatedly">13</button>
+                </div>
+            </div>
+
+            <!-- Game 2: Speed / 24-digit Alphanumeric Typing -->
+            <div id="pane-game-typing" class="dl-game-pane">
+                <div class="typing-target-card">
+                    <div id="typing-mode-label" class="typing-target-label">
+                        <i class="fas fa-key"></i> Type this exact verification code
+                    </div>
+                    <div id="typing-target-phrase" class="typing-target-text code-font">
+                        7K9M-2W4P-8Q1N-5R3B-6D2F-9L8A
+                    </div>
+                </div>
+                <textarea id="typing-input-field" class="typing-input-area" placeholder="Type the code or sentence above..." spellcheck="false" autocomplete="off"></textarea>
+                <div class="typing-status-row">
+                    <span id="typing-char-count">0 characters typed</span>
+                    <span id="typing-match-status" style="font-weight: 700;">Waiting for input...</span>
+                </div>
+                <button type="button" id="typing-verify-btn" class="typing-verify-btn">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Verify & Download</span>
+                </button>
+            </div>
+
+            <!-- Game 3: Click-to-Click Line Matching (Reference Image Style) -->
+            <div id="pane-game-match" class="dl-game-pane">
+                <p class="math-step-label" style="text-align: center; margin-bottom: 0.85rem;">
+                    <i class="fas fa-draw-polygon" style="color: #10b981;"></i> Click an item on the left, then click its pair on the right
+                </p>
+                <div id="line-match-board" class="line-match-board">
+                    <svg id="line-match-svg" class="line-match-svg">
+                        <defs>
+                            <marker id="match-arrow" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+                                <polygon points="0 0.5, 7 3.5, 0 6.5" fill="#059669" />
+                            </marker>
+                            <marker id="match-arrow-err" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+                                <polygon points="0 0.5, 7 3.5, 0 6.5" fill="#ef4444" />
+                            </marker>
+                        </defs>
+                        <!-- Dynamic <line> tags connecting dots -->
+                    </svg>
+                    <div class="line-match-columns">
+                        <div id="line-match-left-col" class="line-match-col">
+                            <!-- Left nodes -->
+                        </div>
+                        <div id="line-match-right-col" class="line-match-col">
+                            <!-- Right nodes -->
+                        </div>
+                    </div>
+                </div>
+                <div class="line-match-actions">
+                    <button type="button" id="match-reset-btn" class="match-reset-btn" title="Clear all lines">
+                        <i class="fas fa-undo"></i> Reset
+                    </button>
+                    <button type="button" id="match-verify-btn" class="match-verify-btn">
+                        <i class="fas fa-check-double"></i> Verify Matches & Download
+                    </button>
+                </div>
+            </div>
+
+            <div id="dl-game-success" class="dl-game-success-banner">
+                <i class="fas fa-check-circle"></i> Verification passed! Download started...
+            </div>
+            <div id="dl-game-error" class="dl-game-error-banner">
+                <i class="fas fa-exclamation-triangle"></i> Matches don't look right yet. Try again!
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script type="module">
-        import { auth, fs, doc, getDoc } from "./firebase-config.js";
+        import { auth, fs, doc, getDoc, collection, addDoc } from "./firebase-config.js";
         import { subjectMaterials } from "./materials.js";
 
         const toast = document.getElementById('cg-toast');
@@ -740,9 +840,52 @@
         const modalCancelBtn = document.getElementById('modal-cancel-btn');
         const closeGuestModalBtn = document.getElementById('close-guest-modal');
 
+        // Game Modal Elements
+        const gameModal = document.getElementById('download-game-modal');
+        const closeGameModalBtn = document.getElementById('close-game-modal');
+        const gameModalTitle = document.getElementById('dl-game-modal-title');
+        const gameModalSub = document.getElementById('dl-game-modal-sub');
+        const gameSuccessBanner = document.getElementById('dl-game-success');
+        const gameErrorBanner = document.getElementById('dl-game-error');
+
+        // Game 1 Elements (Math Option + Count Button)
+        const mathEquationDisplay = document.getElementById('math-equation-display');
+        const mathStepLabel = document.getElementById('math-step-label');
+        const mathOptionsContainer = document.getElementById('math-options-container');
+        const mathClickerWrapper = document.getElementById('math-clicker-wrapper');
+        const mathCountBtn = document.getElementById('math-count-btn');
+
+        // Game 2 Elements (Speed / 24-char Alphanumeric Typing)
+        const typingModeLabel = document.getElementById('typing-mode-label');
+        const typingTargetPhrase = document.getElementById('typing-target-phrase');
+        const typingInputField = document.getElementById('typing-input-field');
+        const typingCharCount = document.getElementById('typing-char-count');
+        const typingMatchStatus = document.getElementById('typing-match-status');
+        const typingVerifyBtn = document.getElementById('typing-verify-btn');
+
+        // Game 3 Elements (Click-to-Click Line Match)
+        const lineMatchBoard = document.getElementById('line-match-board');
+        const lineMatchSvg = document.getElementById('line-match-svg');
+        const lineMatchLeftCol = document.getElementById('line-match-left-col');
+        const lineMatchRightCol = document.getElementById('line-match-right-col');
+        const matchResetBtn = document.getElementById('match-reset-btn');
+        const matchVerifyBtn = document.getElementById('match-verify-btn');
+
         let fileUrl = null;
         let fileTitle = null;
         let isLoggedIn = false;
+        let activeGame = 'math';
+        let isGameFinished = false;
+
+        // Current Subject and File from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentSubject = urlParams.get('subject') || 'General';
+        const initialFile = urlParams.get('file') || urlParams.get('url');
+        const initialTitle = urlParams.get('title');
+        if (initialFile) {
+            fileUrl = decodeURIComponent(initialFile);
+            fileTitle = initialTitle ? decodeURIComponent(initialTitle) : 'Material Document';
+        }
 
         // ── Toast helper
         function showToast(msg, color = 'white') {
@@ -752,7 +895,7 @@
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        // ── Modal helpers
+        // ── Guest Modal helpers
         function openGuestModal() {
             if (guestModal) {
                 guestModal.classList.add('open');
@@ -788,8 +931,9 @@
         }
 
         window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && guestModal && guestModal.classList.contains('open')) {
-                closeGuestModal();
+            if (e.key === 'Escape') {
+                if (guestModal && guestModal.classList.contains('open')) closeGuestModal();
+                if (gameModal && gameModal.classList.contains('open') && !isGameFinished) closeGameModal();
             }
         });
 
@@ -803,12 +947,472 @@
             document.body.removeChild(a);
         }
 
+        // ── Record download in Firestore for Admin tracking
+        async function recordDownloadInFirestore() {
+            try {
+                const user = auth.currentUser;
+                let userName = 'Student';
+                let userEmail = 'student@cupcake.internal';
+
+                if (user) {
+                    userEmail = user.email || 'N/A';
+                    userName = user.displayName || user.email.split('@')[0];
+                    try {
+                        const userDoc = await getDoc(doc(fs, "users", user.uid));
+                        if (userDoc.exists() && userDoc.data().name) {
+                            userName = userDoc.data().name;
+                        }
+                    } catch (e) {}
+                }
+
+                await addDoc(collection(fs, "file_downloads"), {
+                    fileUrl: fileUrl,
+                    fileTitle: fileTitle || 'Material Document',
+                    subject: currentSubject,
+                    userId: user ? user.uid : 'member',
+                    userName: userName,
+                    userEmail: userEmail,
+                    timestamp: new Date().toISOString()
+                });
+            } catch (err) {
+                console.error("Error logging download to Firestore:", err);
+            }
+        }
+
+        // ── Unified On Game Success
+        function onGameSuccess() {
+            isGameFinished = true;
+            if (gameSuccessBanner) gameSuccessBanner.style.display = 'block';
+            if (gameErrorBanner) gameErrorBanner.style.display = 'none';
+
+            triggerDownload();
+            showToast('Verification passed! Download started.', '#10b981');
+            recordDownloadInFirestore();
+
+            setTimeout(() => {
+                closeGameModal();
+                if (gameSuccessBanner) gameSuccessBanner.style.display = 'none';
+                isGameFinished = false;
+            }, 1400);
+        }
+
+        function showGameError(msg) {
+            if (gameErrorBanner) {
+                gameErrorBanner.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${msg}`;
+                gameErrorBanner.style.display = 'block';
+                setTimeout(() => {
+                    gameErrorBanner.style.display = 'none';
+                }, 3500);
+            }
+        }
+
+        // ── Game 1: 2-Step Math Answer Option then Count Button Logic
+        let mathTarget = 12;
+        let mathClicksRemaining = 12;
+
+        function initMathGame() {
+            if (mathClickerWrapper) mathClickerWrapper.style.display = 'none';
+            if (mathOptionsContainer) mathOptionsContainer.style.display = 'grid';
+            if (mathStepLabel) {
+                mathStepLabel.innerHTML = '<i class="fas fa-bullseye" style="color: #10b981;"></i> Step 1: Select the correct answer below';
+            }
+
+            const n1 = Math.floor(Math.random() * 6) + 4; // 4 to 9
+            const n2 = Math.floor(Math.random() * 5) + 3; // 3 to 7
+            mathTarget = n1 + n2; // 7 to 16
+            mathClicksRemaining = mathTarget;
+
+            if (mathEquationDisplay) mathEquationDisplay.textContent = `${n1} + ${n2} = ?`;
+
+            // Generate 4 unique options including mathTarget
+            const options = new Set([mathTarget]);
+            while (options.size < 4) {
+                const offset = Math.floor(Math.random() * 7) - 3;
+                const val = mathTarget + offset;
+                if (val > 0 && val !== mathTarget) options.add(val);
+            }
+            const shuffledOptions = Array.from(options).sort(() => Math.random() - 0.5);
+
+            if (mathOptionsContainer) {
+                mathOptionsContainer.innerHTML = shuffledOptions.map(opt => `
+                    <button type="button" class="math-option-chip" data-val="${opt}">${opt}</button>
+                `).join('');
+
+                mathOptionsContainer.querySelectorAll('.math-option-chip').forEach(btn => {
+                    btn.onclick = () => {
+                        const chosen = parseInt(btn.getAttribute('data-val'), 10);
+                        if (chosen === mathTarget) {
+                            btn.classList.add('correct');
+                            setTimeout(() => {
+                                if (mathOptionsContainer) mathOptionsContainer.style.display = 'none';
+                                if (mathStepLabel) {
+                                    mathStepLabel.innerHTML = '<i class="fas fa-check" style="color: #10b981;"></i> Step 1 Passed! Step 2: Tap down to 0';
+                                }
+                                if (mathClickerWrapper) mathClickerWrapper.style.display = 'block';
+                                if (mathCountBtn) {
+                                    mathCountBtn.textContent = mathClicksRemaining;
+                                    mathCountBtn.classList.remove('completed');
+                                }
+                            }, 300);
+                        } else {
+                            btn.classList.add('wrong');
+                            showGameError('Incorrect answer. Try again!');
+                            setTimeout(() => btn.classList.remove('wrong'), 500);
+                        }
+                    };
+                });
+            }
+        }
+
+        if (mathCountBtn) {
+            mathCountBtn.onclick = () => {
+                if (isGameFinished || mathClicksRemaining <= 0) return;
+                mathClicksRemaining--;
+                if (mathClicksRemaining > 0) {
+                    mathCountBtn.textContent = mathClicksRemaining;
+                } else {
+                    mathCountBtn.textContent = "0";
+                    mathCountBtn.classList.add('completed');
+                    onGameSuccess();
+                }
+            };
+        }
+
+        // ── Game 2: Speed / 24-digit Alphanumeric Typing Logic
+        const typingSentences = [
+            "Consistent preparation and daily revision guarantee outstanding results in university semester exams.",
+            "Focus on understanding core fundamentals and solving previous year question papers for success.",
+            "Dedication discipline and daily practice turn engineering challenges into high academic scores.",
+            "Mastering principles and regular practice lead to outstanding confidence and academic excellence.",
+            "Continuous learning and systematic problem solving build supreme engineering knowledge and success."
+        ];
+
+        function generate24CharAlphanumeric() {
+            const chars = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
+            let raw = "";
+            for (let i = 0; i < 24; i++) {
+                raw += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return raw.match(/.{1,4}/g).join('-');
+        }
+
+        let currentTypingTarget = "";
+        let isAlphanumericMode = false;
+
+        function initTypingGame() {
+            isAlphanumericMode = Math.random() < 0.5; // 50% 24-character code, 50% sentence
+            if (isAlphanumericMode) {
+                currentTypingTarget = generate24CharAlphanumeric();
+                if (typingModeLabel) typingModeLabel.innerHTML = '<i class="fas fa-shield-alt"></i> Type this 24-character verification code';
+                if (typingTargetPhrase) typingTargetPhrase.classList.add('code-font');
+            } else {
+                currentTypingTarget = typingSentences[Math.floor(Math.random() * typingSentences.length)];
+                if (typingModeLabel) typingModeLabel.innerHTML = '<i class="fas fa-quote-left"></i> Type this exact sentence';
+                if (typingTargetPhrase) typingTargetPhrase.classList.remove('code-font');
+            }
+
+            if (typingTargetPhrase) typingTargetPhrase.textContent = currentTypingTarget;
+            if (typingInputField) {
+                typingInputField.value = "";
+                typingInputField.classList.remove('matched');
+            }
+            if (typingCharCount) typingCharCount.textContent = "0 characters typed";
+            if (typingMatchStatus) {
+                typingMatchStatus.textContent = "Waiting for input...";
+                typingMatchStatus.style.color = "#64748b";
+            }
+        }
+
+        if (typingInputField) {
+            typingInputField.oninput = () => {
+                let entered = typingInputField.value;
+                if (typingCharCount) typingCharCount.textContent = `${entered.length} characters typed`;
+
+                let normalizedEntered = entered;
+                let normalizedTarget = currentTypingTarget;
+
+                if (isAlphanumericMode) {
+                    normalizedEntered = entered.toUpperCase().replace(/-/g, '').trim();
+                    normalizedTarget = currentTypingTarget.toUpperCase().replace(/-/g, '').trim();
+                }
+
+                if (normalizedTarget.startsWith(normalizedEntered)) {
+                    if (normalizedEntered === normalizedTarget && normalizedEntered.length > 0) {
+                        typingMatchStatus.textContent = "Perfect match! Click Verify.";
+                        typingMatchStatus.style.color = "#10b981";
+                        typingInputField.classList.add('matched');
+                    } else {
+                        typingMatchStatus.textContent = "Matching so far...";
+                        typingMatchStatus.style.color = "#059669";
+                        typingInputField.classList.remove('matched');
+                    }
+                } else {
+                    typingMatchStatus.textContent = "Mismatch detected! Check characters.";
+                    typingMatchStatus.style.color = "#ef4444";
+                    typingInputField.classList.remove('matched');
+                }
+            };
+        }
+
+        if (typingVerifyBtn) {
+            typingVerifyBtn.onclick = () => {
+                if (isGameFinished) return;
+                let entered = typingInputField.value.trim();
+                let target = currentTypingTarget.trim();
+
+                if (isAlphanumericMode) {
+                    entered = entered.toUpperCase().replace(/-/g, '');
+                    target = target.toUpperCase().replace(/-/g, '');
+                } else {
+                    entered = entered.replace(/\s+/g, ' ');
+                    target = target.replace(/\s+/g, ' ');
+                }
+
+                if (entered === target && entered.length > 0) {
+                    onGameSuccess();
+                } else {
+                    showGameError(isAlphanumericMode ? "Code does not match 24 characters exactly." : "Sentence does not match exactly.");
+                }
+            };
+        }
+
+        // ── Game 3: Click-to-Click Line Matching Logic (Reference Image Style)
+        const brandPool = [
+            { id: 'github', name: 'GitHub', icon: 'fab fa-github', bg: '#24292e' },
+            { id: 'youtube', name: 'YouTube', icon: 'fab fa-youtube', bg: '#dc2626' },
+            { id: 'instagram', name: 'Instagram', icon: 'fab fa-instagram', bg: 'linear-gradient(45deg, #f09433, #dc2743, #bc1888)' },
+            { id: 'linkedin', name: 'LinkedIn', icon: 'fab fa-linkedin-in', bg: '#0284c7' },
+            { id: 'discord', name: 'Discord', icon: 'fab fa-discord', bg: '#5865F2' },
+            { id: 'spotify', name: 'Spotify', icon: 'fab fa-spotify', bg: '#10b981' }
+        ];
+
+        let activeMatchPairs = [];
+        let activeSourceNode = null;
+        let userMatches = {};
+
+        function initMatchGame() {
+            userMatches = {};
+            activeSourceNode = null;
+            clearSvgLines();
+
+            const shuffled = [...brandPool].sort(() => 0.5 - Math.random());
+            activeMatchPairs = shuffled.slice(0, 3);
+
+            const leftList = [...activeMatchPairs];
+            const rightList = [...activeMatchPairs].sort(() => 0.5 - Math.random());
+
+            if (lineMatchLeftCol) {
+                lineMatchLeftCol.innerHTML = leftList.map(item => `
+                    <div class="line-node left-node" data-id="${item.id}" id="ln-left-${item.id}">
+                        <div class="line-node-content">
+                            <div class="line-node-icon" style="background: ${item.bg};">
+                                <i class="${item.icon}"></i>
+                            </div>
+                            <span class="line-node-text">${item.name}</span>
+                        </div>
+                        <div class="connector-dot" id="dot-left-${item.id}"></div>
+                    </div>
+                `).join('');
+            }
+
+            if (lineMatchRightCol) {
+                lineMatchRightCol.innerHTML = rightList.map(item => `
+                    <div class="line-node right-node" data-id="${item.id}" id="ln-right-${item.id}">
+                        <div class="connector-dot" id="dot-right-${item.id}"></div>
+                        <div class="line-node-content">
+                            <span class="line-node-text">${item.name}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            if (lineMatchLeftCol) {
+                lineMatchLeftCol.querySelectorAll('.line-node').forEach(node => {
+                    node.onclick = () => {
+                        const leftId = node.getAttribute('data-id');
+                        lineMatchLeftCol.querySelectorAll('.line-node').forEach(n => n.classList.remove('active-source'));
+                        activeSourceNode = leftId;
+                        node.classList.add('active-source');
+                    };
+                });
+            }
+
+            if (lineMatchRightCol) {
+                lineMatchRightCol.querySelectorAll('.line-node').forEach(node => {
+                    node.onclick = () => {
+                        const rightId = node.getAttribute('data-id');
+                        if (!activeSourceNode) {
+                            showGameError('Click an item on the left first!');
+                            return;
+                        }
+
+                        userMatches[activeSourceNode] = rightId;
+
+                        const leftNode = document.getElementById(`ln-left-${activeSourceNode}`);
+                        if (leftNode) {
+                            leftNode.classList.remove('active-source');
+                            leftNode.classList.add('matched');
+                        }
+                        node.classList.add('matched');
+
+                        redrawLines();
+                        activeSourceNode = null;
+                    };
+                });
+            }
+        }
+
+        function clearSvgLines() {
+            if (!lineMatchSvg) return;
+            const defs = lineMatchSvg.querySelector('defs');
+            lineMatchSvg.innerHTML = '';
+            if (defs) lineMatchSvg.appendChild(defs);
+        }
+
+        function redrawLines(isError = false) {
+            clearSvgLines();
+            const board = document.getElementById('line-match-board');
+            if (!board || !lineMatchSvg) return;
+            const boardRect = board.getBoundingClientRect();
+
+            Object.keys(userMatches).forEach(leftId => {
+                const rightId = userMatches[leftId];
+                const leftDot = document.getElementById(`dot-left-${leftId}`);
+                const rightDot = document.getElementById(`dot-right-${rightId}`);
+
+                if (leftDot && rightDot) {
+                    const r1 = leftDot.getBoundingClientRect();
+                    const r2 = rightDot.getBoundingClientRect();
+
+                    const x1 = r1.left + r1.width / 2 - boardRect.left;
+                    const y1 = r1.top + r1.height / 2 - boardRect.top;
+                    const x2 = r2.left + r2.width / 2 - boardRect.left;
+                    const y2 = r2.top + r2.height / 2 - boardRect.top;
+
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.setAttribute('x1', x1);
+                    line.setAttribute('y1', y1);
+                    line.setAttribute('x2', x2);
+                    line.setAttribute('y2', y2);
+                    line.setAttribute('marker-end', isError ? 'url(#match-arrow-err)' : 'url(#match-arrow)');
+                    if (isError) line.classList.add('error-line');
+                    lineMatchSvg.appendChild(line);
+                }
+            });
+        }
+
+        if (matchResetBtn) {
+            matchResetBtn.onclick = () => {
+                userMatches = {};
+                activeSourceNode = null;
+                clearSvgLines();
+                document.querySelectorAll('.line-node').forEach(n => {
+                    n.classList.remove('active-source', 'matched');
+                });
+            };
+        }
+
+        if (matchVerifyBtn) {
+            matchVerifyBtn.onclick = () => {
+                if (isGameFinished) return;
+                const keys = Object.keys(userMatches);
+                if (keys.length < activeMatchPairs.length) {
+                    showGameError('Please connect all 3 pairs before verifying!');
+                    return;
+                }
+
+                let allCorrect = true;
+                activeMatchPairs.forEach(pair => {
+                    if (userMatches[pair.id] !== pair.id) {
+                        allCorrect = false;
+                    }
+                });
+
+                if (allCorrect) {
+                    redrawLines(false);
+                    onGameSuccess();
+                } else {
+                    redrawLines(true);
+                    showGameError('Some matches are incorrect. Redraw lines and try again!');
+                    setTimeout(() => {
+                        redrawLines(false);
+                    }, 1200);
+                }
+            };
+        }
+
+        window.addEventListener('resize', () => {
+            if (activeGame === 'match' && gameModal && gameModal.classList.contains('open')) {
+                redrawLines();
+            }
+        });
+
+        // ── Single Random Game Picker
+        const availableGames = ['math', 'typing', 'match'];
+
+        function openGameModal() {
+            isGameFinished = false;
+            if (gameSuccessBanner) gameSuccessBanner.style.display = 'none';
+            if (gameErrorBanner) gameErrorBanner.style.display = 'none';
+
+            // Pick exactly ONE game randomly
+            const picked = availableGames[Math.floor(Math.random() * availableGames.length)];
+            activeGame = picked;
+
+            document.querySelectorAll('.dl-game-pane').forEach(p => p.classList.remove('active'));
+
+            if (picked === 'math') {
+                const pane = document.getElementById('pane-game-math');
+                if (pane) pane.classList.add('active');
+                if (gameModalTitle) gameModalTitle.innerHTML = '<i class="fas fa-calculator" style="color: #10b981;"></i> Math Challenge';
+                if (gameModalSub) gameModalSub.textContent = 'Select the correct answer, then tap down the count';
+                initMathGame();
+            } else if (picked === 'typing') {
+                const pane = document.getElementById('pane-game-typing');
+                if (pane) pane.classList.add('active');
+                if (gameModalTitle) gameModalTitle.innerHTML = '<i class="fas fa-keyboard" style="color: #10b981;"></i> Verification Typing';
+                if (gameModalSub) gameModalSub.textContent = 'Type the exact verification sequence below';
+                initTypingGame();
+            } else if (picked === 'match') {
+                const pane = document.getElementById('pane-game-match');
+                if (pane) pane.classList.add('active');
+                if (gameModalTitle) gameModalTitle.innerHTML = '<i class="fas fa-draw-polygon" style="color: #10b981;"></i> Match the Following';
+                if (gameModalSub) gameModalSub.textContent = 'Click an item on the left, then click its pair on the right';
+                initMatchGame();
+            }
+
+            if (gameModal) {
+                gameModal.classList.add('open');
+                if (picked === 'match') {
+                    setTimeout(redrawLines, 120);
+                }
+            }
+        }
+
+        function closeGameModal() {
+            if (gameModal) {
+                gameModal.classList.remove('open');
+            }
+        }
+
+        if (closeGameModalBtn) {
+            closeGameModalBtn.onclick = closeGameModal;
+        }
+
+        if (gameModal) {
+            gameModal.onclick = (e) => {
+                if (e.target === gameModal && !isGameFinished) {
+                    closeGameModal();
+                }
+            };
+        }
+
         // ── Auth state — track login
         auth.onAuthStateChanged((user) => {
             isLoggedIn = !!user;
         });
 
-        // ── Unified Download logic
+        // ── Unified Download logic with Games
         const handleDownload = () => {
             if (!fileUrl || fileUrl === '#') {
                 showToast('No file available to download.');
@@ -823,8 +1427,8 @@
                 return;
             }
 
-            triggerDownload();
-            showToast('Download started', 'white');
+            // Authenticated user -> Open verification game modal (Single random game)
+            openGameModal();
         };
 
         const floatDlBtn = document.getElementById('floating-download');
