@@ -746,6 +746,9 @@
             <!-- Game 1: Math Answer Option then Count Button -->
             <div id="pane-game-math" class="dl-game-pane">
                 <div class="math-game-box">
+                    <div id="math-order-rule" class="math-order-rule-badge" style="display: none;">
+                        <i class="fas fa-layer-group"></i> <span id="math-order-rule-text">Rule: Multiply first, then Add</span>
+                    </div>
                     <div id="math-equation-display" class="math-equation">8 + 5 = ?</div>
                     <div id="math-step-label" class="math-step-label">
                         <i class="fas fa-bullseye" style="color: #10b981;"></i> Step 1: Select the correct answer below
@@ -766,14 +769,19 @@
             <!-- Game 2: Speed / 24-digit Alphanumeric Typing -->
             <div id="pane-game-typing" class="dl-game-pane">
                 <div class="typing-target-card">
-                    <div id="typing-mode-label" class="typing-target-label">
-                        <i class="fas fa-key"></i> Type this exact verification code
+                    <div class="typing-target-header">
+                        <div id="typing-mode-label" class="typing-target-label">
+                            <i class="fas fa-quote-left"></i> Type this sentence (within 60s)
+                        </div>
+                        <span id="typing-timer-display" class="typing-timer-pill">
+                            <i class="fas fa-stopwatch"></i> <span id="typing-sec-val">60</span>s left
+                        </span>
                     </div>
                     <div id="typing-target-phrase" class="typing-target-text code-font">
-                        7K9M-2W4P-8Q1N-5R3B-6D2F-9L8A
+                        7K9M - 2W4P - 8Q1N - 5R3B - 6D2F - 9L8A
                     </div>
                 </div>
-                <textarea id="typing-input-field" class="typing-input-area" placeholder="Type the code or sentence above..." spellcheck="false" autocomplete="off"></textarea>
+                <textarea id="typing-input-field" class="typing-input-area" placeholder="Type the text above exactly..." spellcheck="false" autocomplete="off"></textarea>
                 <div class="typing-status-row">
                     <span id="typing-char-count">0 characters typed</span>
                     <span id="typing-match-status" style="font-weight: 700;">Waiting for input...</span>
@@ -787,7 +795,7 @@
             <!-- Game 3: Click-to-Click Line Matching (Reference Image Style) -->
             <div id="pane-game-match" class="dl-game-pane">
                 <p class="math-step-label" style="text-align: center; margin-bottom: 0.85rem;">
-                    <i class="fas fa-draw-polygon" style="color: #10b981;"></i> Click an item on the left, then click its pair on the right
+                    <i class="fas fa-draw-polygon" style="color: #10b981;"></i> Click an icon on the left, then click its brand name on the right
                 </p>
                 <div id="line-match-board" class="line-match-board">
                     <svg id="line-match-svg" class="line-match-svg">
@@ -802,11 +810,11 @@
                         <!-- Dynamic <line> tags connecting dots -->
                     </svg>
                     <div class="line-match-columns">
-                        <div id="line-match-left-col" class="line-match-col">
-                            <!-- Left nodes -->
+                        <div id="line-match-left-col" class="line-match-col left-col">
+                            <!-- Left nodes: icon only -->
                         </div>
-                        <div id="line-match-right-col" class="line-match-col">
-                            <!-- Right nodes -->
+                        <div id="line-match-right-col" class="line-match-col right-col">
+                            <!-- Right nodes: brand name only -->
                         </div>
                     </div>
                 </div>
@@ -851,12 +859,16 @@
         // Game 1 Elements (Math Option + Count Button)
         const mathEquationDisplay = document.getElementById('math-equation-display');
         const mathStepLabel = document.getElementById('math-step-label');
+        const mathOrderRule = document.getElementById('math-order-rule');
+        const mathOrderRuleText = document.getElementById('math-order-rule-text');
         const mathOptionsContainer = document.getElementById('math-options-container');
         const mathClickerWrapper = document.getElementById('math-clicker-wrapper');
         const mathCountBtn = document.getElementById('math-count-btn');
 
         // Game 2 Elements (Speed / 24-char Alphanumeric Typing)
         const typingModeLabel = document.getElementById('typing-mode-label');
+        const typingTimerDisplay = document.getElementById('typing-timer-display');
+        const typingSecVal = document.getElementById('typing-sec-val');
         const typingTargetPhrase = document.getElementById('typing-target-phrase');
         const typingInputField = document.getElementById('typing-input-field');
         const typingCharCount = document.getElementById('typing-char-count');
@@ -876,6 +888,8 @@
         let isLoggedIn = false;
         let activeGame = 'math';
         let isGameFinished = false;
+        let typingTimerInterval = null;
+        let typingTimeRemaining = 60;
 
         // Current Subject and File from URL
         const urlParams = new URLSearchParams(window.location.search);
@@ -892,7 +906,7 @@
             toast.textContent = msg;
             toast.style.borderColor = color === 'white' ? 'rgba(255,255,255,0.1)' : color;
             toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+            setTimeout(() => toast.classList.remove('show'), 3200);
         }
 
         // ── Guest Modal helpers
@@ -982,6 +996,10 @@
         // ── Unified On Game Success
         function onGameSuccess() {
             isGameFinished = true;
+            if (typingTimerInterval) {
+                clearInterval(typingTimerInterval);
+                typingTimerInterval = null;
+            }
             if (gameSuccessBanner) gameSuccessBanner.style.display = 'block';
             if (gameErrorBanner) gameErrorBanner.style.display = 'none';
 
@@ -1006,9 +1024,75 @@
             }
         }
 
-        // ── Game 1: 2-Step Math Answer Option then Count Button Logic
+        // ── Game 1: 4 Operations + Hierarchy Math Problem Logic
         let mathTarget = 12;
         let mathClicksRemaining = 12;
+
+        function generateMathProblem() {
+            // 5 Types: Addition (+), Subtraction (-), Multiplication (×), Division (÷), Hierarchy (BODMAS with order)
+            const type = Math.floor(Math.random() * 5);
+            let equation = "";
+            let answer = 0;
+            let rule = "";
+            let isHierarchy = false;
+
+            if (type === 0) {
+                // Addition: Result 6..16
+                const a = Math.floor(Math.random() * 7) + 3; // 3..9
+                const b = Math.floor(Math.random() * 6) + 3; // 3..8
+                equation = `${a} + ${b} = ?`;
+                answer = a + b;
+                rule = "Standard Addition";
+            } else if (type === 1) {
+                // Subtraction: Result 5..14
+                const ans = Math.floor(Math.random() * 9) + 5; // 5..13
+                const b = Math.floor(Math.random() * 6) + 3; // 3..8
+                const a = ans + b;
+                equation = `${a} - ${b} = ?`;
+                answer = ans;
+                rule = "Standard Subtraction";
+            } else if (type === 2) {
+                // Multiplication: Result 6..15
+                const pairs = [
+                    [2, 3, 6], [2, 4, 8], [2, 5, 10], [2, 6, 12], [2, 7, 14],
+                    [3, 2, 6], [3, 3, 9], [3, 4, 12], [3, 5, 15],
+                    [4, 2, 8], [4, 3, 12], [5, 2, 10], [5, 3, 15], [6, 2, 12], [7, 2, 14]
+                ];
+                const pick = pairs[Math.floor(Math.random() * pairs.length)];
+                equation = `${pick[0]} × ${pick[1]} = ?`;
+                answer = pick[2];
+                rule = "Standard Multiplication";
+            } else if (type === 3) {
+                // Division: Result 4..12
+                const ans = Math.floor(Math.random() * 7) + 4; // 4..10
+                const b = Math.floor(Math.random() * 3) + 2; // 2..4
+                const a = ans * b;
+                equation = `${a} ÷ ${b} = ?`;
+                answer = ans;
+                rule = "Standard Division";
+            } else {
+                // Hierarchy / Order of Operations
+                isHierarchy = true;
+                const hierarchyPuzzles = [
+                    { eq: '(3 × 4) + 2 = ?', ans: 14, rule: 'Rule: Multiply first, then Add' },
+                    { eq: '5 + (2 × 4) = ?', ans: 13, rule: 'Rule: Multiply first, then Add' },
+                    { eq: '(15 - 3) ÷ 2 = ?', ans: 6, rule: 'Rule: Calculate brackets first, then Divide' },
+                    { eq: '20 - (2 × 4) = ?', ans: 12, rule: 'Rule: Multiply first, then Subtract' },
+                    { eq: '(4 + 2) × 2 = ?', ans: 12, rule: 'Rule: Calculate brackets first, then Multiply' },
+                    { eq: '6 + (8 ÷ 2) = ?', ans: 10, rule: 'Rule: Divide first, then Add' },
+                    { eq: '(2 × 5) + 4 = ?', ans: 14, rule: 'Rule: Multiply first, then Add' },
+                    { eq: '(18 ÷ 3) + 5 = ?', ans: 11, rule: 'Rule: Divide first, then Add' },
+                    { eq: '16 - (12 ÷ 3) = ?', ans: 12, rule: 'Rule: Divide first, then Subtract' },
+                    { eq: '(5 - 2) × 3 = ?', ans: 9, rule: 'Rule: Calculate brackets first, then Multiply' }
+                ];
+                const h = hierarchyPuzzles[Math.floor(Math.random() * hierarchyPuzzles.length)];
+                equation = h.eq;
+                answer = h.ans;
+                rule = h.rule;
+            }
+
+            return { equation, answer, rule, isHierarchy };
+        }
 
         function initMathGame() {
             if (mathClickerWrapper) mathClickerWrapper.style.display = 'none';
@@ -1017,12 +1101,20 @@
                 mathStepLabel.innerHTML = '<i class="fas fa-bullseye" style="color: #10b981;"></i> Step 1: Select the correct answer below';
             }
 
-            const n1 = Math.floor(Math.random() * 6) + 4; // 4 to 9
-            const n2 = Math.floor(Math.random() * 5) + 3; // 3 to 7
-            mathTarget = n1 + n2; // 7 to 16
+            const problem = generateMathProblem();
+            mathTarget = problem.answer;
             mathClicksRemaining = mathTarget;
 
-            if (mathEquationDisplay) mathEquationDisplay.textContent = `${n1} + ${n2} = ?`;
+            if (mathEquationDisplay) mathEquationDisplay.textContent = problem.equation;
+
+            if (mathOrderRule && mathOrderRuleText) {
+                if (problem.isHierarchy) {
+                    mathOrderRuleText.textContent = problem.rule;
+                    mathOrderRule.style.display = 'inline-flex';
+                } else {
+                    mathOrderRule.style.display = 'none';
+                }
+            }
 
             // Generate 4 unique options including mathTarget
             const options = new Set([mathTarget]);
@@ -1045,6 +1137,7 @@
                             btn.classList.add('correct');
                             setTimeout(() => {
                                 if (mathOptionsContainer) mathOptionsContainer.style.display = 'none';
+                                if (mathOrderRule) mathOrderRule.style.display = 'none';
                                 if (mathStepLabel) {
                                     mathStepLabel.innerHTML = '<i class="fas fa-check" style="color: #10b981;"></i> Step 1 Passed! Step 2: Tap down to 0';
                                 }
@@ -1053,11 +1146,14 @@
                                     mathCountBtn.textContent = mathClicksRemaining;
                                     mathCountBtn.classList.remove('completed');
                                 }
-                            }, 300);
+                            }, 250);
                         } else {
                             btn.classList.add('wrong');
-                            showGameError('Incorrect answer. Try again!');
-                            setTimeout(() => btn.classList.remove('wrong'), 500);
+                            // Close the popup with slight concern sorry, try again
+                            setTimeout(() => {
+                                closeGameModal();
+                                showToast("Sorry, that wasn't the right answer. Please try again!", "#ef4444");
+                            }, 350);
                         }
                     };
                 });
@@ -1078,36 +1174,62 @@
             };
         }
 
-        // ── Game 2: Speed / 24-digit Alphanumeric Typing Logic
+        // ── Game 2: 15-20 Words Sentence (within 60s) OR 24-digit Unambiguous Alphanumeric
         const typingSentences = [
-            "Consistent preparation and daily revision guarantee outstanding results in university semester exams.",
-            "Focus on understanding core fundamentals and solving previous year question papers for success.",
-            "Dedication discipline and daily practice turn engineering challenges into high academic scores.",
-            "Mastering principles and regular practice lead to outstanding confidence and academic excellence.",
-            "Continuous learning and systematic problem solving build supreme engineering knowledge and success."
+            "Consistent preparation and comprehensive daily revision guarantee outstanding academic excellence and confidence in university semester examinations.", // 16 words
+            "Engineering students achieve remarkable success by mastering fundamental concepts and systematically solving previous year university question papers.", // 17 words
+            "Daily dedication discipline and relentless practice turn complex technical challenges into top academic grades and career opportunities.", // 17 words
+            "Continuous learning combined with structured problem solving builds supreme engineering knowledge analytical thinking and professional mastery.", // 17 words
+            "Understanding core theoretical principles and practicing numerical problems daily leads to confident performance and exceptional examination results.", // 17 words
+            "Systematic study habits smart time management and persistent effort always produce exceptional outcomes in university examinations." // 16 words
         ];
 
         function generate24CharAlphanumeric() {
-            const chars = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
+            // Unambiguous character set (no 0, O, 1, I, L, B, 8, S, 5, Z, 2)
+            const safeChars = "34679ACDEFGHJKMNPQRTUVWXY";
             let raw = "";
             for (let i = 0; i < 24; i++) {
-                raw += chars.charAt(Math.floor(Math.random() * chars.length));
+                raw += safeChars.charAt(Math.floor(Math.random() * safeChars.length));
             }
-            return raw.match(/.{1,4}/g).join('-');
+            return raw.match(/.{1,4}/g).join(' - ');
         }
 
         let currentTypingTarget = "";
         let isAlphanumericMode = false;
 
+        function startTypingTimer() {
+            if (typingTimerInterval) clearInterval(typingTimerInterval);
+            typingTimeRemaining = 60;
+            if (typingTimerDisplay) typingTimerDisplay.style.display = 'inline-flex';
+            if (typingSecVal) typingSecVal.textContent = '60';
+
+            typingTimerInterval = setInterval(() => {
+                typingTimeRemaining--;
+                if (typingSecVal) typingSecVal.textContent = typingTimeRemaining;
+                if (typingTimeRemaining <= 0) {
+                    clearInterval(typingTimerInterval);
+                    typingTimerInterval = null;
+                    closeGameModal();
+                    showToast("Sorry, time expired! Please try again.", "#ef4444");
+                }
+            }, 1000);
+        }
+
         function initTypingGame() {
+            if (typingTimerInterval) {
+                clearInterval(typingTimerInterval);
+                typingTimerInterval = null;
+            }
+
             isAlphanumericMode = Math.random() < 0.5; // 50% 24-character code, 50% sentence
+
             if (isAlphanumericMode) {
                 currentTypingTarget = generate24CharAlphanumeric();
-                if (typingModeLabel) typingModeLabel.innerHTML = '<i class="fas fa-shield-alt"></i> Type this 24-character verification code';
+                if (typingModeLabel) typingModeLabel.innerHTML = '<i class="fas fa-shield-alt"></i> Type this 24-character code (within 60s)';
                 if (typingTargetPhrase) typingTargetPhrase.classList.add('code-font');
             } else {
                 currentTypingTarget = typingSentences[Math.floor(Math.random() * typingSentences.length)];
-                if (typingModeLabel) typingModeLabel.innerHTML = '<i class="fas fa-quote-left"></i> Type this exact sentence';
+                if (typingModeLabel) typingModeLabel.innerHTML = '<i class="fas fa-quote-left"></i> Type this sentence (within 60s)';
                 if (typingTargetPhrase) typingTargetPhrase.classList.remove('code-font');
             }
 
@@ -1116,40 +1238,60 @@
                 typingInputField.value = "";
                 typingInputField.classList.remove('matched');
             }
-            if (typingCharCount) typingCharCount.textContent = "0 characters typed";
+            if (typingCharCount) typingCharCount.textContent = isAlphanumericMode ? "0 / 24 characters" : "0 characters typed";
             if (typingMatchStatus) {
                 typingMatchStatus.textContent = "Waiting for input...";
                 typingMatchStatus.style.color = "#64748b";
             }
+
+            startTypingTimer();
         }
 
         if (typingInputField) {
             typingInputField.oninput = () => {
                 let entered = typingInputField.value;
-                if (typingCharCount) typingCharCount.textContent = `${entered.length} characters typed`;
-
-                let normalizedEntered = entered;
-                let normalizedTarget = currentTypingTarget;
 
                 if (isAlphanumericMode) {
-                    normalizedEntered = entered.toUpperCase().replace(/-/g, '').trim();
-                    normalizedTarget = currentTypingTarget.toUpperCase().replace(/-/g, '').trim();
-                }
+                    // Normalize: remove dashes, spaces, convert uppercase
+                    const cleanUser = entered.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                    const cleanTarget = currentTypingTarget.toUpperCase().replace(/[^A-Z0-9]/g, '');
 
-                if (normalizedTarget.startsWith(normalizedEntered)) {
-                    if (normalizedEntered === normalizedTarget && normalizedEntered.length > 0) {
-                        typingMatchStatus.textContent = "Perfect match! Click Verify.";
-                        typingMatchStatus.style.color = "#10b981";
-                        typingInputField.classList.add('matched');
+                    typingCharCount.textContent = `${cleanUser.length} / 24 characters`;
+
+                    if (cleanTarget.startsWith(cleanUser)) {
+                        if (cleanUser.length === 24) {
+                            typingMatchStatus.textContent = "Code verified! Click Verify & Download.";
+                            typingMatchStatus.style.color = "#10b981";
+                            typingInputField.classList.add('matched');
+                        } else {
+                            typingMatchStatus.textContent = `Correct so far (${cleanUser.length}/24)...`;
+                            typingMatchStatus.style.color = "#059669";
+                            typingInputField.classList.remove('matched');
+                        }
                     } else {
-                        typingMatchStatus.textContent = "Matching so far...";
-                        typingMatchStatus.style.color = "#059669";
+                        typingMatchStatus.textContent = "Mismatch detected! Check characters.";
+                        typingMatchStatus.style.color = "#ef4444";
                         typingInputField.classList.remove('matched');
                     }
                 } else {
-                    typingMatchStatus.textContent = "Mismatch detected! Check characters.";
-                    typingMatchStatus.style.color = "#ef4444";
-                    typingInputField.classList.remove('matched');
+                    // Sentence matching
+                    typingCharCount.textContent = `${entered.length} characters typed`;
+
+                    if (currentTypingTarget.startsWith(entered)) {
+                        if (entered.trim() === currentTypingTarget.trim()) {
+                            typingMatchStatus.textContent = "Sentence verified! Click Verify & Download.";
+                            typingMatchStatus.style.color = "#10b981";
+                            typingInputField.classList.add('matched');
+                        } else {
+                            typingMatchStatus.textContent = "Typing correctly so far...";
+                            typingMatchStatus.style.color = "#059669";
+                            typingInputField.classList.remove('matched');
+                        }
+                    } else {
+                        typingMatchStatus.textContent = "Character mismatch! Check spelling.";
+                        typingMatchStatus.style.color = "#ef4444";
+                        typingInputField.classList.remove('matched');
+                    }
                 }
             };
         }
@@ -1157,33 +1299,136 @@
         if (typingVerifyBtn) {
             typingVerifyBtn.onclick = () => {
                 if (isGameFinished) return;
-                let entered = typingInputField.value.trim();
-                let target = currentTypingTarget.trim();
+
+                let isSuccess = false;
 
                 if (isAlphanumericMode) {
-                    entered = entered.toUpperCase().replace(/-/g, '');
-                    target = target.toUpperCase().replace(/-/g, '');
+                    const cleanUser = typingInputField.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                    const cleanTarget = currentTypingTarget.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                    isSuccess = cleanUser === cleanTarget && cleanUser.length === 24;
                 } else {
-                    entered = entered.replace(/\s+/g, ' ');
-                    target = target.replace(/\s+/g, ' ');
+                    const cleanUser = typingInputField.value.trim().replace(/\s+/g, ' ');
+                    const cleanTarget = currentTypingTarget.trim().replace(/\s+/g, ' ');
+                    isSuccess = cleanUser === cleanTarget && cleanUser.length > 0;
                 }
 
-                if (entered === target && entered.length > 0) {
+                if (isSuccess) {
+                    if (typingTimerInterval) clearInterval(typingTimerInterval);
                     onGameSuccess();
                 } else {
-                    showGameError(isAlphanumericMode ? "Code does not match 24 characters exactly." : "Sentence does not match exactly.");
+                    if (typingTimerInterval) clearInterval(typingTimerInterval);
+                    closeGameModal();
+                    showToast(isAlphanumericMode ? "Sorry, the code did not match. Please try again!" : "Sorry, the sentence did not match. Please try again!", "#ef4444");
                 }
             };
         }
 
-        // ── Game 3: Click-to-Click Line Matching Logic (Reference Image Style)
+        // ── Game 3: 100+ Top Brands Pool (3 to 5 pairs; Left side Icon ONLY, Right side Name ONLY)
         const brandPool = [
             { id: 'github', name: 'GitHub', icon: 'fab fa-github', bg: '#24292e' },
             { id: 'youtube', name: 'YouTube', icon: 'fab fa-youtube', bg: '#dc2626' },
             { id: 'instagram', name: 'Instagram', icon: 'fab fa-instagram', bg: 'linear-gradient(45deg, #f09433, #dc2743, #bc1888)' },
             { id: 'linkedin', name: 'LinkedIn', icon: 'fab fa-linkedin-in', bg: '#0284c7' },
             { id: 'discord', name: 'Discord', icon: 'fab fa-discord', bg: '#5865F2' },
-            { id: 'spotify', name: 'Spotify', icon: 'fab fa-spotify', bg: '#10b981' }
+            { id: 'spotify', name: 'Spotify', icon: 'fab fa-spotify', bg: '#10b981' },
+            { id: 'apple', name: 'Apple', icon: 'fab fa-apple', bg: '#000000' },
+            { id: 'google', name: 'Google', icon: 'fab fa-google', bg: '#ea4335' },
+            { id: 'microsoft', name: 'Microsoft', icon: 'fab fa-microsoft', bg: '#00a4ef' },
+            { id: 'amazon', name: 'Amazon', icon: 'fab fa-amazon', bg: '#ff9900' },
+            { id: 'facebook', name: 'Facebook', icon: 'fab fa-facebook-f', bg: '#1877f2' },
+            { id: 'x-twitter', name: 'X / Twitter', icon: 'fab fa-x-twitter', bg: '#000000' },
+            { id: 'threads', name: 'Threads', icon: 'fab fa-threads', bg: '#000000' },
+            { id: 'tiktok', name: 'TikTok', icon: 'fab fa-tiktok', bg: '#010101' },
+            { id: 'reddit', name: 'Reddit', icon: 'fab fa-reddit-alien', bg: '#ff4500' },
+            { id: 'twitch', name: 'Twitch', icon: 'fab fa-twitch', bg: '#9146ff' },
+            { id: 'slack', name: 'Slack', icon: 'fab fa-slack', bg: '#4a154b' },
+            { id: 'figma', name: 'Figma', icon: 'fab fa-figma', bg: '#f24e1e' },
+            { id: 'dropbox', name: 'Dropbox', icon: 'fab fa-dropbox', bg: '#0061ff' },
+            { id: 'pinterest', name: 'Pinterest', icon: 'fab fa-pinterest', bg: '#e60023' },
+            { id: 'snapchat', name: 'Snapchat', icon: 'fab fa-snapchat', bg: '#fffc00', darkText: true },
+            { id: 'telegram', name: 'Telegram', icon: 'fab fa-telegram', bg: '#229ed9' },
+            { id: 'whatsapp', name: 'WhatsApp', icon: 'fab fa-whatsapp', bg: '#25d366' },
+            { id: 'steam', name: 'Steam', icon: 'fab fa-steam', bg: '#171a21' },
+            { id: 'playstation', name: 'PlayStation', icon: 'fab fa-playstation', bg: '#003791' },
+            { id: 'xbox', name: 'Xbox', icon: 'fab fa-xbox', bg: '#107c10' },
+            { id: 'android', name: 'Android', icon: 'fab fa-android', bg: '#3ddc84' },
+            { id: 'windows', name: 'Windows', icon: 'fab fa-windows', bg: '#0078d7' },
+            { id: 'linux', name: 'Linux', icon: 'fab fa-linux', bg: '#333333' },
+            { id: 'ubuntu', name: 'Ubuntu', icon: 'fab fa-ubuntu', bg: '#e95420' },
+            { id: 'python', name: 'Python', icon: 'fab fa-python', bg: '#3776ab' },
+            { id: 'java', name: 'Java', icon: 'fab fa-java', bg: '#f89820' },
+            { id: 'js', name: 'JavaScript', icon: 'fab fa-js', bg: '#f7df1e', darkText: true },
+            { id: 'html5', name: 'HTML5', icon: 'fab fa-html5', bg: '#e34f26' },
+            { id: 'css3', name: 'CSS3', icon: 'fab fa-css3-alt', bg: '#1572b6' },
+            { id: 'react', name: 'React', icon: 'fab fa-react', bg: '#61dafb', darkText: true },
+            { id: 'vuejs', name: 'Vue.js', icon: 'fab fa-vuejs', bg: '#4fc08d' },
+            { id: 'angular', name: 'Angular', icon: 'fab fa-angular', bg: '#dd0031' },
+            { id: 'node', name: 'Node.js', icon: 'fab fa-node-js', bg: '#339933' },
+            { id: 'docker', name: 'Docker', icon: 'fab fa-docker', bg: '#2496ed' },
+            { id: 'aws', name: 'AWS', icon: 'fab fa-aws', bg: '#232f3e' },
+            { id: 'cloudflare', name: 'Cloudflare', icon: 'fab fa-cloudflare', bg: '#f38020' },
+            { id: 'digital-ocean', name: 'DigitalOcean', icon: 'fab fa-digital-ocean', bg: '#0080ff' },
+            { id: 'git', name: 'Git', icon: 'fab fa-git-alt', bg: '#f05032' },
+            { id: 'gitlab', name: 'GitLab', icon: 'fab fa-gitlab', bg: '#fc6d26' },
+            { id: 'bitbucket', name: 'Bitbucket', icon: 'fab fa-bitbucket', bg: '#0052cc' },
+            { id: 'stack-overflow', name: 'Stack Overflow', icon: 'fab fa-stack-overflow', bg: '#f48024' },
+            { id: 'npm', name: 'npm', icon: 'fab fa-npm', bg: '#cb3837' },
+            { id: 'yarn', name: 'Yarn', icon: 'fab fa-yarn', bg: '#2c8ebb' },
+            { id: 'php', name: 'PHP', icon: 'fab fa-php', bg: '#777bb4' },
+            { id: 'rust', name: 'Rust', icon: 'fab fa-rust', bg: '#000000' },
+            { id: 'swift', name: 'Swift', icon: 'fab fa-swift', bg: '#f05138' },
+            { id: 'canva', name: 'Canva', icon: 'fab fa-canva', bg: '#00c4cc' },
+            { id: 'wordpress', name: 'WordPress', icon: 'fab fa-wordpress', bg: '#21759b' },
+            { id: 'medium', name: 'Medium', icon: 'fab fa-medium', bg: '#000000' },
+            { id: 'paypal', name: 'PayPal', icon: 'fab fa-paypal', bg: '#00457c' },
+            { id: 'stripe', name: 'Stripe', icon: 'fab fa-stripe', bg: '#635bff' },
+            { id: 'uber', name: 'Uber', icon: 'fab fa-uber', bg: '#000000' },
+            { id: 'airbnb', name: 'Airbnb', icon: 'fab fa-airbnb', bg: '#ff5a5f' },
+            { id: 'ebay', name: 'eBay', icon: 'fab fa-ebay', bg: '#e53238' },
+            { id: 'shopify', name: 'Shopify', icon: 'fab fa-shopify', bg: '#7ab55c' },
+            { id: 'firefox', name: 'Firefox', icon: 'fab fa-firefox-browser', bg: '#ff7139' },
+            { id: 'chrome', name: 'Chrome', icon: 'fab fa-chrome', bg: '#4285f4' },
+            { id: 'edge', name: 'Edge', icon: 'fab fa-edge', bg: '#0078d7' },
+            { id: 'safari', name: 'Safari', icon: 'fab fa-safari', bg: '#006cff' },
+            { id: 'opera', name: 'Opera', icon: 'fab fa-opera', bg: '#ff1b2d' },
+            { id: 'brave', name: 'Brave', icon: 'fab fa-brave', bg: '#fb542b' },
+            { id: 'wikipedia', name: 'Wikipedia', icon: 'fab fa-wikipedia-w', bg: '#000000' },
+            { id: 'quora', name: 'Quora', icon: 'fab fa-quora', bg: '#b92b27' },
+            { id: 'trello', name: 'Trello', icon: 'fab fa-trello', bg: '#0079bf' },
+            { id: 'jira', name: 'Jira', icon: 'fab fa-jira', bg: '#0052cc' },
+            { id: 'confluence', name: 'Confluence', icon: 'fab fa-confluence', bg: '#172b4d' },
+            { id: 'zoom', name: 'Zoom', icon: 'fas fa-video', bg: '#2d8cff' },
+            { id: 'skype', name: 'Skype', icon: 'fab fa-skype', bg: '#00aff0' },
+            { id: 'viber', name: 'Viber', icon: 'fab fa-viber', bg: '#7360f2' },
+            { id: 'line', name: 'LINE', icon: 'fab fa-line', bg: '#00c300' },
+            { id: 'wechat', name: 'WeChat', icon: 'fab fa-weixin', bg: '#07c160' },
+            { id: 'behance', name: 'Behance', icon: 'fab fa-behance', bg: '#1769ff' },
+            { id: 'dribbble', name: 'Dribbble', icon: 'fab fa-dribbble', bg: '#ea4c89' },
+            { id: 'unsplash', name: 'Unsplash', icon: 'fab fa-unsplash', bg: '#000000' },
+            { id: 'deviantart', name: 'DeviantArt', icon: 'fab fa-deviantart', bg: '#05cc47' },
+            { id: 'etsy', name: 'Etsy', icon: 'fab fa-etsy', bg: '#f1641e' },
+            { id: 'wix', name: 'Wix', icon: 'fab fa-wix', bg: '#0c6ebd' },
+            { id: 'squarespace', name: 'Squarespace', icon: 'fab fa-squarespace', bg: '#000000' },
+            { id: 'blogger', name: 'Blogger', icon: 'fab fa-blogger-b', bg: '#f57d00' },
+            { id: 'tumblr', name: 'Tumblr', icon: 'fab fa-tumblr', bg: '#35465c' },
+            { id: 'vimeo', name: 'Vimeo', icon: 'fab fa-vimeo-v', bg: '#1ab7ea' },
+            { id: 'soundcloud', name: 'SoundCloud', icon: 'fab fa-soundcloud', bg: '#ff5500' },
+            { id: 'kickstarter', name: 'Kickstarter', icon: 'fab fa-kickstarter-k', bg: '#05ce78' },
+            { id: 'patreon', name: 'Patreon', icon: 'fab fa-patreon', bg: '#ff424d' },
+            { id: 'bluetooth', name: 'Bluetooth', icon: 'fab fa-bluetooth-b', bg: '#0082fc' },
+            { id: 'usb', name: 'USB', icon: 'fab fa-usb', bg: '#435363' },
+            { id: 'salesforce', name: 'Salesforce', icon: 'fab fa-salesforce', bg: '#00a1e0' },
+            { id: 'hubspot', name: 'HubSpot', icon: 'fab fa-hubspot', bg: '#ff7a59' },
+            { id: 'mailchimp', name: 'Mailchimp', icon: 'fab fa-mailchimp', bg: '#ffe01b', darkText: true },
+            { id: 'meta', name: 'Meta', icon: 'fab fa-meta', bg: '#0081fb' },
+            { id: 'deezer', name: 'Deezer', icon: 'fab fa-deezer', bg: '#feaa2d' },
+            { id: 'lastfm', name: 'Last.fm', icon: 'fab fa-lastfm', bg: '#d51007' },
+            { id: 'dailymotion', name: 'Dailymotion', icon: 'fab fa-dailymotion', bg: '#0066dc' },
+            { id: 'hackerrank', name: 'HackerRank', icon: 'fab fa-hackerrank', bg: '#2ec866' },
+            { id: 'kaggle', name: 'Kaggle', icon: 'fab fa-kaggle', bg: '#20beff' },
+            { id: 'codepen', name: 'CodePen', icon: 'fab fa-codepen', bg: '#000000' },
+            { id: 'freecodecamp', name: 'freeCodeCamp', icon: 'fab fa-free-code-camp', bg: '#0a0a23' },
+            { id: 'w3schools', name: 'W3Schools', icon: 'fas fa-graduation-cap', bg: '#04aa6d' }
         ];
 
         let activeMatchPairs = [];
@@ -1195,26 +1440,27 @@
             activeSourceNode = null;
             clearSvgLines();
 
+            // Randomly select 3, 4, or 5 pairs
+            const pairCount = Math.floor(Math.random() * 3) + 3; // 3, 4, or 5
             const shuffled = [...brandPool].sort(() => 0.5 - Math.random());
-            activeMatchPairs = shuffled.slice(0, 3);
+            activeMatchPairs = shuffled.slice(0, pairCount);
 
             const leftList = [...activeMatchPairs];
             const rightList = [...activeMatchPairs].sort(() => 0.5 - Math.random());
 
+            // Left side: ONLY the icon, NO name
             if (lineMatchLeftCol) {
                 lineMatchLeftCol.innerHTML = leftList.map(item => `
-                    <div class="line-node left-node" data-id="${item.id}" id="ln-left-${item.id}">
-                        <div class="line-node-content">
-                            <div class="line-node-icon" style="background: ${item.bg};">
-                                <i class="${item.icon}"></i>
-                            </div>
-                            <span class="line-node-text">${item.name}</span>
+                    <div class="line-node left-node" data-id="${item.id}" id="ln-left-${item.id}" title="Match this brand icon">
+                        <div class="line-node-icon" style="background: ${item.bg}; ${item.darkText ? 'color: #0f172a;' : ''}">
+                            <i class="${item.icon}"></i>
                         </div>
                         <div class="connector-dot" id="dot-left-${item.id}"></div>
                     </div>
                 `).join('');
             }
 
+            // Right side: ONLY the brand name, NO icon
             if (lineMatchRightCol) {
                 lineMatchRightCol.innerHTML = rightList.map(item => `
                     <div class="line-node right-node" data-id="${item.id}" id="ln-right-${item.id}">
@@ -1242,7 +1488,7 @@
                     node.onclick = () => {
                         const rightId = node.getAttribute('data-id');
                         if (!activeSourceNode) {
-                            showGameError('Click an item on the left first!');
+                            showGameError('Click an icon on the left first!');
                             return;
                         }
 
@@ -1317,7 +1563,7 @@
                 if (isGameFinished) return;
                 const keys = Object.keys(userMatches);
                 if (keys.length < activeMatchPairs.length) {
-                    showGameError('Please connect all 3 pairs before verifying!');
+                    showGameError(`Please connect all ${activeMatchPairs.length} pairs before verifying!`);
                     return;
                 }
 
@@ -1333,10 +1579,10 @@
                     onGameSuccess();
                 } else {
                     redrawLines(true);
-                    showGameError('Some matches are incorrect. Redraw lines and try again!');
                     setTimeout(() => {
-                        redrawLines(false);
-                    }, 1200);
+                        closeGameModal();
+                        showToast("Sorry, some matches were incorrect. Please try again!", "#ef4444");
+                    }, 500);
                 }
             };
         }
@@ -1371,13 +1617,13 @@
                 const pane = document.getElementById('pane-game-typing');
                 if (pane) pane.classList.add('active');
                 if (gameModalTitle) gameModalTitle.innerHTML = '<i class="fas fa-keyboard" style="color: #10b981;"></i> Verification Typing';
-                if (gameModalSub) gameModalSub.textContent = 'Type the exact verification sequence below';
+                if (gameModalSub) gameModalSub.textContent = 'Type the exact verification sequence below within 60 seconds';
                 initTypingGame();
             } else if (picked === 'match') {
                 const pane = document.getElementById('pane-game-match');
                 if (pane) pane.classList.add('active');
                 if (gameModalTitle) gameModalTitle.innerHTML = '<i class="fas fa-draw-polygon" style="color: #10b981;"></i> Match the Following';
-                if (gameModalSub) gameModalSub.textContent = 'Click an item on the left, then click its pair on the right';
+                if (gameModalSub) gameModalSub.textContent = 'Click an icon on the left, then click its brand name on the right';
                 initMatchGame();
             }
 
@@ -1390,6 +1636,10 @@
         }
 
         function closeGameModal() {
+            if (typingTimerInterval) {
+                clearInterval(typingTimerInterval);
+                typingTimerInterval = null;
+            }
             if (gameModal) {
                 gameModal.classList.remove('open');
             }

@@ -672,9 +672,9 @@ export const subjectMaterials = {
             { name: 'Unit 1: Democratic Values', file: 'hve/notes/HVE_unit_1.pdf', cat: 1 },
             { name: 'Unit 2: Secular Values', file: 'hve/notes/HVE_unit_2.pdf', cat: 1 },
             { name: 'Unit 3: Scientific Values (First Half)', file: 'hve/notes/HVE_unit_3.pdf', cat: 1 },
-            { name: 'Unit 3: Scientific Values (Second Half)', file: 'hve/notes/cat 2/HVE_Unit 3.pdf', cat: 2 },
-            { name: 'Unit 4: Social Ethics', file: 'hve/notes/cat 2/HVE_Unit 4.pdf', cat: 2 },
-            { name: 'Unit 5: Scientific Ethics', file: 'hve/notes/cat 2/HVE_Unit 5.pdf', cat: 2 },
+            { name: 'Unit 3: Scientific Values (Second Half)', file: '#', cat: 2, status: 'Uploaded soon' },
+            { name: 'Unit 4: Social Ethics', file: '#', cat: 2, status: 'Uploaded soon' },
+            { name: 'Unit 5: Scientific Ethics', file: '#', cat: 2, status: 'Uploaded soon' },
             { name: '2-Mark Question Bank', file: 'hve/2m/hve_2m.pdf' }
         ],
         previousYearQuestions: [

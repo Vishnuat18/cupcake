@@ -3206,6 +3206,20 @@ iframe {
     margin-bottom: 0.6rem;
 }
 
+.math-order-rule-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    color: #047857;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+}
+
 .math-options-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -3294,16 +3308,36 @@ iframe {
     margin-bottom: 1rem;
 }
 
+.typing-target-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
 .typing-target-label {
     font-size: 0.72rem;
     font-weight: 800;
     color: #64748b;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-bottom: 0.35rem;
     display: flex;
     align-items: center;
     gap: 0.4rem;
+}
+
+.typing-timer-pill {
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #dc2626;
+    padding: 0.25rem 0.6rem;
+    border-radius: 8px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
 }
 
 .typing-target-text {
@@ -3318,14 +3352,14 @@ iframe {
 
 .typing-target-text.code-font {
     font-family: 'Consolas', 'Courier New', monospace;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 700;
-    letter-spacing: 2px;
+    letter-spacing: 2.5px;
     color: #047857;
     word-break: break-all;
     background: #f0fdf4;
-    padding: 0.4rem 0.6rem;
-    border-radius: 6px;
+    padding: 0.5rem 0.7rem;
+    border-radius: 8px;
     border: 1px dashed #86efac;
 }
 
@@ -3432,21 +3466,28 @@ iframe {
     display: flex;
     flex-direction: column;
     gap: 0.85rem;
-    width: 44%;
+}
+
+.line-match-col.left-col {
+    width: 34%;
+}
+
+.line-match-col.right-col {
+    width: 58%;
 }
 
 .line-node {
     background: #ffffff;
     border: 1.5px solid #e2e8f0;
     border-radius: 12px;
-    padding: 0.65rem 0.75rem;
+    padding: 0.55rem 0.75rem;
     display: flex;
     align-items: center;
     gap: 0.65rem;
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
-    min-height: 50px;
+    min-height: 48px;
     box-sizing: border-box;
 }
 
@@ -3468,6 +3509,7 @@ iframe {
 
 .line-node.left-node {
     justify-content: space-between;
+    padding: 0.45rem 0.65rem;
 }
 
 .line-node.right-node {
@@ -3482,13 +3524,13 @@ iframe {
 }
 
 .line-node-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     color: white;
     flex-shrink: 0;
 }

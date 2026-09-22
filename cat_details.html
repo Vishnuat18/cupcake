@@ -304,7 +304,7 @@
                     }
 
                     const badgeLabel = item.unitNum ? `UNIT ${item.unitNum}` : (item.isTwoMark ? '2-MARKS' : `CAT ${catNum}`);
-                    const subLabel = !isAvailable ? 'Uploading Soon' :
+                    const subLabel = !isAvailable ? 'Uploaded soon' :
                                      (isCat1 && item.unitNum === 3 ? 'Unit 3 Notes (First Half Focus)' :
                                      !isCat1 && item.unitNum === 3 ? 'Unit 3 Notes (Second Half Focus)' :
                                      'PDF Document');
@@ -313,7 +313,7 @@
                         `<div class="cat-page-arrow">
                             <i class="fas fa-chevron-right"></i>
                         </div>` :
-                        `<span class="cat-page-soon-pill">SOON</span>`;
+                        `<span class="cat-page-soon-pill">UPLOADED SOON</span>`;
 
                     noteCard.innerHTML = `
                         <div style="display: flex; align-items: center; gap: 0.85rem; overflow: hidden; flex: 1;">
