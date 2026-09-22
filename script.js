@@ -30,6 +30,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // 1b. Guest Login Logic
+    const guestLoginBtn = document.getElementById('guest-login-btn');
+    if (guestLoginBtn) {
+        guestLoginBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.setItem('cupcake_is_guest', 'true');
+            const overlay = document.querySelector('.page-transition-overlay');
+            if (overlay) overlay.classList.add('active');
+            setTimeout(() => {
+                window.location.href = "home.html";
+            }, overlay ? 250 : 0);
+        });
+    }
+
     // 2. Captcha Logic
     let currentCaptcha = "";
     window.generateCaptcha = function() {
@@ -55,9 +69,11 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Robust login page check: check URL name or if the DOM has the login-section
         const isLoginPage = page === "index.html" || page === "" || page === "cupcake" || !!document.getElementById('login-section');
+        const isGuest = localStorage.getItem('cupcake_is_guest') === 'true';
 
         if (user) {
             console.log("User logged in:", user.email);
+            localStorage.removeItem('cupcake_is_guest');
             
             try {
                 const userRef = doc(fs, "users", user.uid);
@@ -115,6 +131,32 @@ document.addEventListener('DOMContentLoaded', () => {
                     window.location.href = "home.html";
                 }
             }
+        } else if (isGuest) {
+            if (isLoginPage) {
+                window.location.href = "home.html";
+                return;
+            }
+
+            // Global UI Sync for Guest
+            const guestElements = {
+                'nav-avatar-header': 'G',
+                'nav-avatar': 'G',
+                'nav-user-name': 'Guest',
+                'header-user-name': 'Guest',
+                'display-name': 'Guest User'
+            };
+
+            Object.entries(guestElements).forEach(([id, val]) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.textContent = val;
+                    el.classList.add('profile-sync-fade');
+                }
+            });
+
+            // Hide Admin Access for Guest
+            const adminLinks = document.querySelectorAll('a[href="admin.html"]');
+            adminLinks.forEach(link => link.style.display = 'none');
         } else {
             const guestPages = ["index.html", "", "cupcake"];
             const isGuestPage = isLoginPage || guestPages.includes(page);
@@ -188,11 +230,13 @@ document.addEventListener('DOMContentLoaded', () => {
     logoutLinks.forEach(link => {
         link.addEventListener('click', async (e) => {
             e.preventDefault();
+            localStorage.removeItem('cupcake_is_guest');
             try {
                 await signOut(auth);
             } catch (error) {
                 console.error("Logout failed", error);
             }
+            window.location.href = "index.html";
         });
     });
 

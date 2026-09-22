@@ -131,20 +131,77 @@
         </div>
     </header>
 
-    <!-- Top News Banner -->
-    <div class="news-banner" onclick="location.href='gpa.html'">
-        <span class="news-tag">News</span>
-        <div class="news-text">
-            <span>Academic Companion is live! Track your GPA, CGPA & trend.</span>
-            <i class="fas fa-arrow-right"></i>
+    <!-- Top Rolling News Banner -->
+    <div class="news-banner rolling-news-banner" onclick="location.href='subject_details.html?subject=hve'" role="button" tabindex="0" title="Click to view Human Values and Ethics CAT exam notes">
+        <div class="rolling-news-badge">
+            <span class="pulse-dot"></span>
+            <span>UPDATE</span>
+        </div>
+        <div class="rolling-news-viewport">
+            <div class="rolling-news-track">
+                <span class="rolling-news-item">
+                    <i class="fas fa-bullhorn"></i> Human values and ethics for the CAT exam notes updated
+                    <span class="click-hint">Click to view <i class="fas fa-arrow-right"></i></span>
+                </span>
+                <span class="rolling-news-divider">•</span>
+                <span class="rolling-news-item">
+                    <i class="fas fa-book-reader"></i> Human values and ethics for the CAT exam notes updated
+                    <span class="click-hint">Click to view <i class="fas fa-arrow-right"></i></span>
+                </span>
+                <span class="rolling-news-divider">•</span>
+                <span class="rolling-news-item">
+                    <i class="fas fa-bullhorn"></i> Human values and ethics for the CAT exam notes updated
+                    <span class="click-hint">Click to view <i class="fas fa-arrow-right"></i></span>
+                </span>
+                <span class="rolling-news-divider">•</span>
+                <span class="rolling-news-item">
+                    <i class="fas fa-book-reader"></i> Human values and ethics for the CAT exam notes updated
+                    <span class="click-hint">Click to view <i class="fas fa-arrow-right"></i></span>
+                </span>
+            </div>
         </div>
     </div>
 
     <div class="container home-container">
 
-        <div class="dashboard-header" style="margin-bottom: 2rem;">
+        <div class="dashboard-header" style="margin-bottom: 1.25rem;">
             <h1 id="user-greeting">Welcome back, Study Buddy!</h1>
-            <p style="color: var(--text-muted);">Access your Semester 7 study materials and previous year question papers below.</p>
+            <p id="dashboard-subtext" style="color: var(--text-muted);">Access your Semester 7 study materials and previous year question papers below.</p>
+        </div>
+
+        <!-- Minimal CGPA Calculator Card -->
+        <div class="cgpa-mini-card" onclick="location.href='gpa.html'" role="button" tabindex="0" title="Open CGPA & GPA Calculator">
+            <div class="cgpa-mini-left">
+                <div class="cgpa-mini-icon">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <div class="cgpa-mini-text">
+                    <div class="cgpa-mini-title">CGPA & GPA Calculator</div>
+                    <div class="cgpa-mini-sub">Calculate your semester GPA & degree CGPA</div>
+                </div>
+            </div>
+            <div class="cgpa-mini-arrow">
+                <i class="fas fa-arrow-right"></i>
+            </div>
+        </div>
+
+        <!-- Semester Filter Pills -->
+        <div class="semester-filter-section">
+            <div class="semester-pills-wrap" id="semester-pills-wrap">
+                <button type="button" class="sem-pill" data-sem="6" id="pill-sem-6" aria-label="Semester 6">
+                    <i class="fas fa-graduation-cap sem-pill-icon"></i>
+                    <span>Semester 6</span>
+                </button>
+                <button type="button" class="sem-pill active" data-sem="7" id="pill-sem-7" aria-label="Semester 7">
+                    <i class="fas fa-check-circle sem-pill-icon"></i>
+                    <span>Semester 7</span>
+                </button>
+                <button type="button" class="sem-pill sem-pill-soon" data-sem="8" id="pill-sem-8" aria-label="Semester 8">
+                    <i class="fas fa-lightbulb sem-pill-icon"></i>
+                    <span>Semester 8</span>
+                    <span class="sem-pill-tag">Project titles - Show uploaded soon</span>
+                </button>
+            </div>
         </div>
 
         <!-- Dynamic Event Card Stack (Commented out to make system later)
@@ -327,7 +384,25 @@
                         }
                     } catch (error) {
                         console.error("Error loading profile:", error);
+                        loadSubjects();
                     }
+                } else if (localStorage.getItem('cupcake_is_guest') === 'true') {
+                    const navAvatarHeader = document.getElementById('nav-avatar-header');
+                    const navAvatar = document.getElementById('nav-avatar');
+                    const navUserName = document.getElementById('nav-user-name');
+                    const headerUserName = document.getElementById('header-user-name');
+                    const greetingElement = document.getElementById('user-greeting');
+                    
+                    if (navAvatarHeader) navAvatarHeader.textContent = 'G';
+                    if (navAvatar) navAvatar.textContent = 'G';
+                    if (navUserName) navUserName.textContent = 'Guest';
+                    if (headerUserName) headerUserName.textContent = 'Guest';
+                    if (greetingElement) greetingElement.innerHTML = 'Welcome, Study Buddy!';
+
+                    const adminLinks = document.querySelectorAll('a[href="admin.html"]');
+                    adminLinks.forEach(link => link.style.display = 'none');
+
+                    loadSubjects();
                 }
             });
 
@@ -571,9 +646,42 @@
                 });
             }
 
-            // 2. Dynamic Subject Grid
+            // 2. Dynamic Subject Grid & Semester Selection
             const mainGrid = document.getElementById('main-subject-grid');
+            const semPills = document.querySelectorAll('.sem-pill');
+            const dashboardSubtext = document.getElementById('dashboard-subtext');
             let allSubjects = [];
+            let currentSemester = 7;
+
+            // Handle Semester Pill Switching
+            semPills.forEach(pill => {
+                pill.addEventListener('click', () => {
+                    const sem = parseInt(pill.getAttribute('data-sem'));
+                    if (sem === currentSemester) return;
+
+                    semPills.forEach(p => p.classList.remove('active'));
+                    pill.classList.add('active');
+                    currentSemester = sem;
+
+                    // Update subtext
+                    if (dashboardSubtext) {
+                        if (sem === 6) {
+                            dashboardSubtext.textContent = "Access your Semester 6 study materials and previous year question papers below.";
+                        } else if (sem === 7) {
+                            dashboardSubtext.textContent = "Access your Semester 7 study materials and previous year question papers below.";
+                        } else if (sem === 8) {
+                            dashboardSubtext.textContent = "Final year capstone project titles and guidelines - Uploaded soon.";
+                        }
+                    }
+
+                    // Reset search if user was searching
+                    if (searchInput && searchInput.value) {
+                        clearSearch();
+                    }
+
+                    renderGrid();
+                });
+            });
 
             async function loadSubjects() {
                 // Performance: Load from cache first for instant rendering
@@ -592,7 +700,19 @@
                     const querySnapshot = await getDocs(collection(fs, "cupcake_subjects"));
                     
                     if (!querySnapshot.empty) {
-                        allSubjects = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                        const firestoreSubs = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                        // Merge with subjectMaterials so local subjects (like sem 6) are always available
+                        const localSubs = Object.entries(subjectMaterials).map(([key, data]) => ({ id: key, ...data }));
+                        const combined = [...localSubs];
+                        firestoreSubs.forEach(fsSub => {
+                            const idx = combined.findIndex(s => s.id === fsSub.id);
+                            if (idx !== -1) {
+                                combined[idx] = { ...combined[idx], ...fsSub };
+                            } else {
+                                combined.push(fsSub);
+                            }
+                        });
+                        allSubjects = combined;
                     } else {
                         // Fallback to materials.js if Firestore is empty
                         allSubjects = Object.entries(subjectMaterials).map(([key, data]) => ({ id: key, ...data }));
@@ -609,12 +729,44 @@
             }
 
             function renderGrid() {
-                // Filter by Semester 7 only
-                const filtered = allSubjects.filter(sub => sub.semester === 7);
+                if (currentSemester === 8) {
+                    mainGrid.innerHTML = `
+                        <div class="sem8-container glass">
+                            <div class="sem8-icon-glow">
+                                <i class="fas fa-laptop-code"></i>
+                            </div>
+                            <div class="sem8-badge-pill">
+                                <i class="fas fa-clock"></i> Uploaded Soon
+                            </div>
+                            <h2 class="sem8-title">Semester 8 Project Titles</h2>
+                            <p class="sem8-desc">Final year capstone project titles, domain options, and project report guidelines are currently being prepared and will be uploaded soon.</p>
+                            <div class="sem8-chips-grid">
+                                <div class="sem8-chip"><i class="fas fa-brain"></i> Artificial Intelligence & Data Science</div>
+                                <div class="sem8-chip"><i class="fas fa-network-wired"></i> Full Stack & Cloud Applications</div>
+                                <div class="sem8-chip"><i class="fas fa-shield-alt"></i> Cyber Security & Blockchain</div>
+                                <div class="sem8-chip"><i class="fas fa-microchip"></i> IoT & Smart Systems</div>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Filter by selected semester (6 or 7)
+                const filtered = allSubjects.filter(sub => sub.semester === currentSemester);
                 
-                // Sort by Semester 7 order (HVE, PRW, ITAS, PoM, ECE)
-                const sem7Order = ['hve', 'prw', 'itas', 'pom', 'ece'];
-                filtered.sort((a, b) => sem7Order.indexOf(a.id) - sem7Order.indexOf(b.id));
+                // Sort by semester order
+                if (currentSemester === 7) {
+                    const sem7Order = ['hve', 'prw', 'itas', 'pom', 'ece'];
+                    filtered.sort((a, b) => sem7Order.indexOf(a.id) - sem7Order.indexOf(b.id));
+                } else if (currentSemester === 6) {
+                    const sem6Order = ['oose', 'vce', 'esia', 'ppl', 'ba', 'eh'];
+                    filtered.sort((a, b) => sem6Order.indexOf(a.id) - sem6Order.indexOf(b.id));
+                }
+
+                if (filtered.length === 0) {
+                    mainGrid.innerHTML = `<div style="grid-column: 1/-1; padding: 3rem; text-align: center; color: var(--text-muted);">No subjects found for Semester ${currentSemester}.</div>`;
+                    return;
+                }
 
                 let html = filtered.map(sub => `
                     <div class="subject-card glass" 

@@ -706,12 +706,39 @@
         <span>Screenshots and recordings are strictly restricted.</span>
     </div>
 
+    <!-- Guest Download Restriction Modal -->
+    <div id="guest-download-modal" class="guest-modal-backdrop">
+        <div class="guest-modal-card">
+            <button type="button" class="guest-modal-close" id="close-guest-modal" title="Close">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="guest-modal-icon-wrap">
+                <i class="fas fa-lock"></i>
+            </div>
+            <h3>Login to Download</h3>
+            <p>Downloading resources is reserved for registered members. Please login to your account to download and access materials offline.</p>
+            <div class="guest-modal-actions">
+                <button type="button" id="modal-login-btn" class="modal-btn modal-btn-login">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>Login to Download</span>
+                </button>
+                <button type="button" id="modal-cancel-btn" class="modal-btn modal-btn-cancel">
+                    <span>Cancel</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script type="module">
         import { auth, fs, doc, getDoc } from "./firebase-config.js";
         import { subjectMaterials } from "./materials.js";
 
         const toast = document.getElementById('cg-toast');
+        const guestModal = document.getElementById('guest-download-modal');
+        const modalLoginBtn = document.getElementById('modal-login-btn');
+        const modalCancelBtn = document.getElementById('modal-cancel-btn');
+        const closeGuestModalBtn = document.getElementById('close-guest-modal');
 
         let fileUrl = null;
         let fileTitle = null;
@@ -724,6 +751,47 @@
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
+
+        // ── Modal helpers
+        function openGuestModal() {
+            if (guestModal) {
+                guestModal.classList.add('open');
+            }
+        }
+
+        function closeGuestModal() {
+            if (guestModal) {
+                guestModal.classList.remove('open');
+            }
+        }
+
+        if (modalLoginBtn) {
+            modalLoginBtn.onclick = () => {
+                window.location.href = "index.html";
+            };
+        }
+
+        if (modalCancelBtn) {
+            modalCancelBtn.onclick = closeGuestModal;
+        }
+
+        if (closeGuestModalBtn) {
+            closeGuestModalBtn.onclick = closeGuestModal;
+        }
+
+        if (guestModal) {
+            guestModal.onclick = (e) => {
+                if (e.target === guestModal) {
+                    closeGuestModal();
+                }
+            };
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && guestModal && guestModal.classList.contains('open')) {
+                closeGuestModal();
+            }
+        });
 
         // ── Trigger actual download
         function triggerDownload() {
@@ -746,10 +814,15 @@
                 showToast('No file available to download.');
                 return;
             }
-            if (!isLoggedIn) {
-                showToast('Please log in to download.');
+
+            const isGuest = localStorage.getItem('cupcake_is_guest') === 'true';
+
+            // If user is a guest or not logged in, show the login popup
+            if (isGuest || !isLoggedIn) {
+                openGuestModal();
                 return;
             }
+
             triggerDownload();
             showToast('Download started', 'white');
         };
@@ -1028,7 +1101,15 @@
                 viewerTitle.textContent = decodedTitle;
                 // Pass file info to the captcha module
                 if (window.__setCaptchaFile) window.__setCaptchaFile(url, decodedTitle);
-                if (subject) backLink.href = `subject_details.html?subject=${subject}`;
+                const catParam = urlParams.get('cat');
+                const defaultBackUrl = catParam ? `cat_details.html?subject=${subject}&cat=${catParam}` : (subject ? `subject_details.html?subject=${subject}` : 'home.html');
+                backLink.href = defaultBackUrl;
+                backLink.onclick = (e) => {
+                    if (window.history.length > 1) {
+                        e.preventDefault();
+                        window.history.back();
+                    }
+                };
 
                 const loadingStatus = document.getElementById('loading-status');
                 const startTime = Date.now();
@@ -1042,7 +1123,7 @@
                                 <i class="fas fa-clock" style="font-size: 3rem; color: var(--primary-light); margin-bottom: 1.5rem; display: block;"></i>
                                 <h2 style="font-family: 'Outfit'; font-weight: 700; font-size: 1.8rem; margin-bottom: 0.5rem; color: white;">Upload soon...</h2>
                                 <p style="color: var(--text-muted);">This resource is being prepared by our team.</p>
-                                <a href="subject_details.html?subject=${subject}" class="glass" style="display: inline-block; margin-top: 2rem; padding: 0.8rem 1.5rem; border-radius: 12px; color: white; text-decoration: none; font-weight: 600;">
+                                <a href="${defaultBackUrl}" class="glass" style="display: inline-block; margin-top: 2rem; padding: 0.8rem 1.5rem; border-radius: 12px; color: white; text-decoration: none; font-weight: 600;">
                                     <i class="fas fa-arrow-left"></i> Go Back
                                 </a>
                             </div>

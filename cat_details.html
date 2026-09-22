@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAT Exam Pack - Cupcake Notes</title>
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/icon.png">
+</head>
+<body class="cat-page-body">
+    <!-- Top Navbar for Desktop -->
+    <nav class="navbar glass">
+        <div class="logo">
+            <img src="smacklogo_home.png" alt="SMACK" style="width: 140px; object-fit: contain; border-radius: 8px;">
+        </div>
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="resources.html">Tools</a>
+            <a href="admin.html" class="admin-only" style="display: none;">Admin Panel</a>
+        </div>
+        <div class="nav-right">
+            <a href="profile.html" class="profile-link" style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-main); font-weight: 600; text-decoration: none;">
+                <div id="nav-avatar" style="width: 42px; aspect-ratio: 1/1; object-fit: contain; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: white;">U</div>
+                <span id="nav-user-name" style="font-size: 0.9rem;">Profile</span>
+            </a>
+            <a href="index.html" class="logout" style="color: var(--text-muted); font-size: 1.1rem; transition: var(--transition);"><i class="fas fa-sign-out-alt"></i></a>
+        </div>
+    </nav>
+
+    <!-- Mobile Header -->
+    <header class="app-header glass">
+        <div style="display: flex; align-items: center; gap: 0.8rem; overflow: hidden;">
+            <a id="mobile-back-btn" href="home.html" class="back-btn" title="Back to Subject">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div style="display: flex; flex-direction: column; overflow: hidden;">
+                <span id="header-subject-title" style="font-family: 'Outfit'; font-weight: 800; font-size: 1.05rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main);">CAT Exam Pack</span>
+                <span id="header-cat-sub" style="font-size: 0.72rem; color: #059669; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Preparation</span>
+            </div>
+        </div>
+        <a href="profile.html" id="nav-avatar-header" style="width: 36px; height: 36px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; font-weight: 700; font-size: 0.85rem; flex-shrink: 0;">U</a>
+    </header>
+
+    <div class="container cat-page-container">
+        <!-- Hero Card (Clean Light Theme, Subject & Exam Only) -->
+        <div class="cat-page-hero-light glass">
+            <div class="cat-hero-text-block">
+                <div id="cat-hero-title" class="cat-exam-label">Continuous Assessment Test 1</div>
+                <h1 id="cat-subject-fullname" class="cat-page-title">Loading Subject...</h1>
+            </div>
+        </div>
+
+        <!-- Sticky / Compact Segmented Tabs -->
+        <div class="cat-page-tabs-wrap">
+            <div class="cat-page-tabs glass">
+                <button type="button" class="cat-page-tab active" data-tab="notes">
+                    <i class="fas fa-file-pdf"></i>
+                    <span>Notes</span>
+                    <span id="count-notes" class="cat-tab-count">-</span>
+                </button>
+                <button type="button" class="cat-page-tab" data-tab="questions">
+                    <i class="fas fa-star"></i>
+                    <span>Important Questions</span>
+                    <span id="count-questions" class="cat-tab-count">-</span>
+                </button>
+                <button type="button" class="cat-page-tab" data-tab="syllabus">
+                    <i class="fas fa-list-ul"></i>
+                    <span>Syllabus</span>
+                    <span id="count-syllabus" class="cat-tab-count">3 Units</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Tab 1: Notes -->
+        <div id="pane-notes" class="cat-page-pane active">
+            <div class="cat-pane-header">
+                <div>
+                    <h3 class="cat-pane-title">Notes</h3>
+                    <p id="notes-portion-desc" class="cat-pane-desc">Targeted notes strictly for this exam portion.</p>
+                </div>
+            </div>
+            <div id="cat-notes-container" class="cat-notes-grid">
+                <!-- Dynamically populated -->
+                <div style="text-align: center; padding: 3rem; color: var(--text-muted); grid-column: 1/-1;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 0.8rem; color: var(--primary);"></i>
+                    <p>Loading study notes...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Important Questions -->
+        <div id="pane-questions" class="cat-page-pane">
+            <div class="cat-pane-header">
+                <div>
+                    <h3 class="cat-pane-title">Curated Important Questions</h3>
+                    <p id="questions-portion-desc" class="cat-pane-desc">Important questions partitioned strictly for this assessment.</p>
+                </div>
+            </div>
+            <div id="cat-questions-container" class="cat-questions-column">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+
+        <!-- Tab 3: Syllabus Coverage -->
+        <div id="pane-syllabus" class="cat-page-pane">
+            <div class="cat-pane-header">
+                <div>
+                    <h3 class="cat-pane-title">Exam Syllabus Coverage</h3>
+                    <p id="syllabus-portion-desc" class="cat-pane-desc">Syllabus units tested in this assessment.</p>
+                </div>
+            </div>
+            <div id="cat-syllabus-container" class="cat-syllabus-column">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Nav Bar -->
+    <div class="mobile-nav">
+        <a href="home.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="resources.html" class="nav-item">
+            <i class="fas fa-wrench"></i>
+            <span>Tools</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+        </a>
+    </div>
+
+    <script type="module">
+        import { auth, db, fs, doc, getDoc } from "./firebase-config.js";
+        import { subjectMaterials } from "./materials.js";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const subject = urlParams.get('subject');
+            const catParam = (urlParams.get('cat') || '1').toString().replace(/[^0-9]/g, '');
+            const isCat1 = catParam !== '2';
+            const catNum = isCat1 ? 1 : 2;
+
+            // DOM Elements
+            const backBtn = document.getElementById('mobile-back-btn');
+            const headerSubjectTitle = document.getElementById('header-subject-title');
+            const headerCatSub = document.getElementById('header-cat-sub');
+            const heroTitle = document.getElementById('cat-hero-title');
+            const subjectFullName = document.getElementById('cat-subject-fullname');
+            const countNotes = document.getElementById('count-notes');
+            const countQuestions = document.getElementById('count-questions');
+            const countSyllabus = document.getElementById('count-syllabus');
+            const notesContainer = document.getElementById('cat-notes-container');
+            const questionsContainer = document.getElementById('cat-questions-container');
+            const syllabusContainer = document.getElementById('cat-syllabus-container');
+            const notesPortionDesc = document.getElementById('notes-portion-desc');
+            const questionsPortionDesc = document.getElementById('questions-portion-desc');
+            const syllabusPortionDesc = document.getElementById('syllabus-portion-desc');
+            const tabButtons = document.querySelectorAll('.cat-page-tab');
+            const panes = {
+                notes: document.getElementById('pane-notes'),
+                questions: document.getElementById('pane-questions'),
+                syllabus: document.getElementById('pane-syllabus')
+            };
+
+            // Back button configuration
+            const backUrl = subject ? `subject_details.html?subject=${encodeURIComponent(subject)}` : 'home.html';
+            if (backBtn) backBtn.href = backUrl;
+
+            // Tab switching
+            tabButtons.forEach(btn => {
+                btn.onclick = () => {
+                    const tabKey = btn.dataset.tab;
+                    tabButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    Object.keys(panes).forEach(k => {
+                        if (panes[k]) panes[k].classList.remove('active');
+                    });
+                    if (panes[tabKey]) panes[tabKey].classList.add('active');
+                };
+            });
+
+            // Auth State Handling
+            auth.onAuthStateChanged(async (user) => {
+                const navAvatar = document.getElementById('nav-avatar');
+                const headerAvatar = document.getElementById('nav-avatar-header');
+                const navUserName = document.getElementById('nav-user-name');
+
+                if (user) {
+                    try {
+                        const userDoc = await getDoc(doc(fs, "users", user.uid));
+                        if (userDoc.exists()) {
+                            const data = userDoc.data();
+                            const initial = (data.name || "U").charAt(0).toUpperCase();
+                            if (navAvatar) navAvatar.textContent = initial;
+                            if (headerAvatar) headerAvatar.textContent = initial;
+                            if (navUserName) navUserName.textContent = data.name || "Profile";
+                        }
+                    } catch (e) {
+                        console.error("Profile fetch error:", e);
+                    }
+                } else if (localStorage.getItem('cupcake_is_guest') === 'true') {
+                    if (navAvatar) navAvatar.textContent = 'G';
+                    if (headerAvatar) headerAvatar.textContent = 'G';
+                    if (navUserName) navUserName.textContent = 'Guest';
+                }
+            });
+
+            // Validate Subject
+            if (!subject || !subjectMaterials[subject]) {
+                if (headerSubjectTitle) headerSubjectTitle.textContent = "Subject Not Found";
+                notesContainer.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 4rem 1.5rem; color: #94a3b8;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 2.5rem; color: #ef4444; margin-bottom: 1rem;"></i>
+                        <h3 style="color: var(--text-main); margin-bottom: 0.5rem;">Subject Not Found</h3>
+                        <p style="font-size: 0.9rem; margin-bottom: 1.5rem;">We couldn't find materials for the specified subject.</p>
+                        <a href="home.html" class="modal-btn-login" style="display: inline-flex; text-decoration: none; max-width: 200px; justify-content: center;">Go to Home</a>
+                    </div>
+                `;
+                return;
+            }
+
+            const subjectData = subjectMaterials[subject];
+            const subjectShort = subjectData.shortName || subject.toUpperCase();
+            const portionText = isCat1 ? 'Units 1, 2 & 3 (1st Half)' : 'Units 3 (2nd Half), 4 & 5';
+            const catBadgeText = isCat1 ? 'CAT I STUDY PACK' : 'CAT II STUDY PACK';
+            const bannerSrc = isCat1 ? 'assets/cards/cat1_green.png' : 'assets/cards/cat2_green.png';
+            const targetUnits = isCat1 ? [1, 2, 3] : [3, 4, 5];
+
+            // Set Meta & Header Info
+            document.title = `${subjectShort} CAT ${catNum} - Cupcake Notes`;
+            if (headerSubjectTitle) headerSubjectTitle.textContent = `${subjectShort} • CAT ${catNum}`;
+            if (headerCatSub) headerCatSub.textContent = portionText;
+            if (heroTitle) heroTitle.textContent = `Continuous Assessment Test ${catNum}`;
+            if (subjectFullName) subjectFullName.textContent = subjectData.fullName || subjectShort;
+
+            if (notesPortionDesc) notesPortionDesc.textContent = `Targeted notes for ${portionText}.`;
+            if (questionsPortionDesc) questionsPortionDesc.textContent = `Partitioned questions for ${portionText}.`;
+            if (syllabusPortionDesc) syllabusPortionDesc.textContent = `Syllabus units for ${portionText}.`;
+
+            // Helper to parse unit number from string
+            function detectUnitNum(name, file) {
+                const text = ((name || '') + ' ' + (file || '')).toLowerCase();
+                if (text.includes('unit 1') || text.includes('unit_1') || text.includes('u1') || text.includes('unit i ') || text.includes('unit-1') || text.includes('unit-i')) return 1;
+                if (text.includes('unit 2') || text.includes('unit_2') || text.includes('u2') || text.includes('unit ii ') || text.includes('unit-2') || text.includes('unit-ii')) return 2;
+                if (text.includes('unit 3') || text.includes('unit_3') || text.includes('u3') || text.includes('unit iii') || text.includes('unit-3') || text.includes('unit-iii')) return 3;
+                if (text.includes('unit 4') || text.includes('unit_4') || text.includes('u4') || text.includes('unit iv') || text.includes('unit-4') || text.includes('unit-iv')) return 4;
+                if (text.includes('unit 5') || text.includes('unit_5') || text.includes('u5') || text.includes('unit v') || text.includes('unit-5') || text.includes('unit-v')) return 5;
+                return null;
+            }
+
+            // 1. Populate Study Notes (Strictly for this CAT)
+            notesContainer.innerHTML = '';
+            let matchingNotes = [];
+
+            if (subject === 'ece') {
+                (subjectData.materials || []).forEach(group => {
+                    if (group.file) {
+                        matchingNotes.push(group);
+                    } else if (group.unit && targetUnits.includes(group.unit)) {
+                        if (group.topics) {
+                            group.topics.forEach(t => matchingNotes.push({ ...t, unitNum: group.unit }));
+                        }
+                    }
+                });
+            } else {
+                (subjectData.materials || []).forEach(item => {
+                    // If note has explicit CAT assignment (e.g. CAT 1 vs CAT 2), filter strictly
+                    if (item.cat && item.cat !== catNum) {
+                        return;
+                    }
+                    const uNum = detectUnitNum(item.name, item.file);
+                    if (uNum && targetUnits.includes(uNum)) {
+                        matchingNotes.push({ ...item, unitNum: uNum });
+                    } else if (item.name && (item.name.toLowerCase().includes('2-mark') || item.name.toLowerCase().includes('2 mark'))) {
+                        matchingNotes.push({ ...item, isTwoMark: true });
+                    }
+                });
+            }
+
+            if (countNotes) countNotes.textContent = matchingNotes.length.toString();
+
+            if (matchingNotes.length > 0) {
+                matchingNotes.forEach(item => {
+                    const isAvailable = item.file && item.file !== '#';
+                    const noteCard = document.createElement('div');
+                    noteCard.className = 'cat-page-note-card glass';
+
+                    if (!isAvailable) {
+                        noteCard.style.opacity = '0.65';
+                        noteCard.style.cursor = 'default';
+                    } else {
+                        noteCard.onclick = () => {
+                            location.href = `viewer.html?file=${encodeURIComponent(item.file)}&title=${encodeURIComponent(item.name)}&subject=${subject}&cat=${catNum}`;
+                        };
+                    }
+
+                    const badgeLabel = item.unitNum ? `UNIT ${item.unitNum}` : (item.isTwoMark ? '2-MARKS' : `CAT ${catNum}`);
+                    const subLabel = !isAvailable ? 'Uploading Soon' :
+                                     (isCat1 && item.unitNum === 3 ? 'Unit 3 Notes (First Half Focus)' :
+                                     !isCat1 && item.unitNum === 3 ? 'Unit 3 Notes (Second Half Focus)' :
+                                     'PDF Document');
+
+                    const actionIndicator = isAvailable ? 
+                        `<div class="cat-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>` :
+                        `<span class="cat-page-soon-pill">SOON</span>`;
+
+                    noteCard.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 0.85rem; overflow: hidden; flex: 1;">
+                            <div class="cat-page-note-icon">
+                                <i class="fas fa-file-pdf"></i>
+                            </div>
+                            <div style="overflow: hidden;">
+                                <h4 class="cat-page-note-name">${item.name}</h4>
+                                <span class="cat-page-note-sub">${subLabel}</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0;">
+                            <span class="cat-unit-pill-badge">${badgeLabel}</span>
+                            ${actionIndicator}
+                        </div>
+                    `;
+                    notesContainer.appendChild(noteCard);
+                });
+            } else {
+                notesContainer.innerHTML = `
+                    <div class="cat-empty-state glass">
+                        <i class="fas fa-clock"></i>
+                        <h4>Notes Uploading Soon</h4>
+                        <p>Study notes for this exam portion are being curated by our academic team.</p>
+                    </div>
+                `;
+            }
+
+            // 2. Populate Important Questions (Strictly Partitioned)
+            questionsContainer.innerHTML = '';
+            const allIQ = subjectData.importantQuestions || [];
+            let matchingQuestions = [];
+
+            allIQ.forEach(item => {
+                const uStr = (item.unit || '').toString();
+                const uNum = parseInt(uStr.replace(/[^0-9]/g, '')) || 
+                             (uStr.toUpperCase().includes('I') ? (uStr.toUpperCase().includes('V') ? (uStr.toUpperCase().includes('IV') ? 4 : 5) : (uStr.toUpperCase().includes('III') ? 3 : (uStr.toUpperCase().includes('II') ? 2 : 1))) : null);
+
+                if (isCat1) {
+                    // CAT 1: Unit 1, Unit 2, Unit 3 (First Half ONLY)
+                    if (uNum === 1 || uNum === 2) {
+                        matchingQuestions.push({
+                            unitNum: uNum,
+                            title: `Unit ${uNum}`,
+                            firstHalf: item.firstHalf || [],
+                            secondHalf: item.secondHalf || [],
+                            questions: item.questions || []
+                        });
+                    } else if (uNum === 3) {
+                        matchingQuestions.push({
+                            unitNum: 3,
+                            title: `Unit 3 (First Half Only)`,
+                            isFirstHalfOnly: true,
+                            firstHalf: item.firstHalf || (item.questions ? item.questions.slice(0, Math.ceil(item.questions.length / 2)) : [])
+                        });
+                    }
+                } else {
+                    // CAT 2: Unit 3 (Second Half ONLY), Unit 4, Unit 5
+                    if (uNum === 3) {
+                        matchingQuestions.push({
+                            unitNum: 3,
+                            title: `Unit 3 (Second Half Only)`,
+                            isSecondHalfOnly: true,
+                            secondHalf: item.secondHalf || (item.questions ? item.questions.slice(Math.ceil(item.questions.length / 2)) : [])
+                        });
+                    } else if (uNum === 4 || uNum === 5) {
+                        matchingQuestions.push({
+                            unitNum: uNum,
+                            title: `Unit ${uNum}`,
+                            firstHalf: item.firstHalf || [],
+                            secondHalf: item.secondHalf || [],
+                            questions: item.questions || []
+                        });
+                    }
+                }
+            });
+
+            if (countQuestions) countQuestions.textContent = matchingQuestions.length.toString();
+
+            if (matchingQuestions.length > 0) {
+                matchingQuestions.forEach(qItem => {
+                    const qCard = document.createElement('div');
+                    qCard.className = 'cat-page-qcard glass';
+
+                    let contentHTML = '';
+
+                    if (qItem.isFirstHalfOnly) {
+                        contentHTML = `
+                            <span class="cat-q-subtag"><i class="fas fa-arrow-right"></i> First Half Questions</span>
+                            <ul class="cat-page-qlist">
+                                ${(qItem.firstHalf || []).map(q => `<li>${q}</li>`).join('')}
+                            </ul>
+                        `;
+                    } else if (qItem.isSecondHalfOnly) {
+                        contentHTML = `
+                            <span class="cat-q-subtag"><i class="fas fa-arrow-right"></i> Second Half Questions</span>
+                            <ul class="cat-page-qlist">
+                                ${(qItem.secondHalf || []).map(q => `<li>${q}</li>`).join('')}
+                            </ul>
+                        `;
+                    } else if (qItem.firstHalf && qItem.firstHalf.length > 0) {
+                        contentHTML = `
+                            <div style="margin-bottom: 0.8rem;">
+                                <span class="cat-q-subtag"><i class="fas fa-angle-right"></i> First Half</span>
+                                <ul class="cat-page-qlist">
+                                    ${qItem.firstHalf.map(q => `<li>${q}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <div>
+                                <span class="cat-q-subtag"><i class="fas fa-angle-right"></i> Second Half</span>
+                                <ul class="cat-page-qlist">
+                                    ${(qItem.secondHalf || []).map(q => `<li>${q}</li>`).join('')}
+                                </ul>
+                            </div>
+                        `;
+                    } else if (qItem.questions && qItem.questions.length > 0) {
+                        contentHTML = `
+                            <ul class="cat-page-qlist">
+                                ${qItem.questions.map(q => `<li>${q}</li>`).join('')}
+                            </ul>
+                        `;
+                    }
+
+                    qCard.innerHTML = `
+                        <div class="cat-page-qcard-header">
+                            <div style="display: flex; align-items: center; gap: 0.6rem;">
+                                <i class="fas fa-star" style="color: #fbbf24; font-size: 0.9rem;"></i>
+                                <h4 class="cat-page-qcard-title">${qItem.title}</h4>
+                            </div>
+                            <span class="cat-unit-pill-badge">${qItem.isFirstHalfOnly ? 'CAT 1 Portion' : (qItem.isSecondHalfOnly ? 'CAT 2 Portion' : `Unit ${qItem.unitNum}`)}</span>
+                        </div>
+                        <div>${contentHTML}</div>
+                    `;
+                    questionsContainer.appendChild(qCard);
+                });
+            } else {
+                questionsContainer.innerHTML = `
+                    <div class="cat-empty-state glass">
+                        <i class="fas fa-lightbulb" style="color: #fbbf24;"></i>
+                        <h4>Questions Being Curated</h4>
+                        <p>Important questions for ${subjectShort} are currently being prepared for the upcoming exam.</p>
+                    </div>
+                `;
+            }
+
+            // 3. Populate Syllabus
+            syllabusContainer.innerHTML = '';
+            const allSyllabus = subjectData.syllabus || [];
+            let filteredSyllabus = [];
+
+            allSyllabus.forEach((u, idx) => {
+                const unitIdx = idx + 1;
+                if (isCat1 && [1, 2, 3].includes(unitIdx)) {
+                    filteredSyllabus.push({ ...u, unitNum: unitIdx, isUnit3: unitIdx === 3 });
+                } else if (!isCat1 && [3, 4, 5].includes(unitIdx)) {
+                    filteredSyllabus.push({ ...u, unitNum: unitIdx, isUnit3: unitIdx === 3 });
+                }
+            });
+
+            if (countSyllabus) countSyllabus.textContent = `${filteredSyllabus.length} Units`;
+
+            if (filteredSyllabus.length > 0) {
+                filteredSyllabus.forEach(u => {
+                    const sCard = document.createElement('div');
+                    sCard.className = 'cat-page-qcard glass';
+                    
+                    let noteBadge = '';
+                    if (u.isUnit3) {
+                        noteBadge = isCat1 ? 
+                            `<span class="cat-unit-pill-badge" style="background: rgba(16, 185, 129, 0.25); color: #d1fae5;">Focus: 1st Half</span>` :
+                            `<span class="cat-unit-pill-badge" style="background: rgba(16, 185, 129, 0.25); color: #d1fae5;">Focus: 2nd Half</span>`;
+                    }
+
+                    sCard.innerHTML = `
+                        <div class="cat-page-qcard-header">
+                            <div style="display: flex; align-items: center; gap: 0.6rem;">
+                                <i class="fas fa-layer-group" style="color: #34d399; font-size: 0.9rem;"></i>
+                                <h4 class="cat-page-qcard-title">${u.unit || 'UNIT ' + u.unitNum}: ${u.title || ''}</h4>
+                            </div>
+                            ${noteBadge}
+                        </div>
+                        <p class="cat-page-syllabus-text">${u.topics || 'Detailed syllabus not available.'}</p>
+                    `;
+                    syllabusContainer.appendChild(sCard);
+                });
+            } else {
+                syllabusContainer.innerHTML = `
+                    <div class="cat-empty-state glass">
+                        <i class="fas fa-list-ul"></i>
+                        <h4>Syllabus Unavailable</h4>
+                        <p>Detailed syllabus units have not been uploaded yet.</p>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
