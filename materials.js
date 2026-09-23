@@ -10,6 +10,8 @@ export const subjectMaterials = {
         courseCode: 'CCS356',
         icon: 'fas fa-code-branch',
         bgImage: 'oose/oose_bg.png',
+        coverLandscape: 'assets/cover/sem6/oose_landscape.png',
+        coverPortrait: 'assets/cover/sem6/oose_portrait.png',
         semester: 6,
         syllabus: [
             {
@@ -111,6 +113,8 @@ export const subjectMaterials = {
         courseCode: 'CCS371',
         icon: 'fas fa-video',
         bgImage: 'vce/vce_bg.png',
+        coverLandscape: 'assets/cover/sem6/vce_landscape.png',
+        coverPortrait: 'assets/cover/sem6/vce_portrait.png',
         semester: 6,
         syllabus: [
             {
@@ -221,6 +225,8 @@ export const subjectMaterials = {
         courseCode: 'OCE351',
         icon: 'fas fa-leaf',
         bgImage: 'esia/esia_bg.png',
+        coverLandscape: 'assets/cover/sem6/esia_landscape.png',
+        coverPortrait: 'assets/cover/sem6/esia_portrait.png',
         semester: 6,
         syllabus: [
             {
@@ -327,6 +333,8 @@ export const subjectMaterials = {
         courseCode: 'CCS358',
         icon: 'fas fa-terminal',
         bgImage: 'ppl/ppl_bg.png',
+        coverLandscape: 'assets/cover/sem6/ppl_landscape.png',
+        coverPortrait: 'assets/cover/sem6/ppl_portrait.png',
         semester: 6,
         syllabus: [
             {
@@ -434,6 +442,8 @@ export const subjectMaterials = {
         courseCode: 'CCW331',
         icon: 'fas fa-chart-line',
         bgImage: 'ba/ba_bg.png',
+        coverLandscape: 'assets/cover/sem6/ba_landscape.png',
+        coverPortrait: 'assets/cover/sem6/ba_portrait.png',
         semester: 6,
         syllabus: [
             {
@@ -535,6 +545,8 @@ export const subjectMaterials = {
         courseCode: 'CCS344',
         icon: 'fas fa-user-secret',
         bgImage: 'eh/eh_bg.png',
+        coverLandscape: 'assets/cover/sem6/eh_landscape.png',
+        coverPortrait: 'assets/cover/sem6/eh_portrait.png',
         semester: 6,
         syllabus: [
             {
@@ -640,6 +652,8 @@ export const subjectMaterials = {
         courseCode: 'GE3791',
         icon: 'fas fa-balance-scale',
         bgImage: 'hve/hve_bg.png',
+        coverLandscape: 'assets/cover/sem7/hve_landscape.png',
+        coverPortrait: 'assets/cover/sem7/hve_portrait.png',
         semester: 7,
         syllabus: [
             {
@@ -744,6 +758,8 @@ export const subjectMaterials = {
         courseCode: 'OHS352',
         icon: 'fas fa-file-signature',
         bgImage: 'prw/prw_bg.png',
+        coverLandscape: 'assets/cover/sem7/prw_landscape.png',
+        coverPortrait: 'assets/cover/sem7/prw_portrait.png',
         semester: 7,
         syllabus: [
             {
@@ -786,6 +802,8 @@ export const subjectMaterials = {
         courseCode: 'AI3021',
         icon: 'fas fa-tractor',
         bgImage: 'itas/itas_bg.png',
+        coverLandscape: 'assets/cover/sem7/itas_landscape.png',
+        coverPortrait: 'assets/cover/sem7/itas_portrait.png',
         semester: 7,
         syllabus: [
             {
@@ -833,6 +851,8 @@ export const subjectMaterials = {
         courseCode: 'GE3751',
         icon: 'fas fa-tasks',
         bgImage: 'pom/pom_bg.png',
+        coverLandscape: 'assets/cover/sem7/pom_landscape.png',
+        coverPortrait: 'assets/cover/sem7/pom_portrait.png',
         semester: 7,
         syllabus: [
             {
@@ -878,6 +898,8 @@ export const subjectMaterials = {
         courseCode: 'OHS551',
         icon: 'fas fa-language',
         bgImage: 'ece/ece_bg.png',
+        coverLandscape: 'assets/cover/sem7/ece_landscape.png',
+        coverPortrait: 'assets/cover/sem7/ece_portrait.png',
         semester: 7,
         syllabus: [
             {

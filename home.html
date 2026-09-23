@@ -242,64 +242,47 @@
         </div>
 
         <div class="subject-grid" id="main-subject-grid">
-            <!-- ITAS Card -->
-            <div class="subject-card glass" onclick="handleSubjectClick('itas')" style="background-image: url('itas/itas_bg.png')">
-                <div class="badge badge-abs">AI3021</div>
-                <i class="fas fa-tractor"></i>
-                <h3>IT in Agricultural System</h3>
-                <p>Course Code: AI3021</p>
-                <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--primary);">
-                    <i class="fas fa-file-pdf"></i> 8 Files Found
-                </div>
-            </div>
-
-            <!-- PoM Card -->
-            <div class="subject-card glass" onclick="handleSubjectClick('pom')" style="background-image: url('pom/pom_bg.png')">
-                <div class="badge badge-abs">GE3751</div>
-                <i class="fas fa-tasks"></i>
-                <h3>Principles of Management</h3>
-                <p>Course Code: GE3751</p>
-                <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--primary);">
-                    <i class="fas fa-file-pdf"></i> 6 Files Found
-                </div>
-            </div>
-
             <!-- HVE Card -->
-            <div class="subject-card glass" onclick="handleSubjectClick('hve')" style="background-image: url('hve/hve_bg.png')">
-                <div class="badge badge-abs">GE3791</div>
-                <i class="fas fa-balance-scale"></i>
-                <h3>Human Values and Ethics</h3>
-                <p>Course Code: GE3791</p>
-                <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--primary);">
-                    <i class="fas fa-file-pdf"></i> 7 Files Found
-                </div>
+            <div class="subject-card subject-cover-card" onclick="handleSubjectClick('hve')" role="button" tabindex="0" title="Human Values and Ethics" aria-label="Human Values and Ethics">
+                <picture class="subject-cover-picture">
+                    <source media="(max-width: 768px)" srcset="assets/cover/sem7/hve_portrait.png">
+                    <img src="assets/cover/sem7/hve_landscape.png" alt="Human Values and Ethics" class="subject-cover-img" loading="lazy">
+                </picture>
             </div>
 
             <!-- PRW Card -->
-            <div class="subject-card glass" onclick="handleSubjectClick('prw')" style="background-image: url('prw/prw_bg.png')">
-                <div class="badge badge-abs">OHS352</div>
-                <i class="fas fa-file-signature"></i>
-                <h3>Project Report Writing</h3>
-                <p>Course Code: OHS352</p>
-                <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--primary);">
-                    <i class="fas fa-file-pdf"></i> 0 Files Found
-                </div>
+            <div class="subject-card subject-cover-card" onclick="handleSubjectClick('prw')" role="button" tabindex="0" title="Project Report Writing" aria-label="Project Report Writing">
+                <picture class="subject-cover-picture">
+                    <source media="(max-width: 768px)" srcset="assets/cover/sem7/prw_portrait.png">
+                    <img src="assets/cover/sem7/prw_landscape.png" alt="Project Report Writing" class="subject-cover-img" loading="lazy">
+                </picture>
+            </div>
+
+            <!-- ITAS Card -->
+            <div class="subject-card subject-cover-card" onclick="handleSubjectClick('itas')" role="button" tabindex="0" title="IT in Agricultural System" aria-label="IT in Agricultural System">
+                <picture class="subject-cover-picture">
+                    <source media="(max-width: 768px)" srcset="assets/cover/sem7/itas_portrait.png">
+                    <img src="assets/cover/sem7/itas_landscape.png" alt="IT in Agricultural System" class="subject-cover-img" loading="lazy">
+                </picture>
+            </div>
+
+            <!-- POM Card -->
+            <div class="subject-card subject-cover-card" onclick="handleSubjectClick('pom')" role="button" tabindex="0" title="Principles of Management" aria-label="Principles of Management">
+                <picture class="subject-cover-picture">
+                    <source media="(max-width: 768px)" srcset="assets/cover/sem7/pom_portrait.png">
+                    <img src="assets/cover/sem7/pom_landscape.png" alt="Principles of Management" class="subject-cover-img" loading="lazy">
+                </picture>
             </div>
 
             <!-- ECE Card -->
-            <div class="subject-card glass" onclick="handleSubjectClick('ece')" style="background-image: url('ece/ece_bg.png')">
-                <div class="badge badge-abs">OHS551</div>
-                <i class="fas fa-language"></i>
-                <h3>English for Competitive Examinations</h3>
-                <p>Course Code: OHS551</p>
-                <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--primary);">
-                    <i class="fas fa-file-pdf"></i> 0 Files Found
-                </div>
+            <div class="subject-card subject-cover-card card-span-center" onclick="handleSubjectClick('ece')" role="button" tabindex="0" title="English for Competitive Examinations" aria-label="English for Competitive Examinations">
+                <picture class="subject-cover-picture">
+                    <source media="(max-width: 768px)" srcset="assets/cover/sem7/ece_portrait.png">
+                    <img src="assets/cover/sem7/ece_landscape.png" alt="English for Competitive Examinations" class="subject-cover-img" loading="lazy">
+                </picture>
             </div>
-        </div>     </div>
-            </div>
-
         </div>
+    </div>
 
     <!-- Mobile Nav Foot -->
     <div class="mobile-nav">
@@ -696,7 +679,7 @@
 
             async function loadSubjects() {
                 // Performance: Load from cache first for instant rendering
-                const CACHE_KEY = 'cupcake_subjects_cache_v3';
+                const CACHE_KEY = 'cupcake_subjects_cache_v4';
                 const cachedData = localStorage.getItem(CACHE_KEY);
                 if (cachedData) {
                     try {
@@ -722,6 +705,8 @@
                                 combined[idx] = { 
                                     ...combined[idx], 
                                     ...fsSub,
+                                    coverLandscape: (subjectMaterials[fsSub.id] && subjectMaterials[fsSub.id].coverLandscape) || fsSub.coverLandscape || combined[idx].coverLandscape,
+                                    coverPortrait: (subjectMaterials[fsSub.id] && subjectMaterials[fsSub.id].coverPortrait) || fsSub.coverPortrait || combined[idx].coverPortrait,
                                     materials: (subjectMaterials[fsSub.id] && subjectMaterials[fsSub.id].materials) || fsSub.materials || combined[idx].materials
                                 };
                             } else {
@@ -784,23 +769,26 @@
                     return;
                 }
 
-                let html = filtered.map(sub => `
-                    <div class="subject-card glass" 
-                          onclick="handleSubjectClick('${sub.id}')"
-                          style="background-image: url('${sub.bgImage || ''}')">
-                        <div class="badge badge-abs">${sub.courseCode || 'N/A'}</div>
-                        <i class="${sub.icon || 'fas fa-book'}"></i>
-                        <h3>${sub.fullName || sub.name}</h3>
-                        <p>Course Code: ${sub.courseCode || 'N/A'}</p>
-                         <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--primary);">
-                            <i class="fas fa-file-pdf"></i> ${
-                                sub.id === 'ece' 
-                                ? (sub.materials ? sub.materials.reduce((acc, g) => acc + (g.topics ? g.topics.length : 0), 0) : 0)
-                                : (sub.materials ? sub.materials.length : 0)
-                            } Files Found
-                        </div>
-                    </div>
-                `).join('');
+                let html = filtered.map((sub, index) => {
+                    const coverL = sub.coverLandscape || `assets/cover/sem${sub.semester}/${sub.id}_landscape.png`;
+                    const coverP = sub.coverPortrait || `assets/cover/sem${sub.semester}/${sub.id}_portrait.png`;
+                    const isLastOdd = (filtered.length % 2 !== 0) && (index === filtered.length - 1);
+                    const spanClass = isLastOdd ? ' card-span-center' : '';
+
+                    return `
+                    <div class="subject-card subject-cover-card${spanClass}" 
+                         onclick="handleSubjectClick('${sub.id}')"
+                         role="button"
+                         tabindex="0"
+                         aria-label="${sub.fullName || sub.name}"
+                         title="${sub.fullName || sub.name}"
+                         onkeydown="if(event.key==='Enter'||event.key===' ') handleSubjectClick('${sub.id}')">
+                        <picture class="subject-cover-picture">
+                            <source media="(max-width: 768px)" srcset="${coverP}">
+                            <img src="${coverL}" alt="${sub.fullName || sub.name}" class="subject-cover-img" loading="lazy">
+                        </picture>
+                    </div>`;
+                }).join('');
 
                 mainGrid.innerHTML = html;
             }
