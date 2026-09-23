@@ -3109,6 +3109,38 @@ iframe {
     margin: 0;
 }
 
+.dl-game-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.dl-change-challenge-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+    color: #475569;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.76rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.dl-change-challenge-btn:hover {
+    background: #ecfdf5;
+    border-color: #10b981;
+    color: #047857;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15);
+}
+
 .dl-game-close-btn {
     width: 32px;
     height: 32px;
@@ -3312,7 +3344,8 @@ iframe {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.5rem;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
 }
 
 .typing-target-label {
@@ -3324,20 +3357,28 @@ iframe {
     display: flex;
     align-items: center;
     gap: 0.4rem;
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .typing-timer-pill {
     background: rgba(239, 68, 68, 0.12);
-    border: 1px solid rgba(239, 68, 68, 0.3);
+    border: 1px solid rgba(239, 68, 68, 0.35);
     color: #dc2626;
-    padding: 0.25rem 0.6rem;
-    border-radius: 8px;
+    padding: 0.26rem 0.65rem;
+    border-radius: 999px;
     font-family: 'Outfit', sans-serif;
     font-size: 0.78rem;
     font-weight: 800;
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
+    flex-shrink: 0;
+    white-space: nowrap;
+    box-shadow: 0 1px 3px rgba(239, 68, 68, 0.12);
 }
 
 .typing-target-text {
@@ -3354,7 +3395,7 @@ iframe {
     font-family: 'Consolas', 'Courier New', monospace;
     font-size: 1.05rem;
     font-weight: 700;
-    letter-spacing: 2.5px;
+    letter-spacing: 2px;
     color: #047857;
     word-break: break-all;
     background: #f0fdf4;
@@ -3376,6 +3417,7 @@ iframe {
     min-height: 70px;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
     margin-bottom: 0.85rem;
+    box-sizing: border-box;
 }
 
 .typing-input-area:focus {
@@ -3386,6 +3428,69 @@ iframe {
 .typing-input-area.matched {
     border-color: #059669;
     background: #f0fdf4;
+}
+
+/* 6 Respective Boxes (4 characters each) for Alphanumeric Code */
+.alpha-boxes-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.4rem;
+    margin-bottom: 0.85rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.alpha-box-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    min-width: 0;
+}
+
+.alpha-box-label {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.alpha-input-box {
+    width: 100%;
+    padding: 0.65rem 0.2rem;
+    border-radius: 10px;
+    border: 1.5px solid #cbd5e1;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-align: center;
+    color: #0f172a;
+    background: #f8fafc;
+    text-transform: uppercase;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+}
+
+.alpha-input-box:focus {
+    border-color: #10b981;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18);
+}
+
+.alpha-input-box.filled {
+    border-color: #10b981;
+    background: #f0fdf4;
+    color: #047857;
+}
+
+.alpha-input-box.wrong {
+    border-color: #ef4444;
+    background: #fef2f2;
+    color: #dc2626;
 }
 
 .typing-status-row {
@@ -3647,6 +3752,150 @@ iframe {
     font-weight: 600;
     margin-top: 0.75rem;
     animation: fadeIn 0.3s ease;
+}
+
+/* Match Game Category Pill */
+.match-game-instruction-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    margin-bottom: 0.85rem;
+}
+
+.match-category-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: #ecfdf5;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #047857;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+/* Change Challenge Footer */
+.dl-game-footer {
+    margin-top: 1.15rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dl-change-challenge-link {
+    background: transparent;
+    border: 1.5px dashed #cbd5e1;
+    padding: 0.45rem 1.1rem;
+    border-radius: 999px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #475569;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.dl-change-challenge-link:hover {
+    background: #f0fdf4;
+    border-color: #10b981;
+    border-style: solid;
+    color: #047857;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15);
+}
+
+/* Mobile Responsiveness for Challenge Modal & Components */
+@media (max-width: 520px) {
+    .dl-game-card {
+        padding: 1.15rem 0.95rem;
+        border-radius: 16px;
+        max-height: 94vh;
+    }
+
+    .dl-game-title-group h3 {
+        font-size: 1.05rem;
+    }
+
+    .dl-game-title-group p {
+        font-size: 0.72rem;
+    }
+
+    .dl-change-challenge-btn {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.72rem;
+    }
+
+    .typing-target-card {
+        padding: 0.85rem 0.85rem;
+        margin-bottom: 0.85rem;
+    }
+
+    .typing-target-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.35rem;
+        margin-bottom: 0.45rem;
+    }
+
+    .typing-target-label {
+        font-size: 0.68rem;
+    }
+
+    .typing-timer-pill {
+        font-size: 0.74rem;
+        padding: 0.2rem 0.5rem;
+        flex-shrink: 0;
+    }
+
+    .typing-target-text.code-font {
+        font-size: 0.88rem;
+        letter-spacing: 1.2px;
+        padding: 0.45rem 0.5rem;
+    }
+
+    /* Wrap 6 boxes into 2 neat rows of 3 on mobile */
+    .alpha-boxes-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.45rem;
+    }
+
+    .alpha-input-box {
+        padding: 0.6rem 0.15rem;
+        font-size: 0.9rem;
+        letter-spacing: 1.2px;
+    }
+
+    .line-match-col.left-col {
+        width: 32%;
+    }
+
+    .line-match-col.right-col {
+        width: 62%;
+    }
+
+    .line-node {
+        min-height: 44px;
+        padding: 0.4rem 0.55rem;
+    }
+
+    .line-node-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 1.1rem;
+    }
+
+    .line-node-text {
+        font-size: 0.78rem;
+    }
 }
 
 /* ── Admin Material Downloads Analytics ───────────────────── */

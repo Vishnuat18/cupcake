@@ -738,9 +738,14 @@
                     <h3 id="dl-game-modal-title"><i class="fas fa-gamepad" style="color: #10b981;"></i> Download Challenge</h3>
                     <p id="dl-game-modal-sub">Solve the quick challenge below to unlock and download your material</p>
                 </div>
-                <button type="button" class="dl-game-close-btn" id="close-game-modal" title="Close">
-                    <i class="fas fa-times"></i>
-                </button>
+                <div class="dl-game-header-actions">
+                    <button type="button" class="dl-change-challenge-btn" id="change-challenge-btn" title="Switch to another challenge">
+                        <i class="fas fa-sync-alt"></i> <span>Change</span>
+                    </button>
+                    <button type="button" class="dl-game-close-btn" id="close-game-modal" title="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
             </div>
 
             <!-- Game 1: Math Answer Option then Count Button -->
@@ -766,12 +771,12 @@
                 </div>
             </div>
 
-            <!-- Game 2: Speed / 24-digit Alphanumeric Typing -->
+            <!-- Game 2: Speed Sentence / 6-Box Alphanumeric Typing -->
             <div id="pane-game-typing" class="dl-game-pane">
                 <div class="typing-target-card">
                     <div class="typing-target-header">
                         <div id="typing-mode-label" class="typing-target-label">
-                            <i class="fas fa-quote-left"></i> Type this sentence (within 60s)
+                            <i class="fas fa-quote-left"></i> Type this sentence
                         </div>
                         <span id="typing-timer-display" class="typing-timer-pill">
                             <i class="fas fa-stopwatch"></i> <span id="typing-sec-val">60</span>s left
@@ -781,7 +786,38 @@
                         7K9M - 2W4P - 8Q1N - 5R3B - 6D2F - 9L8A
                     </div>
                 </div>
-                <textarea id="typing-input-field" class="typing-input-area" placeholder="Type the text above exactly..." spellcheck="false" autocomplete="off"></textarea>
+
+                <!-- Textarea for Sentences -->
+                <textarea id="typing-input-field" class="typing-input-area" placeholder="Type the sentence above exactly..." spellcheck="false" autocomplete="off"></textarea>
+
+                <!-- 6 Respective Boxes (4 characters each) for Alphanumeric Code -->
+                <div id="alpha-boxes-container" class="alpha-boxes-grid" style="display: none;">
+                    <div class="alpha-box-item">
+                        <span class="alpha-box-label">Part 1</span>
+                        <input type="text" class="alpha-input-box" id="alpha-box-0" maxlength="4" placeholder="----" autocomplete="off" spellcheck="false" data-box-index="0">
+                    </div>
+                    <div class="alpha-box-item">
+                        <span class="alpha-box-label">Part 2</span>
+                        <input type="text" class="alpha-input-box" id="alpha-box-1" maxlength="4" placeholder="----" autocomplete="off" spellcheck="false" data-box-index="1">
+                    </div>
+                    <div class="alpha-box-item">
+                        <span class="alpha-box-label">Part 3</span>
+                        <input type="text" class="alpha-input-box" id="alpha-box-2" maxlength="4" placeholder="----" autocomplete="off" spellcheck="false" data-box-index="2">
+                    </div>
+                    <div class="alpha-box-item">
+                        <span class="alpha-box-label">Part 4</span>
+                        <input type="text" class="alpha-input-box" id="alpha-box-3" maxlength="4" placeholder="----" autocomplete="off" spellcheck="false" data-box-index="3">
+                    </div>
+                    <div class="alpha-box-item">
+                        <span class="alpha-box-label">Part 5</span>
+                        <input type="text" class="alpha-input-box" id="alpha-box-4" maxlength="4" placeholder="----" autocomplete="off" spellcheck="false" data-box-index="4">
+                    </div>
+                    <div class="alpha-box-item">
+                        <span class="alpha-box-label">Part 6</span>
+                        <input type="text" class="alpha-input-box" id="alpha-box-5" maxlength="4" placeholder="----" autocomplete="off" spellcheck="false" data-box-index="5">
+                    </div>
+                </div>
+
                 <div class="typing-status-row">
                     <span id="typing-char-count">0 characters typed</span>
                     <span id="typing-match-status" style="font-weight: 700;">Waiting for input...</span>
@@ -794,9 +830,14 @@
 
             <!-- Game 3: Click-to-Click Line Matching (Reference Image Style) -->
             <div id="pane-game-match" class="dl-game-pane">
-                <p class="math-step-label" style="text-align: center; margin-bottom: 0.85rem;">
-                    <i class="fas fa-draw-polygon" style="color: #10b981;"></i> Click an icon on the left, then click its brand name on the right
-                </p>
+                <div class="match-game-instruction-wrap">
+                    <p class="math-step-label" style="text-align: center; margin-bottom: 0.2rem;">
+                        <i class="fas fa-draw-polygon" style="color: #10b981;"></i> Click an icon on the left, then click its brand name on the right
+                    </p>
+                    <div id="match-category-pill" class="match-category-pill">
+                        <i class="fas fa-layer-group"></i> <span>Theme: Social Media & Networks</span>
+                    </div>
+                </div>
                 <div id="line-match-board" class="line-match-board">
                     <svg id="line-match-svg" class="line-match-svg">
                         <defs>
@@ -828,6 +869,13 @@
                 </div>
             </div>
 
+            <!-- Change challenge footer option -->
+            <div class="dl-game-footer">
+                <button type="button" id="change-challenge-footer-btn" class="dl-change-challenge-link" title="Change the challenge">
+                    <i class="fas fa-sync-alt"></i> Change the challenge
+                </button>
+            </div>
+
             <div id="dl-game-success" class="dl-game-success-banner">
                 <i class="fas fa-check-circle"></i> Verification passed! Download started...
             </div>
@@ -851,6 +899,8 @@
         // Game Modal Elements
         const gameModal = document.getElementById('download-game-modal');
         const closeGameModalBtn = document.getElementById('close-game-modal');
+        const changeChallengeBtn = document.getElementById('change-challenge-btn');
+        const changeChallengeFooterBtn = document.getElementById('change-challenge-footer-btn');
         const gameModalTitle = document.getElementById('dl-game-modal-title');
         const gameModalSub = document.getElementById('dl-game-modal-sub');
         const gameSuccessBanner = document.getElementById('dl-game-success');
@@ -865,12 +915,14 @@
         const mathClickerWrapper = document.getElementById('math-clicker-wrapper');
         const mathCountBtn = document.getElementById('math-count-btn');
 
-        // Game 2 Elements (Speed / 24-char Alphanumeric Typing)
+        // Game 2 Elements (Speed / 6-Box Alphanumeric Typing)
         const typingModeLabel = document.getElementById('typing-mode-label');
         const typingTimerDisplay = document.getElementById('typing-timer-display');
         const typingSecVal = document.getElementById('typing-sec-val');
         const typingTargetPhrase = document.getElementById('typing-target-phrase');
         const typingInputField = document.getElementById('typing-input-field');
+        const alphaBoxesContainer = document.getElementById('alpha-boxes-container');
+        const alphaInputBoxes = Array.from(document.querySelectorAll('.alpha-input-box'));
         const typingCharCount = document.getElementById('typing-char-count');
         const typingMatchStatus = document.getElementById('typing-match-status');
         const typingVerifyBtn = document.getElementById('typing-verify-btn');
@@ -880,6 +932,7 @@
         const lineMatchSvg = document.getElementById('line-match-svg');
         const lineMatchLeftCol = document.getElementById('line-match-left-col');
         const lineMatchRightCol = document.getElementById('line-match-right-col');
+        const matchCategoryPill = document.getElementById('match-category-pill');
         const matchResetBtn = document.getElementById('match-reset-btn');
         const matchVerifyBtn = document.getElementById('match-verify-btn');
 
@@ -1174,7 +1227,7 @@
             };
         }
 
-        // ── Game 2: 15-20 Words Sentence (within 60s) OR 24-digit Unambiguous Alphanumeric
+        // ── Game 2: 15-20 Words Sentence (within 60s) OR 6-Box 24-digit Alphanumeric
         const typingSentences = [
             "Consistent preparation and comprehensive daily revision guarantee outstanding academic excellence and confidence in university semester examinations.", // 16 words
             "Engineering students achieve remarkable success by mastering fundamental concepts and systematically solving previous year university question papers.", // 17 words
@@ -1215,83 +1268,170 @@
             }, 1000);
         }
 
+        function updateAlphanumericProgress() {
+            const combined = alphaInputBoxes.map(b => b.value).join('');
+            const cleanTarget = currentTypingTarget.toUpperCase().replace(/[^A-Z0-9]/g, '');
+
+            if (typingCharCount) {
+                typingCharCount.textContent = `${combined.length} / 24 characters`;
+            }
+
+            if (cleanTarget.startsWith(combined)) {
+                if (combined.length === 24) {
+                    if (typingMatchStatus) {
+                        typingMatchStatus.textContent = "Code verified! Click Verify & Download.";
+                        typingMatchStatus.style.color = "#10b981";
+                    }
+                    alphaInputBoxes.forEach(b => b.classList.add('filled'));
+                } else {
+                    if (typingMatchStatus) {
+                        typingMatchStatus.textContent = `Correct so far (${combined.length}/24)...`;
+                        typingMatchStatus.style.color = "#059669";
+                    }
+                }
+            } else {
+                if (typingMatchStatus) {
+                    typingMatchStatus.textContent = "Mismatch detected! Check characters.";
+                    typingMatchStatus.style.color = "#ef4444";
+                }
+            }
+        }
+
         function initTypingGame() {
             if (typingTimerInterval) {
                 clearInterval(typingTimerInterval);
                 typingTimerInterval = null;
             }
 
-            isAlphanumericMode = Math.random() < 0.5; // 50% 24-character code, 50% sentence
+            isAlphanumericMode = Math.random() < 0.5; // 50% 24-character 6-box code, 50% sentence
 
             if (isAlphanumericMode) {
                 currentTypingTarget = generate24CharAlphanumeric();
-                if (typingModeLabel) typingModeLabel.innerHTML = '<i class="fas fa-shield-alt"></i> Type this 24-character code (within 60s)';
-                if (typingTargetPhrase) typingTargetPhrase.classList.add('code-font');
+                if (typingModeLabel) {
+                    typingModeLabel.innerHTML = '<i class="fas fa-shield-alt"></i> Type 24-character code';
+                }
+                if (typingTargetPhrase) {
+                    typingTargetPhrase.classList.add('code-font');
+                    typingTargetPhrase.textContent = currentTypingTarget;
+                }
+                // Show 6 boxes, hide textarea
+                if (typingInputField) typingInputField.style.display = 'none';
+                if (alphaBoxesContainer) alphaBoxesContainer.style.display = 'grid';
+
+                alphaInputBoxes.forEach(b => {
+                    b.value = '';
+                    b.classList.remove('filled', 'wrong');
+                });
+                if (typingCharCount) typingCharCount.textContent = "0 / 24 characters";
+                if (typingMatchStatus) {
+                    typingMatchStatus.textContent = "Fill in the 6 code boxes...";
+                    typingMatchStatus.style.color = "#64748b";
+                }
+                setTimeout(() => {
+                    if (alphaInputBoxes[0]) alphaInputBoxes[0].focus();
+                }, 100);
             } else {
                 currentTypingTarget = typingSentences[Math.floor(Math.random() * typingSentences.length)];
-                if (typingModeLabel) typingModeLabel.innerHTML = '<i class="fas fa-quote-left"></i> Type this sentence (within 60s)';
-                if (typingTargetPhrase) typingTargetPhrase.classList.remove('code-font');
-            }
-
-            if (typingTargetPhrase) typingTargetPhrase.textContent = currentTypingTarget;
-            if (typingInputField) {
-                typingInputField.value = "";
-                typingInputField.classList.remove('matched');
-            }
-            if (typingCharCount) typingCharCount.textContent = isAlphanumericMode ? "0 / 24 characters" : "0 characters typed";
-            if (typingMatchStatus) {
-                typingMatchStatus.textContent = "Waiting for input...";
-                typingMatchStatus.style.color = "#64748b";
+                if (typingModeLabel) {
+                    typingModeLabel.innerHTML = '<i class="fas fa-quote-left"></i> Type this sentence';
+                }
+                if (typingTargetPhrase) {
+                    typingTargetPhrase.classList.remove('code-font');
+                    typingTargetPhrase.textContent = currentTypingTarget;
+                }
+                // Show textarea, hide 6 boxes
+                if (typingInputField) {
+                    typingInputField.style.display = 'block';
+                    typingInputField.value = '';
+                    typingInputField.classList.remove('matched');
+                }
+                if (alphaBoxesContainer) alphaBoxesContainer.style.display = 'none';
+                if (typingCharCount) typingCharCount.textContent = "0 characters typed";
+                if (typingMatchStatus) {
+                    typingMatchStatus.textContent = "Waiting for input...";
+                    typingMatchStatus.style.color = "#64748b";
+                }
+                setTimeout(() => {
+                    if (typingInputField) typingInputField.focus();
+                }, 100);
             }
 
             startTypingTimer();
         }
 
+        // Setup 6-Box Alphanumeric handlers
+        alphaInputBoxes.forEach((box, idx) => {
+            box.oninput = () => {
+                box.value = box.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 4);
+                if (box.value.length === 4) {
+                    box.classList.add('filled');
+                    if (idx < alphaInputBoxes.length - 1) {
+                        alphaInputBoxes[idx + 1].focus();
+                        alphaInputBoxes[idx + 1].select();
+                    }
+                } else {
+                    box.classList.remove('filled');
+                }
+                updateAlphanumericProgress();
+            };
+
+            box.onkeydown = (e) => {
+                if (e.key === 'Backspace' && box.value.length === 0 && idx > 0) {
+                    alphaInputBoxes[idx - 1].focus();
+                } else if (e.key === 'ArrowLeft' && box.selectionStart === 0 && idx > 0) {
+                    alphaInputBoxes[idx - 1].focus();
+                } else if (e.key === 'ArrowRight' && box.selectionEnd === box.value.length && idx < alphaInputBoxes.length - 1) {
+                    alphaInputBoxes[idx + 1].focus();
+                }
+            };
+
+            box.onpaste = (e) => {
+                e.preventDefault();
+                const pasted = (e.clipboardData || window.clipboardData).getData('text') || '';
+                const clean = pasted.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 24);
+                if (clean.length > 0) {
+                    for (let k = 0; k < alphaInputBoxes.length; k++) {
+                        const chunk = clean.slice(k * 4, (k + 1) * 4);
+                        alphaInputBoxes[k].value = chunk;
+                        if (chunk.length === 4) alphaInputBoxes[k].classList.add('filled');
+                        else alphaInputBoxes[k].classList.remove('filled');
+                    }
+                    const nextEmpty = alphaInputBoxes.find(b => b.value.length < 4);
+                    if (nextEmpty) nextEmpty.focus();
+                    else alphaInputBoxes[alphaInputBoxes.length - 1].focus();
+                    updateAlphanumericProgress();
+                }
+            };
+        });
+
+        // Setup Sentence Textarea handler
         if (typingInputField) {
             typingInputField.oninput = () => {
                 let entered = typingInputField.value;
+                if (typingCharCount) {
+                    typingCharCount.textContent = `${entered.length} characters typed`;
+                }
 
-                if (isAlphanumericMode) {
-                    // Normalize: remove dashes, spaces, convert uppercase
-                    const cleanUser = entered.toUpperCase().replace(/[^A-Z0-9]/g, '');
-                    const cleanTarget = currentTypingTarget.toUpperCase().replace(/[^A-Z0-9]/g, '');
-
-                    typingCharCount.textContent = `${cleanUser.length} / 24 characters`;
-
-                    if (cleanTarget.startsWith(cleanUser)) {
-                        if (cleanUser.length === 24) {
-                            typingMatchStatus.textContent = "Code verified! Click Verify & Download.";
+                if (currentTypingTarget.startsWith(entered)) {
+                    if (entered.trim() === currentTypingTarget.trim()) {
+                        if (typingMatchStatus) {
+                            typingMatchStatus.textContent = "Sentence verified! Click Verify & Download.";
                             typingMatchStatus.style.color = "#10b981";
-                            typingInputField.classList.add('matched');
-                        } else {
-                            typingMatchStatus.textContent = `Correct so far (${cleanUser.length}/24)...`;
-                            typingMatchStatus.style.color = "#059669";
-                            typingInputField.classList.remove('matched');
                         }
+                        typingInputField.classList.add('matched');
                     } else {
-                        typingMatchStatus.textContent = "Mismatch detected! Check characters.";
-                        typingMatchStatus.style.color = "#ef4444";
+                        if (typingMatchStatus) {
+                            typingMatchStatus.textContent = "Typing correctly so far...";
+                            typingMatchStatus.style.color = "#059669";
+                        }
                         typingInputField.classList.remove('matched');
                     }
                 } else {
-                    // Sentence matching
-                    typingCharCount.textContent = `${entered.length} characters typed`;
-
-                    if (currentTypingTarget.startsWith(entered)) {
-                        if (entered.trim() === currentTypingTarget.trim()) {
-                            typingMatchStatus.textContent = "Sentence verified! Click Verify & Download.";
-                            typingMatchStatus.style.color = "#10b981";
-                            typingInputField.classList.add('matched');
-                        } else {
-                            typingMatchStatus.textContent = "Typing correctly so far...";
-                            typingMatchStatus.style.color = "#059669";
-                            typingInputField.classList.remove('matched');
-                        }
-                    } else {
+                    if (typingMatchStatus) {
                         typingMatchStatus.textContent = "Character mismatch! Check spelling.";
                         typingMatchStatus.style.color = "#ef4444";
-                        typingInputField.classList.remove('matched');
                     }
+                    typingInputField.classList.remove('matched');
                 }
             };
         }
@@ -1303,7 +1443,7 @@
                 let isSuccess = false;
 
                 if (isAlphanumericMode) {
-                    const cleanUser = typingInputField.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                    const cleanUser = alphaInputBoxes.map(b => b.value).join('').toUpperCase().replace(/[^A-Z0-9]/g, '');
                     const cleanTarget = currentTypingTarget.toUpperCase().replace(/[^A-Z0-9]/g, '');
                     isSuccess = cleanUser === cleanTarget && cleanUser.length === 24;
                 } else {
@@ -1323,113 +1463,115 @@
             };
         }
 
-        // ── Game 3: 100+ Top Brands Pool (3 to 5 pairs; Left side Icon ONLY, Right side Name ONLY)
-        const brandPool = [
-            { id: 'github', name: 'GitHub', icon: 'fab fa-github', bg: '#24292e' },
-            { id: 'youtube', name: 'YouTube', icon: 'fab fa-youtube', bg: '#dc2626' },
-            { id: 'instagram', name: 'Instagram', icon: 'fab fa-instagram', bg: 'linear-gradient(45deg, #f09433, #dc2743, #bc1888)' },
-            { id: 'linkedin', name: 'LinkedIn', icon: 'fab fa-linkedin-in', bg: '#0284c7' },
-            { id: 'discord', name: 'Discord', icon: 'fab fa-discord', bg: '#5865F2' },
-            { id: 'spotify', name: 'Spotify', icon: 'fab fa-spotify', bg: '#10b981' },
-            { id: 'apple', name: 'Apple', icon: 'fab fa-apple', bg: '#000000' },
-            { id: 'google', name: 'Google', icon: 'fab fa-google', bg: '#ea4335' },
-            { id: 'microsoft', name: 'Microsoft', icon: 'fab fa-microsoft', bg: '#00a4ef' },
-            { id: 'amazon', name: 'Amazon', icon: 'fab fa-amazon', bg: '#ff9900' },
-            { id: 'facebook', name: 'Facebook', icon: 'fab fa-facebook-f', bg: '#1877f2' },
-            { id: 'x-twitter', name: 'X / Twitter', icon: 'fab fa-x-twitter', bg: '#000000' },
-            { id: 'threads', name: 'Threads', icon: 'fab fa-threads', bg: '#000000' },
-            { id: 'tiktok', name: 'TikTok', icon: 'fab fa-tiktok', bg: '#010101' },
-            { id: 'reddit', name: 'Reddit', icon: 'fab fa-reddit-alien', bg: '#ff4500' },
-            { id: 'twitch', name: 'Twitch', icon: 'fab fa-twitch', bg: '#9146ff' },
-            { id: 'slack', name: 'Slack', icon: 'fab fa-slack', bg: '#4a154b' },
-            { id: 'figma', name: 'Figma', icon: 'fab fa-figma', bg: '#f24e1e' },
-            { id: 'dropbox', name: 'Dropbox', icon: 'fab fa-dropbox', bg: '#0061ff' },
-            { id: 'pinterest', name: 'Pinterest', icon: 'fab fa-pinterest', bg: '#e60023' },
-            { id: 'snapchat', name: 'Snapchat', icon: 'fab fa-snapchat', bg: '#fffc00', darkText: true },
-            { id: 'telegram', name: 'Telegram', icon: 'fab fa-telegram', bg: '#229ed9' },
-            { id: 'whatsapp', name: 'WhatsApp', icon: 'fab fa-whatsapp', bg: '#25d366' },
-            { id: 'steam', name: 'Steam', icon: 'fab fa-steam', bg: '#171a21' },
-            { id: 'playstation', name: 'PlayStation', icon: 'fab fa-playstation', bg: '#003791' },
-            { id: 'xbox', name: 'Xbox', icon: 'fab fa-xbox', bg: '#107c10' },
-            { id: 'android', name: 'Android', icon: 'fab fa-android', bg: '#3ddc84' },
-            { id: 'windows', name: 'Windows', icon: 'fab fa-windows', bg: '#0078d7' },
-            { id: 'linux', name: 'Linux', icon: 'fab fa-linux', bg: '#333333' },
-            { id: 'ubuntu', name: 'Ubuntu', icon: 'fab fa-ubuntu', bg: '#e95420' },
-            { id: 'python', name: 'Python', icon: 'fab fa-python', bg: '#3776ab' },
-            { id: 'java', name: 'Java', icon: 'fab fa-java', bg: '#f89820' },
-            { id: 'js', name: 'JavaScript', icon: 'fab fa-js', bg: '#f7df1e', darkText: true },
-            { id: 'html5', name: 'HTML5', icon: 'fab fa-html5', bg: '#e34f26' },
-            { id: 'css3', name: 'CSS3', icon: 'fab fa-css3-alt', bg: '#1572b6' },
-            { id: 'react', name: 'React', icon: 'fab fa-react', bg: '#61dafb', darkText: true },
-            { id: 'vuejs', name: 'Vue.js', icon: 'fab fa-vuejs', bg: '#4fc08d' },
-            { id: 'angular', name: 'Angular', icon: 'fab fa-angular', bg: '#dd0031' },
-            { id: 'node', name: 'Node.js', icon: 'fab fa-node-js', bg: '#339933' },
-            { id: 'docker', name: 'Docker', icon: 'fab fa-docker', bg: '#2496ed' },
-            { id: 'aws', name: 'AWS', icon: 'fab fa-aws', bg: '#232f3e' },
-            { id: 'cloudflare', name: 'Cloudflare', icon: 'fab fa-cloudflare', bg: '#f38020' },
-            { id: 'digital-ocean', name: 'DigitalOcean', icon: 'fab fa-digital-ocean', bg: '#0080ff' },
-            { id: 'git', name: 'Git', icon: 'fab fa-git-alt', bg: '#f05032' },
-            { id: 'gitlab', name: 'GitLab', icon: 'fab fa-gitlab', bg: '#fc6d26' },
-            { id: 'bitbucket', name: 'Bitbucket', icon: 'fab fa-bitbucket', bg: '#0052cc' },
-            { id: 'stack-overflow', name: 'Stack Overflow', icon: 'fab fa-stack-overflow', bg: '#f48024' },
-            { id: 'npm', name: 'npm', icon: 'fab fa-npm', bg: '#cb3837' },
-            { id: 'yarn', name: 'Yarn', icon: 'fab fa-yarn', bg: '#2c8ebb' },
-            { id: 'php', name: 'PHP', icon: 'fab fa-php', bg: '#777bb4' },
-            { id: 'rust', name: 'Rust', icon: 'fab fa-rust', bg: '#000000' },
-            { id: 'swift', name: 'Swift', icon: 'fab fa-swift', bg: '#f05138' },
-            { id: 'canva', name: 'Canva', icon: 'fab fa-canva', bg: '#00c4cc' },
-            { id: 'wordpress', name: 'WordPress', icon: 'fab fa-wordpress', bg: '#21759b' },
-            { id: 'medium', name: 'Medium', icon: 'fab fa-medium', bg: '#000000' },
-            { id: 'paypal', name: 'PayPal', icon: 'fab fa-paypal', bg: '#00457c' },
-            { id: 'stripe', name: 'Stripe', icon: 'fab fa-stripe', bg: '#635bff' },
-            { id: 'uber', name: 'Uber', icon: 'fab fa-uber', bg: '#000000' },
-            { id: 'airbnb', name: 'Airbnb', icon: 'fab fa-airbnb', bg: '#ff5a5f' },
-            { id: 'ebay', name: 'eBay', icon: 'fab fa-ebay', bg: '#e53238' },
-            { id: 'shopify', name: 'Shopify', icon: 'fab fa-shopify', bg: '#7ab55c' },
-            { id: 'firefox', name: 'Firefox', icon: 'fab fa-firefox-browser', bg: '#ff7139' },
-            { id: 'chrome', name: 'Chrome', icon: 'fab fa-chrome', bg: '#4285f4' },
-            { id: 'edge', name: 'Edge', icon: 'fab fa-edge', bg: '#0078d7' },
-            { id: 'safari', name: 'Safari', icon: 'fab fa-safari', bg: '#006cff' },
-            { id: 'opera', name: 'Opera', icon: 'fab fa-opera', bg: '#ff1b2d' },
-            { id: 'brave', name: 'Brave', icon: 'fab fa-brave', bg: '#fb542b' },
-            { id: 'wikipedia', name: 'Wikipedia', icon: 'fab fa-wikipedia-w', bg: '#000000' },
-            { id: 'quora', name: 'Quora', icon: 'fab fa-quora', bg: '#b92b27' },
-            { id: 'trello', name: 'Trello', icon: 'fab fa-trello', bg: '#0079bf' },
-            { id: 'jira', name: 'Jira', icon: 'fab fa-jira', bg: '#0052cc' },
-            { id: 'confluence', name: 'Confluence', icon: 'fab fa-confluence', bg: '#172b4d' },
-            { id: 'zoom', name: 'Zoom', icon: 'fas fa-video', bg: '#2d8cff' },
-            { id: 'skype', name: 'Skype', icon: 'fab fa-skype', bg: '#00aff0' },
-            { id: 'viber', name: 'Viber', icon: 'fab fa-viber', bg: '#7360f2' },
-            { id: 'line', name: 'LINE', icon: 'fab fa-line', bg: '#00c300' },
-            { id: 'wechat', name: 'WeChat', icon: 'fab fa-weixin', bg: '#07c160' },
-            { id: 'behance', name: 'Behance', icon: 'fab fa-behance', bg: '#1769ff' },
-            { id: 'dribbble', name: 'Dribbble', icon: 'fab fa-dribbble', bg: '#ea4c89' },
-            { id: 'unsplash', name: 'Unsplash', icon: 'fab fa-unsplash', bg: '#000000' },
-            { id: 'deviantart', name: 'DeviantArt', icon: 'fab fa-deviantart', bg: '#05cc47' },
-            { id: 'etsy', name: 'Etsy', icon: 'fab fa-etsy', bg: '#f1641e' },
-            { id: 'wix', name: 'Wix', icon: 'fab fa-wix', bg: '#0c6ebd' },
-            { id: 'squarespace', name: 'Squarespace', icon: 'fab fa-squarespace', bg: '#000000' },
-            { id: 'blogger', name: 'Blogger', icon: 'fab fa-blogger-b', bg: '#f57d00' },
-            { id: 'tumblr', name: 'Tumblr', icon: 'fab fa-tumblr', bg: '#35465c' },
-            { id: 'vimeo', name: 'Vimeo', icon: 'fab fa-vimeo-v', bg: '#1ab7ea' },
-            { id: 'soundcloud', name: 'SoundCloud', icon: 'fab fa-soundcloud', bg: '#ff5500' },
-            { id: 'kickstarter', name: 'Kickstarter', icon: 'fab fa-kickstarter-k', bg: '#05ce78' },
-            { id: 'patreon', name: 'Patreon', icon: 'fab fa-patreon', bg: '#ff424d' },
-            { id: 'bluetooth', name: 'Bluetooth', icon: 'fab fa-bluetooth-b', bg: '#0082fc' },
-            { id: 'usb', name: 'USB', icon: 'fab fa-usb', bg: '#435363' },
-            { id: 'salesforce', name: 'Salesforce', icon: 'fab fa-salesforce', bg: '#00a1e0' },
-            { id: 'hubspot', name: 'HubSpot', icon: 'fab fa-hubspot', bg: '#ff7a59' },
-            { id: 'mailchimp', name: 'Mailchimp', icon: 'fab fa-mailchimp', bg: '#ffe01b', darkText: true },
-            { id: 'meta', name: 'Meta', icon: 'fab fa-meta', bg: '#0081fb' },
-            { id: 'deezer', name: 'Deezer', icon: 'fab fa-deezer', bg: '#feaa2d' },
-            { id: 'lastfm', name: 'Last.fm', icon: 'fab fa-lastfm', bg: '#d51007' },
-            { id: 'dailymotion', name: 'Dailymotion', icon: 'fab fa-dailymotion', bg: '#0066dc' },
-            { id: 'hackerrank', name: 'HackerRank', icon: 'fab fa-hackerrank', bg: '#2ec866' },
-            { id: 'kaggle', name: 'Kaggle', icon: 'fab fa-kaggle', bg: '#20beff' },
-            { id: 'codepen', name: 'CodePen', icon: 'fab fa-codepen', bg: '#000000' },
-            { id: 'freecodecamp', name: 'freeCodeCamp', icon: 'fab fa-free-code-camp', bg: '#0a0a23' },
-            { id: 'w3schools', name: 'W3Schools', icon: 'fas fa-graduation-cap', bg: '#04aa6d' }
+        // ── Game 3: Thematic Brand Categories with Social Media & Guaranteed Shuffled Matching
+        const brandThematicCategories = [
+            {
+                name: "Social Media & Networks",
+                icon: "fas fa-share-nodes",
+                brands: [
+                    { id: 'instagram', name: 'Instagram', icon: 'fab fa-instagram', bg: 'linear-gradient(45deg, #f09433, #dc2743, #bc1888)' },
+                    { id: 'whatsapp', name: 'WhatsApp', icon: 'fab fa-whatsapp', bg: '#25d366' },
+                    { id: 'youtube', name: 'YouTube', icon: 'fab fa-youtube', bg: '#dc2626' },
+                    { id: 'x-twitter', name: 'X / Twitter', icon: 'fab fa-x-twitter', bg: '#000000' },
+                    { id: 'linkedin', name: 'LinkedIn', icon: 'fab fa-linkedin-in', bg: '#0284c7' },
+                    { id: 'discord', name: 'Discord', icon: 'fab fa-discord', bg: '#5865F2' },
+                    { id: 'tiktok', name: 'TikTok', icon: 'fab fa-tiktok', bg: '#010101' },
+                    { id: 'snapchat', name: 'Snapchat', icon: 'fab fa-snapchat', bg: '#fffc00', darkText: true },
+                    { id: 'telegram', name: 'Telegram', icon: 'fab fa-telegram', bg: '#229ed9' },
+                    { id: 'reddit', name: 'Reddit', icon: 'fab fa-reddit-alien', bg: '#ff4500' },
+                    { id: 'pinterest', name: 'Pinterest', icon: 'fab fa-pinterest', bg: '#e60023' },
+                    { id: 'facebook', name: 'Facebook', icon: 'fab fa-facebook-f', bg: '#1877f2' },
+                    { id: 'threads', name: 'Threads', icon: 'fab fa-threads', bg: '#000000' },
+                    { id: 'wechat', name: 'WeChat', icon: 'fab fa-weixin', bg: '#07c160' }
+                ]
+            },
+            {
+                name: "Developer & Coding Tools",
+                icon: "fas fa-code",
+                brands: [
+                    { id: 'github', name: 'GitHub', icon: 'fab fa-github', bg: '#24292e' },
+                    { id: 'gitlab', name: 'GitLab', icon: 'fab fa-gitlab', bg: '#fc6d26' },
+                    { id: 'stack-overflow', name: 'Stack Overflow', icon: 'fab fa-stack-overflow', bg: '#f48024' },
+                    { id: 'docker', name: 'Docker', icon: 'fab fa-docker', bg: '#2496ed' },
+                    { id: 'python', name: 'Python', icon: 'fab fa-python', bg: '#3776ab' },
+                    { id: 'linux', name: 'Linux', icon: 'fab fa-linux', bg: '#333333' },
+                    { id: 'node', name: 'Node.js', icon: 'fab fa-node-js', bg: '#339933' },
+                    { id: 'npm', name: 'npm', icon: 'fab fa-npm', bg: '#cb3837' },
+                    { id: 'bitbucket', name: 'Bitbucket', icon: 'fab fa-bitbucket', bg: '#0052cc' },
+                    { id: 'codepen', name: 'CodePen', icon: 'fab fa-codepen', bg: '#000000' },
+                    { id: 'freecodecamp', name: 'freeCodeCamp', icon: 'fab fa-free-code-camp', bg: '#0a0a23' },
+                    { id: 'git', name: 'Git', icon: 'fab fa-git-alt', bg: '#f05032' },
+                    { id: 'react', name: 'React', icon: 'fab fa-react', bg: '#61dafb', darkText: true },
+                    { id: 'vuejs', name: 'Vue.js', icon: 'fab fa-vuejs', bg: '#4fc08d' }
+                ]
+            },
+            {
+                name: "Media & Entertainment Streaming",
+                icon: "fas fa-play-circle",
+                brands: [
+                    { id: 'spotify', name: 'Spotify', icon: 'fab fa-spotify', bg: '#10b981' },
+                    { id: 'twitch', name: 'Twitch', icon: 'fab fa-twitch', bg: '#9146ff' },
+                    { id: 'soundcloud', name: 'SoundCloud', icon: 'fab fa-soundcloud', bg: '#ff5500' },
+                    { id: 'vimeo', name: 'Vimeo', icon: 'fab fa-vimeo-v', bg: '#1ab7ea' },
+                    { id: 'deezer', name: 'Deezer', icon: 'fab fa-deezer', bg: '#feaa2d' },
+                    { id: 'steam', name: 'Steam', icon: 'fab fa-steam', bg: '#171a21' },
+                    { id: 'playstation', name: 'PlayStation', icon: 'fab fa-playstation', bg: '#003791' },
+                    { id: 'xbox', name: 'Xbox', icon: 'fab fa-xbox', bg: '#107c10' },
+                    { id: 'dailymotion', name: 'Dailymotion', icon: 'fab fa-dailymotion', bg: '#0066dc' }
+                ]
+            },
+            {
+                name: "Design & Creative Studio",
+                icon: "fas fa-palette",
+                brands: [
+                    { id: 'figma', name: 'Figma', icon: 'fab fa-figma', bg: '#f24e1e' },
+                    { id: 'canva', name: 'Canva', icon: 'fab fa-canva', bg: '#00c4cc' },
+                    { id: 'behance', name: 'Behance', icon: 'fab fa-behance', bg: '#1769ff' },
+                    { id: 'dribbble', name: 'Dribbble', icon: 'fab fa-dribbble', bg: '#ea4c89' },
+                    { id: 'unsplash', name: 'Unsplash', icon: 'fab fa-unsplash', bg: '#000000' },
+                    { id: 'deviantart', name: 'DeviantArt', icon: 'fab fa-deviantart', bg: '#05cc47' },
+                    { id: 'sketch', name: 'Sketch', icon: 'fab fa-sketch', bg: '#f7b500' }
+                ]
+            },
+            {
+                name: "Tech Giants & Cloud Platforms",
+                icon: "fas fa-cloud",
+                brands: [
+                    { id: 'google', name: 'Google', icon: 'fab fa-google', bg: '#ea4335' },
+                    { id: 'apple', name: 'Apple', icon: 'fab fa-apple', bg: '#000000' },
+                    { id: 'microsoft', name: 'Microsoft', icon: 'fab fa-microsoft', bg: '#00a4ef' },
+                    { id: 'aws', name: 'AWS', icon: 'fab fa-aws', bg: '#232f3e' },
+                    { id: 'slack', name: 'Slack', icon: 'fab fa-slack', bg: '#4a154b' },
+                    { id: 'dropbox', name: 'Dropbox', icon: 'fab fa-dropbox', bg: '#0061ff' },
+                    { id: 'trello', name: 'Trello', icon: 'fab fa-trello', bg: '#0079bf' },
+                    { id: 'cloudflare', name: 'Cloudflare', icon: 'fab fa-cloudflare', bg: '#f38020' },
+                    { id: 'zoom', name: 'Zoom', icon: 'fas fa-video', bg: '#2d8cff' }
+                ]
+            }
         ];
+
+        // Guaranteed Derangement: Ensures NO item in rightList has the same id as leftList at any row
+        function getDerangedShuffledList(list) {
+            if (list.length <= 1) return [...list];
+            let shuffled;
+            let attempts = 0;
+            do {
+                shuffled = [...list].sort(() => Math.random() - 0.5);
+                attempts++;
+                let hasCollision = false;
+                for (let i = 0; i < list.length; i++) {
+                    if (list[i].id === shuffled[i].id) {
+                        hasCollision = true;
+                        break;
+                    }
+                }
+                if (!hasCollision) return shuffled;
+            } while (attempts < 100);
+
+            // Deterministic shift if random permutation didn't find derangement in 100 tries
+            const shift = Math.floor(Math.random() * (list.length - 1)) + 1;
+            return list.map((_, i) => list[(i + shift) % list.length]);
+        }
 
         let activeMatchPairs = [];
         let activeSourceNode = null;
@@ -1440,13 +1582,23 @@
             activeSourceNode = null;
             clearSvgLines();
 
-            // Randomly select 3, 4, or 5 pairs
-            const pairCount = Math.floor(Math.random() * 3) + 3; // 3, 4, or 5
-            const shuffled = [...brandPool].sort(() => 0.5 - Math.random());
-            activeMatchPairs = shuffled.slice(0, pairCount);
+            // Give Social Media 50% chance, other categories 50%
+            const selectedCategory = Math.random() < 0.5 
+                ? brandThematicCategories[0] 
+                : brandThematicCategories[Math.floor(Math.random() * brandThematicCategories.length)];
+
+            if (matchCategoryPill) {
+                matchCategoryPill.innerHTML = `<i class="${selectedCategory.icon}" style="color: #10b981;"></i> <span>Theme: ${selectedCategory.name}</span>`;
+            }
+
+            // Pick 3, 4, or 5 pairs from the selected related category
+            const pairCount = Math.min(selectedCategory.brands.length, Math.floor(Math.random() * 3) + 3);
+            const shuffledPool = [...selectedCategory.brands].sort(() => Math.random() - 0.5);
+            activeMatchPairs = shuffledPool.slice(0, pairCount);
 
             const leftList = [...activeMatchPairs];
-            const rightList = [...activeMatchPairs].sort(() => 0.5 - Math.random());
+            // ALWAYS thoroughly shuffled: GUARANTEED DERANGEMENT (no item across on same line)
+            const rightList = getDerangedShuffledList(leftList);
 
             // Left side: ONLY the icon, NO name
             if (lineMatchLeftCol) {
@@ -1472,17 +1624,29 @@
                 `).join('');
             }
 
+            // Attach click listeners to Left nodes
             if (lineMatchLeftCol) {
                 lineMatchLeftCol.querySelectorAll('.line-node').forEach(node => {
                     node.onclick = () => {
                         const leftId = node.getAttribute('data-id');
+
+                        // Remove active state from other left nodes
                         lineMatchLeftCol.querySelectorAll('.line-node').forEach(n => n.classList.remove('active-source'));
+
+                        // If already matched, delete this match so user can redraw
+                        if (userMatches[leftId]) {
+                            delete userMatches[leftId];
+                            node.classList.remove('matched');
+                            redrawLines();
+                        }
+
                         activeSourceNode = leftId;
                         node.classList.add('active-source');
                     };
                 });
             }
 
+            // Attach click listeners to Right nodes
             if (lineMatchRightCol) {
                 lineMatchRightCol.querySelectorAll('.line-node').forEach(node => {
                     node.onclick = () => {
@@ -1492,6 +1656,16 @@
                             return;
                         }
 
+                        // Remove any other match pointing to this right node
+                        for (let k in userMatches) {
+                            if (userMatches[k] === rightId) {
+                                delete userMatches[k];
+                                const oldLeftNode = document.getElementById(`ln-left-${k}`);
+                                if (oldLeftNode) oldLeftNode.classList.remove('matched');
+                            }
+                        }
+
+                        // Save the connection
                         userMatches[activeSourceNode] = rightId;
 
                         const leftNode = document.getElementById(`ln-left-${activeSourceNode}`);
@@ -1499,30 +1673,30 @@
                             leftNode.classList.remove('active-source');
                             leftNode.classList.add('matched');
                         }
+
                         node.classList.add('matched');
+                        activeSourceNode = null;
 
                         redrawLines();
-                        activeSourceNode = null;
                     };
                 });
             }
         }
 
         function clearSvgLines() {
-            if (!lineMatchSvg) return;
-            const defs = lineMatchSvg.querySelector('defs');
-            lineMatchSvg.innerHTML = '';
-            if (defs) lineMatchSvg.appendChild(defs);
+            if (lineMatchSvg) {
+                const lines = lineMatchSvg.querySelectorAll('line');
+                lines.forEach(l => l.remove());
+            }
         }
 
         function redrawLines(isError = false) {
             clearSvgLines();
-            const board = document.getElementById('line-match-board');
-            if (!board || !lineMatchSvg) return;
-            const boardRect = board.getBoundingClientRect();
+            if (!lineMatchBoard || !lineMatchSvg) return;
 
-            Object.keys(userMatches).forEach(leftId => {
-                const rightId = userMatches[leftId];
+            const boardRect = lineMatchBoard.getBoundingClientRect();
+
+            Object.entries(userMatches).forEach(([leftId, rightId]) => {
                 const leftDot = document.getElementById(`dot-left-${leftId}`);
                 const rightDot = document.getElementById(`dot-right-${rightId}`);
 
@@ -1593,16 +1767,10 @@
             }
         });
 
-        // ── Single Random Game Picker
+        // ── Single Random Game Picker & Challenge Switcher
         const availableGames = ['math', 'typing', 'match'];
 
-        function openGameModal() {
-            isGameFinished = false;
-            if (gameSuccessBanner) gameSuccessBanner.style.display = 'none';
-            if (gameErrorBanner) gameErrorBanner.style.display = 'none';
-
-            // Pick exactly ONE game randomly
-            const picked = availableGames[Math.floor(Math.random() * availableGames.length)];
+        function setGameChallenge(picked) {
             activeGame = picked;
 
             document.querySelectorAll('.dl-game-pane').forEach(p => p.classList.remove('active'));
@@ -1626,6 +1794,42 @@
                 if (gameModalSub) gameModalSub.textContent = 'Click an icon on the left, then click its brand name on the right';
                 initMatchGame();
             }
+        }
+
+        function switchChallenge() {
+            if (typingTimerInterval) {
+                clearInterval(typingTimerInterval);
+                typingTimerInterval = null;
+            }
+            isGameFinished = false;
+            if (gameSuccessBanner) gameSuccessBanner.style.display = 'none';
+            if (gameErrorBanner) gameErrorBanner.style.display = 'none';
+
+            // Pick a different game from the other available games
+            const others = availableGames.filter(g => g !== activeGame);
+            const nextGame = others[Math.floor(Math.random() * others.length)];
+            setGameChallenge(nextGame);
+
+            if (nextGame === 'match') {
+                setTimeout(redrawLines, 120);
+            }
+
+            const gameNames = {
+                'math': 'Math Challenge',
+                'typing': 'Typing Verification',
+                'match': 'Match the Following'
+            };
+            showToast(`Switched challenge to: ${gameNames[nextGame]}`, '#10b981');
+        }
+
+        function openGameModal() {
+            isGameFinished = false;
+            if (gameSuccessBanner) gameSuccessBanner.style.display = 'none';
+            if (gameErrorBanner) gameErrorBanner.style.display = 'none';
+
+            // Pick exactly ONE game randomly
+            const picked = availableGames[Math.floor(Math.random() * availableGames.length)];
+            setGameChallenge(picked);
 
             if (gameModal) {
                 gameModal.classList.add('open');
@@ -1643,6 +1847,14 @@
             if (gameModal) {
                 gameModal.classList.remove('open');
             }
+        }
+
+        if (changeChallengeBtn) {
+            changeChallengeBtn.onclick = switchChallenge;
+        }
+
+        if (changeChallengeFooterBtn) {
+            changeChallengeFooterBtn.onclick = switchChallenge;
         }
 
         if (closeGameModalBtn) {
