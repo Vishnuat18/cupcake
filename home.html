@@ -132,32 +132,43 @@
     </header>
 
     <!-- Top Rolling News Banner -->
-    <div class="news-banner rolling-news-banner" onclick="location.href='subject_details.html?subject=hve'" role="button" tabindex="0" title="Click to view Human Values and Ethics CAT exam notes">
+    <div class="news-banner rolling-news-banner" onclick="location.href='cat_details.html?subject=hve&cat=2'" role="button" tabindex="0" title="Click to view CAT 2 exam notes">
         <div class="rolling-news-badge">
             <span class="pulse-dot"></span>
-            <span>UPDATE</span>
+            <span>CAT 2 UPDATES</span>
         </div>
         <div class="rolling-news-viewport">
             <div class="rolling-news-track">
-                <span class="rolling-news-item">
-                    <i class="fas fa-bullhorn"></i> Human values and ethics for the CAT exam notes updated
-                    <span class="click-hint">Click to view <i class="fas fa-arrow-right"></i></span>
+                <span class="rolling-news-item" onclick="event.stopPropagation(); location.href='cat_details.html?subject=hve&cat=2'">
+                    <i class="fas fa-balance-scale"></i> Human Values and Ethics (HVE) CAT 2 notes updated
+                    <span class="click-hint">View Notes <i class="fas fa-arrow-right"></i></span>
                 </span>
                 <span class="rolling-news-divider">•</span>
-                <span class="rolling-news-item">
-                    <i class="fas fa-book-reader"></i> Human values and ethics for the CAT exam notes updated
-                    <span class="click-hint">Click to view <i class="fas fa-arrow-right"></i></span>
+                <span class="rolling-news-item" onclick="event.stopPropagation(); location.href='cat_details.html?subject=itas&cat=2'">
+                    <i class="fas fa-tractor"></i> IT in Agricultural System (ITAS) CAT 2 notes updated
+                    <span class="click-hint">View Notes <i class="fas fa-arrow-right"></i></span>
                 </span>
                 <span class="rolling-news-divider">•</span>
-                <span class="rolling-news-item">
-                    <i class="fas fa-bullhorn"></i> Human values and ethics for the CAT exam notes updated
-                    <span class="click-hint">Click to view <i class="fas fa-arrow-right"></i></span>
+                <span class="rolling-news-item" onclick="event.stopPropagation(); location.href='cat_details.html?subject=pom&cat=2'">
+                    <i class="fas fa-tasks"></i> Principles of Management (POM) CAT 2 notes updated
+                    <span class="click-hint">View Notes <i class="fas fa-arrow-right"></i></span>
                 </span>
                 <span class="rolling-news-divider">•</span>
-                <span class="rolling-news-item">
-                    <i class="fas fa-book-reader"></i> Human values and ethics for the CAT exam notes updated
-                    <span class="click-hint">Click to view <i class="fas fa-arrow-right"></i></span>
+                <span class="rolling-news-item" onclick="event.stopPropagation(); location.href='cat_details.html?subject=hve&cat=2'">
+                    <i class="fas fa-balance-scale"></i> Human Values and Ethics (HVE) CAT 2 notes updated
+                    <span class="click-hint">View Notes <i class="fas fa-arrow-right"></i></span>
                 </span>
+                <span class="rolling-news-divider">•</span>
+                <span class="rolling-news-item" onclick="event.stopPropagation(); location.href='cat_details.html?subject=itas&cat=2'">
+                    <i class="fas fa-tractor"></i> IT in Agricultural System (ITAS) CAT 2 notes updated
+                    <span class="click-hint">View Notes <i class="fas fa-arrow-right"></i></span>
+                </span>
+                <span class="rolling-news-divider">•</span>
+                <span class="rolling-news-item" onclick="event.stopPropagation(); location.href='cat_details.html?subject=pom&cat=2'">
+                    <i class="fas fa-tasks"></i> Principles of Management (POM) CAT 2 notes updated
+                    <span class="click-hint">View Notes <i class="fas fa-arrow-right"></i></span>
+                </span>
+                <span class="rolling-news-divider">•</span>
             </div>
         </div>
     </div>
@@ -238,7 +249,7 @@
                 <h3>IT in Agricultural System</h3>
                 <p>Course Code: AI3021</p>
                 <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--primary);">
-                    <i class="fas fa-file-pdf"></i> 0 Files Found
+                    <i class="fas fa-file-pdf"></i> 8 Files Found
                 </div>
             </div>
 
@@ -249,7 +260,7 @@
                 <h3>Principles of Management</h3>
                 <p>Course Code: GE3751</p>
                 <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--primary);">
-                    <i class="fas fa-file-pdf"></i> 0 Files Found
+                    <i class="fas fa-file-pdf"></i> 6 Files Found
                 </div>
             </div>
 
@@ -260,7 +271,7 @@
                 <h3>Human Values and Ethics</h3>
                 <p>Course Code: GE3791</p>
                 <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--primary);">
-                    <i class="fas fa-file-pdf"></i> 0 Files Found
+                    <i class="fas fa-file-pdf"></i> 7 Files Found
                 </div>
             </div>
 
@@ -685,13 +696,14 @@
 
             async function loadSubjects() {
                 // Performance: Load from cache first for instant rendering
-                const cachedData = localStorage.getItem('cupcake_subjects_cache');
+                const CACHE_KEY = 'cupcake_subjects_cache_v3';
+                const cachedData = localStorage.getItem(CACHE_KEY);
                 if (cachedData) {
                     try {
                         allSubjects = JSON.parse(cachedData);
                         renderGrid();
                     } catch (e) {
-                        localStorage.removeItem('cupcake_subjects_cache');
+                        localStorage.removeItem(CACHE_KEY);
                     }
                 }
 
@@ -701,13 +713,17 @@
                     
                     if (!querySnapshot.empty) {
                         const firestoreSubs = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                        // Merge with subjectMaterials so local subjects (like sem 6) are always available
+                        // Merge with subjectMaterials so local subjects (like sem 6 and latest updated materials) are always available
                         const localSubs = Object.entries(subjectMaterials).map(([key, data]) => ({ id: key, ...data }));
                         const combined = [...localSubs];
                         firestoreSubs.forEach(fsSub => {
                             const idx = combined.findIndex(s => s.id === fsSub.id);
                             if (idx !== -1) {
-                                combined[idx] = { ...combined[idx], ...fsSub };
+                                combined[idx] = { 
+                                    ...combined[idx], 
+                                    ...fsSub,
+                                    materials: (subjectMaterials[fsSub.id] && subjectMaterials[fsSub.id].materials) || fsSub.materials || combined[idx].materials
+                                };
                             } else {
                                 combined.push(fsSub);
                             }
@@ -718,7 +734,7 @@
                         allSubjects = Object.entries(subjectMaterials).map(([key, data]) => ({ id: key, ...data }));
                     }
 
-                    localStorage.setItem('cupcake_subjects_cache', JSON.stringify(allSubjects));
+                    localStorage.setItem(CACHE_KEY, JSON.stringify(allSubjects));
                     renderGrid();
 
                 } catch (error) {

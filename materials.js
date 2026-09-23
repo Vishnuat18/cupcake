@@ -672,10 +672,10 @@ export const subjectMaterials = {
             { name: 'Unit 1: Democratic Values', file: 'hve/notes/HVE_unit_1.pdf', cat: 1 },
             { name: 'Unit 2: Secular Values', file: 'hve/notes/HVE_unit_2.pdf', cat: 1 },
             { name: 'Unit 3: Scientific Values (First Half)', file: 'hve/notes/HVE_unit_3.pdf', cat: 1 },
-            { name: 'Unit 3: Scientific Values (Second Half)', file: '#', cat: 2, status: 'Uploaded soon' },
-            { name: 'Unit 4: Social Ethics', file: '#', cat: 2, status: 'Uploaded soon' },
-            { name: 'Unit 5: Scientific Ethics', file: '#', cat: 2, status: 'Uploaded soon' },
-            { name: '2-Mark Question Bank', file: 'hve/2m/hve_2m.pdf' }
+            { name: 'Unit 3: Scientific Values (Second Half)', file: 'hve/notes/cat2/HVE_Unit 3.pdf', cat: 2, isUpdated: true },
+            { name: 'Unit 4: Social Ethics', file: 'hve/notes/cat2/HVE_Unit 4.pdf', cat: 2, isUpdated: true },
+            { name: 'Unit 5: Scientific Ethics', file: 'hve/notes/cat2/HVE_Unit 5.pdf', cat: 2, isUpdated: true },
+            { name: '2-Mark Question Bank', file: '#', status: 'Uploaded soon' }
         ],
         previousYearQuestions: [
             { year: 'Nov/Dec 2024', file: 'hve/qn/GE3791-Human-Values-and-Ethics-Nov-Dec-2024.pdf' }
@@ -815,11 +815,14 @@ export const subjectMaterials = {
             }
         ],
         materials: [
-            { name: 'Unit 1: Precision Farming (Part 1)', file: 'itas/notes/ITAS_unit_1.pdf', isUpdated: true },
-            { name: 'Unit 1: Precision Farming (Part 2)', file: 'itas/notes/itas_u1_part2.pdf', isUpdated: true },
-            { name: 'Unit 2: Environment Control Systems (Part 1)', file: 'itas/notes/ITAS_unit_2.pdf', isUpdated: true },
-            { name: 'Unit 2: Environment Control Systems (Part 2)', file: 'itas/notes/itas_u2_part2.pdf', isUpdated: true },
-            { name: 'Unit 3: Agricultural Systems Management', file: 'itas/notes/ITAS_unit_3.pdf', isUpdated: true }
+            { name: 'Unit 1: Precision Farming (Part 1)', file: 'itas/notes/ITAS_unit_1.pdf', cat: 1 },
+            { name: 'Unit 1: Precision Farming (Part 2)', file: 'itas/notes/itas_u1_part2.pdf', cat: 1 },
+            { name: 'Unit 2: Environment Control Systems (Part 1)', file: 'itas/notes/ITAS_unit_2.pdf', cat: 1 },
+            { name: 'Unit 2: Environment Control Systems (Part 2)', file: 'itas/notes/itas_u2_part2.pdf', cat: 1 },
+            { name: 'Unit 3: Agricultural Systems Management (First Half)', file: 'itas/notes/ITAS_unit_3.pdf', cat: 1 },
+            { name: 'Unit 3: Agricultural Systems Management (Second Half)', file: 'itas/notes/cat2/ITAS_Unit 3.pdf', cat: 2, isUpdated: true },
+            { name: 'Unit 4: Weather Prediction Models', file: 'itas/notes/cat2/ITAS_Unit 4.pdf', cat: 2, isUpdated: true },
+            { name: 'Unit 5: E-Governance in Agricultural Systems', file: 'itas/notes/cat2/ITAS_Unit 5.pdf', cat: 2, isUpdated: true }
         ],
         previousYearQuestions: [],
         importantQuestions: []
@@ -859,9 +862,12 @@ export const subjectMaterials = {
             }
         ],
         materials: [
-            { name: 'Unit 1: Introduction to Management and Organizations', file: 'pom/notes/POM_unit_1.pdf', isUpdated: true },
-            { name: 'Unit 2: Planning', file: 'pom/notes/POM_unit_2.pdf', isUpdated: true },
-            { name: 'Unit 3: Organising', file: 'pom/notes/POM_unit_3.pdf', isUpdated: true }
+            { name: 'Unit 1: Introduction to Management and Organizations', file: 'pom/notes/POM_unit_1.pdf', cat: 1 },
+            { name: 'Unit 2: Planning', file: 'pom/notes/POM_unit_2.pdf', cat: 1 },
+            { name: 'Unit 3: Organising (First Half)', file: 'pom/notes/POM_unit_3.pdf', cat: 1 },
+            { name: 'Unit 3: Organising (Second Half)', file: 'pom/notes/cat2/POM_Unit 3.pdf', cat: 2, isUpdated: true },
+            { name: 'Unit 4: Directing', file: 'pom/notes/cat2/POM_Unit 4.pdf', cat: 2, isUpdated: true },
+            { name: 'Unit 5: Controlling', file: 'pom/notes/cat2/POM_Unit 5.pdf', cat: 2, isUpdated: true }
         ],
         previousYearQuestions: [],
         importantQuestions: []

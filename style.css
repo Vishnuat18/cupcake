@@ -1953,6 +1953,13 @@ iframe {
     color: #ffffff;
     font-weight: 600;
     letter-spacing: 0.2px;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.rolling-news-item:hover {
+    opacity: 0.95;
+    transform: translateY(-1px);
 }
 
 .rolling-news-item .click-hint {
