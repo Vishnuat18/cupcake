@@ -277,11 +277,15 @@
                     if (item.cat && item.cat !== catNum) {
                         return;
                     }
-                    const uNum = detectUnitNum(item.name, item.file);
-                    if (uNum && targetUnits.includes(uNum)) {
-                        matchingNotes.push({ ...item, unitNum: uNum });
-                    } else if (item.name && (item.name.toLowerCase().includes('2-mark') || item.name.toLowerCase().includes('2 mark'))) {
+                    const isTwoMark = (item.name && (item.name.toLowerCase().includes('2-mark') || item.name.toLowerCase().includes('2 mark'))) ||
+                                      (item.file && (item.file.toLowerCase().includes('2m') || item.file.toLowerCase().includes('2_mark') || item.file.toLowerCase().includes('2mark')));
+                    if (isTwoMark) {
                         matchingNotes.push({ ...item, isTwoMark: true });
+                    } else {
+                        const uNum = detectUnitNum(item.name, item.file);
+                        if (uNum && targetUnits.includes(uNum)) {
+                            matchingNotes.push({ ...item, unitNum: uNum });
+                        }
                     }
                 });
             }
@@ -305,9 +309,10 @@
 
                     const badgeLabel = item.unitNum ? `UNIT ${item.unitNum}` : (item.isTwoMark ? '2-MARKS' : `CAT ${catNum}`);
                     const subLabel = !isAvailable ? 'Uploaded soon' :
+                                     (item.isTwoMark ? '2-Mark Question Bank' :
                                      (isCat1 && item.unitNum === 3 ? 'Unit 3 Notes (First Half Focus)' :
                                      !isCat1 && item.unitNum === 3 ? 'Unit 3 Notes (Second Half Focus)' :
-                                     'PDF Document');
+                                     'PDF Document'));
 
                     const actionIndicator = isAvailable ? 
                         `<div class="cat-page-arrow">

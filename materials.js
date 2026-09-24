@@ -689,7 +689,7 @@ export const subjectMaterials = {
             { name: 'Unit 3: Scientific Values (Second Half)', file: 'hve/notes/cat2/HVE_Unit 3.pdf', cat: 2, isUpdated: true },
             { name: 'Unit 4: Social Ethics', file: 'hve/notes/cat2/HVE_Unit 4.pdf', cat: 2, isUpdated: true },
             { name: 'Unit 5: Scientific Ethics', file: 'hve/notes/cat2/HVE_Unit 5.pdf', cat: 2, isUpdated: true },
-            { name: '2-Mark Question Bank', file: '#', status: 'Uploaded soon' }
+            { name: '2-Mark Questions (Units 3, 4 & 5)', file: 'hve/notes/cat2/HVE_2_Mark_Questions_Units_3_4_5.pdf', cat: 2, isUpdated: true }
         ],
         previousYearQuestions: [
             { year: 'Nov/Dec 2024', file: 'hve/qn/GE3791-Human-Values-and-Ethics-Nov-Dec-2024.pdf' }
