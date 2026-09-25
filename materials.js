@@ -797,7 +797,63 @@ export const subjectMaterials = {
             { name: 'Unit 5: Proof Reading and Presentation', file: 'prw/notes/cat2/PRW_Unit 5.pdf', cat: 2, isUpdated: true }
         ],
         previousYearQuestions: [],
-        importantQuestions: []
+        importantQuestions: [
+            {
+                unit: '1',
+                firstHalf: [
+                    'Describe the significance of grammar, vocabulary, passive voice, reported speech and concord in professional technical writing.',
+                    'Role of grammar and vocabulary in improving technical communication and precision.'
+                ],
+                secondHalf: [
+                    'Explain the structure of a well-structured paragraph using appropriate signpost words and cohesive devices.',
+                    'Describe the usage and effectiveness of cohesive devices and signpost words in guiding the reader.'
+                ]
+            },
+            {
+                unit: '2',
+                firstHalf: [
+                    'Differentiate technical writing and general writing with appropriate examples.',
+                    'Definition, structure, types of reports, and intended audience in project report preparation.'
+                ],
+                secondHalf: [
+                    'Describe the importance and necessity of project reports in STEM fields.',
+                    'Discuss plagiarism, ethical reporting, statistical analysis, and experimental documentation in STEM.'
+                ]
+            },
+            {
+                unit: '3',
+                firstHalf: [
+                    'Importance of an effective title and concise abstract in a project report.',
+                    'Formulating the research question, aim of the study, background, and project significance with examples.'
+                ],
+                secondHalf: [
+                    'Objectives, main components, and steps to develop a theoretical framework in a project report.',
+                    'Determining feasibility and constructing a theoretical framework with practical case studies.'
+                ]
+            },
+            {
+                unit: '4',
+                firstHalf: [
+                    'Purposes, essential steps, and guidelines for conducting a comprehensive literature review.',
+                    'Writing a literature review for a research project: structure, synthesis, and critical analysis.'
+                ],
+                secondHalf: [
+                    'Methods and tools for data collection, selection procedures, and qualities of a good data collection tool.',
+                    'Purpose of a bibliography, information included, common referencing styles, and rules for compilation.'
+                ]
+            },
+            {
+                unit: '5',
+                firstHalf: [
+                    'Ten key methods and checking procedures to avoid typographical errors in report writing.',
+                    'Systematic proofreading process and final checklist for formatting, font, spacing, and tables.'
+                ],
+                secondHalf: [
+                    'Rules and conventions for preparing a bibliography in APA, MLA, and Chicago formats with sample entries.',
+                    'Techniques and guidelines for presenting a project report orally with effective illustrations.'
+                ]
+            }
+        ]
     },
     'itas': {
         fullName: 'IT in Agricultural System',
