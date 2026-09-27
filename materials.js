@@ -899,7 +899,8 @@ export const subjectMaterials = {
             { name: 'Unit 3: Agricultural Systems Management (First Half)', file: 'itas/notes/ITAS_unit_3.pdf', cat: 1 },
             { name: 'Unit 3: Agricultural Systems Management (Second Half)', file: 'itas/notes/cat2/ITAS_Unit 3.pdf', cat: 2, isUpdated: true },
             { name: 'Unit 4: Weather Prediction Models', file: 'itas/notes/cat2/ITAS_Unit 4.pdf', cat: 2, isUpdated: true },
-            { name: 'Unit 5: E-Governance in Agricultural Systems', file: 'itas/notes/cat2/ITAS_Unit 5.pdf', cat: 2, isUpdated: true }
+            { name: 'Unit 5: E-Governance in Agricultural Systems', file: 'itas/notes/cat2/ITAS_Unit 5.pdf', cat: 2, isUpdated: true },
+            { name: '2-Mark Questions (Units 3, 4 & 5)', file: 'itas/notes/cat2/ITAS_2Marks.pdf', cat: 2, isUpdated: true }
         ],
         previousYearQuestions: [],
         importantQuestions: []
