@@ -200,13 +200,21 @@
                 Object.entries(subjectMaterials).forEach(([key, subject]) => {
                     if (key === 'ece') {
                         subject.materials.forEach(group => {
+                            if (group.file) {
+                                const fileName = group.file.toLowerCase();
+                                const name = group.name.toLowerCase();
+                                if (fileName.includes('2m') || fileName.includes('2marks') || 
+                                    name.includes('2-mark') || name.includes('2 mark') || name.includes('two mark') || name.includes('two marks')) {
+                                    results.push({ ...group, subjectKey: key, subjectName: subject.fullName });
+                                }
+                            }
                             if (group.topics) {
                                 group.topics.forEach(m => {
                                     if (m.file) {
                                         const fileName = m.file.toLowerCase();
                                         const name = m.name.toLowerCase();
                                         if (fileName.includes('2m') || fileName.includes('2marks') || 
-                                            name.includes('2-mark') || name.includes('2 mark')) {
+                                            name.includes('2-mark') || name.includes('2 mark') || name.includes('two mark') || name.includes('two marks')) {
                                             results.push({ ...m, subjectKey: key, subjectName: subject.fullName });
                                         }
                                     }

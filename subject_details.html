@@ -369,6 +369,13 @@
 
                     if (subject === 'ece') {
                         allMaterials.forEach(group => {
+                            if (group.file) {
+                                const name = (group.name || '').toLowerCase();
+                                const file = (group.file || '').toLowerCase();
+                                if (name.includes('2-mark') || name.includes('2 mark') || name.includes('two mark') || name.includes('two marks') || file.includes('2m') || file.includes('2mark')) {
+                                    twoMarkFiles.push(group);
+                                }
+                            }
                             if (group.topics) {
                                 group.topics.forEach(m => {
                                     if (m.file && (m.file.toLowerCase().includes('2m') || 

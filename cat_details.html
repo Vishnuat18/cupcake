@@ -266,7 +266,9 @@
                     if (group.file) {
                         // Respect cat filter for flat file entries
                         if (group.cat && group.cat !== catNum) return;
-                        matchingNotes.push(group);
+                        const isTwoMark = (group.name && (group.name.toLowerCase().includes('2-mark') || group.name.toLowerCase().includes('2 mark') || group.name.toLowerCase().includes('two mark') || group.name.toLowerCase().includes('two marks'))) ||
+                                          (group.file && (group.file.toLowerCase().includes('2m') || group.file.toLowerCase().includes('2_mark') || group.file.toLowerCase().includes('2mark')));
+                        matchingNotes.push({ ...group, isTwoMark });
                     } else if (group.unit && targetUnits.includes(group.unit)) {
                         if (group.topics) {
                             group.topics.forEach(t => matchingNotes.push({ ...t, unitNum: group.unit }));

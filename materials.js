@@ -989,8 +989,8 @@ export const subjectMaterials = {
             }
         ],
         materials: [
-            { name: 'Complete ECE Course Notes (PDF)', file: 'ece/notes/ECE Notes.pdf', isUpdated: true },
-            { name: 'Part A Notes', file: 'ece/notes/ECE_Part_A.pdf', isUpdated: true },
+            { name: 'Complete ECE Course Notes (PDF)', file: 'ece/notes/ECE Notes.pdf', cat: 1, isUpdated: true },
+            { name: 'Part A Notes', file: 'ece/notes/ECE_Part_A.pdf', cat: 1, isUpdated: true },
             { name: 'English Two Marks Exercises', file: 'ece/notes/cat2/English_Two_marks_Exercises.pdf', cat: 2, isUpdated: true },
             { name: 'English Writing Sample Formats & Detailed Answers', file: 'ece/notes/cat2/English_Writing_Sample_Formats_and_Detailed_Answers.pdf', cat: 2, isUpdated: true },
             {
