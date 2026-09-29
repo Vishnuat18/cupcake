@@ -264,6 +264,8 @@
             if (subject === 'ece') {
                 (subjectData.materials || []).forEach(group => {
                     if (group.file) {
+                        // Respect cat filter for flat file entries
+                        if (group.cat && group.cat !== catNum) return;
                         matchingNotes.push(group);
                     } else if (group.unit && targetUnits.includes(group.unit)) {
                         if (group.topics) {
