@@ -761,6 +761,10 @@ export const subjectMaterials = {
         coverLandscape: 'assets/cover/sem7/prw_landscape.png',
         coverPortrait: 'assets/cover/sem7/prw_portrait.png',
         semester: 7,
+        hasSemesterPack: true,
+        semCardImage: 'assets/cards/semester.png',
+        importantQuestionsPdf: 'prw/notes/OHS352_Important_Questions.pdf',
+        twoMarksMsg: '2-Mark Question Bank available via OHS352 Important Questions PDF.',
         syllabus: [
             {
                 unit: 'UNIT I',
@@ -789,71 +793,30 @@ export const subjectMaterials = {
             }
         ],
         materials: [
-            { name: 'Unit 1: Writing Skills', file: 'prw/notes/PRW_unit_1.pdf', cat: 1 },
-            { name: 'Unit 2: Project Report Fundamentals', file: 'prw/notes/PRW_unit_2.pdf', cat: 1 },
-            { name: 'Unit 3: Structure of the Report (First Half)', file: 'prw/notes/PRW_unit_3.pdf', cat: 1 },
-            { name: 'Unit 3: Structure of the Report (Second Half)', file: 'prw/notes/cat2/PRW_Unit 3.pdf', cat: 2, isUpdated: true },
-            { name: 'Unit 4: Structure of the Report (Part 2)', file: 'prw/notes/cat2/PRW_Unit 4.pdf', cat: 2, isUpdated: true },
-            { name: 'Unit 5: Proof Reading and Presentation', file: 'prw/notes/cat2/PRW_Unit 5.pdf', cat: 2, isUpdated: true }
+            { name: 'Unit 1: Writing Skills', file: 'prw/notes/PRW_unit_1.pdf', cat: 1, size: '90 KB' },
+            { name: 'Unit 2: Project Report Fundamentals', file: 'prw/notes/PRW_unit_2.pdf', cat: 1, size: '100 KB' },
+            { name: 'Unit 3: Structure of the Report (First Half)', file: 'prw/notes/PRW_unit_3.pdf', cat: 1, size: '88 KB' },
+            { name: 'Unit 3: Structure of the Report (Second Half)', file: 'prw/notes/cat2/PRW_Unit 3.pdf', cat: 2, isUpdated: true, size: '3.17 MB' },
+            { name: 'Unit 4: Structure of the Report (Part 2)', file: 'prw/notes/cat2/PRW_Unit 4.pdf', cat: 2, isUpdated: true, size: '8.67 MB' },
+            { name: 'Unit 5: Proof Reading and Presentation', file: 'prw/notes/cat2/PRW_Unit 5.pdf', cat: 2, isUpdated: true, size: '6.21 MB' },
+            // Semester Notes (Full Semester Study Pack - prw/notes/sem)
+            { name: 'Unit 1: Writing Skills', file: 'prw/notes/sem/PRW_unit_1.pdf', cat: 'sem', isUpdated: true, size: '1.48 MB' },
+            { name: 'Unit 2: Project Report Fundamentals', file: 'prw/notes/sem/PRW_unit_2.pdf', cat: 'sem', isUpdated: true, size: '4.38 MB' },
+            { name: 'Unit 3: Structure of the Report', file: 'prw/notes/sem/PRW_unit_3.pdf', cat: 'sem', isUpdated: true, size: '4.70 MB' },
+            { name: 'Unit 4: Structure of the Report (Part 2)', file: 'prw/notes/sem/PRW_Unit 4.pdf', cat: 'sem', isUpdated: true, size: '8.68 MB' },
+            { name: 'Unit 5: Proof Reading and Presentation', file: 'prw/notes/sem/PRW_Unit 5.pdf', cat: 'sem', isUpdated: true, size: '7.66 MB' },
+            // 2-Marks & Important Questions Bank
+            { name: 'OHS352 2-Mark Questions & Answers Bank', file: 'prw/notes/OHS352_Important_Questions.pdf', cat: 'sem', isTwoMark: true, isUpdated: true, size: '920 KB' }
         ],
-        previousYearQuestions: [],
-        importantQuestions: [
+        previousYearQuestions: [
             {
-                unit: '1',
-                firstHalf: [
-                    'Describe the significance of grammar, vocabulary, passive voice, reported speech and concord in professional technical writing.',
-                    'Role of grammar and vocabulary in improving technical communication and precision.'
-                ],
-                secondHalf: [
-                    'Explain the structure of a well-structured paragraph using appropriate signpost words and cohesive devices.',
-                    'Describe the usage and effectiveness of cohesive devices and signpost words in guiding the reader.'
-                ]
-            },
-            {
-                unit: '2',
-                firstHalf: [
-                    'Differentiate technical writing and general writing with appropriate examples.',
-                    'Definition, structure, types of reports, and intended audience in project report preparation.'
-                ],
-                secondHalf: [
-                    'Describe the importance and necessity of project reports in STEM fields.',
-                    'Discuss plagiarism, ethical reporting, statistical analysis, and experimental documentation in STEM.'
-                ]
-            },
-            {
-                unit: '3',
-                firstHalf: [
-                    'Importance of an effective title and concise abstract in a project report.',
-                    'Formulating the research question, aim of the study, background, and project significance with examples.'
-                ],
-                secondHalf: [
-                    'Objectives, main components, and steps to develop a theoretical framework in a project report.',
-                    'Determining feasibility and constructing a theoretical framework with practical case studies.'
-                ]
-            },
-            {
-                unit: '4',
-                firstHalf: [
-                    'Purposes, essential steps, and guidelines for conducting a comprehensive literature review.',
-                    'Writing a literature review for a research project: structure, synthesis, and critical analysis.'
-                ],
-                secondHalf: [
-                    'Methods and tools for data collection, selection procedures, and qualities of a good data collection tool.',
-                    'Purpose of a bibliography, information included, common referencing styles, and rules for compilation.'
-                ]
-            },
-            {
-                unit: '5',
-                firstHalf: [
-                    'Ten key methods and checking procedures to avoid typographical errors in report writing.',
-                    'Systematic proofreading process and final checklist for formatting, font, spacing, and tables.'
-                ],
-                secondHalf: [
-                    'Rules and conventions for preparing a bibliography in APA, MLA, and Chicago formats with sample entries.',
-                    'Techniques and guidelines for presenting a project report orally with effective illustrations.'
-                ]
+                year: 'Nov/Dec 2024',
+                name: 'Nov/Dec 2024 Question Paper',
+                file: 'prw/notes/sem/question_papers/OHS352-Project-Report-Writing-Nov-Dec-2024-Question-Paper-Download.pdf',
+                size: '979 KB'
             }
-        ]
+        ],
+        importantQuestions: []
     },
     'itas': {
         fullName: 'IT in Agricultural System',

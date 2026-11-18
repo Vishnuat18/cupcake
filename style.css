@@ -2533,6 +2533,281 @@ iframe {
     box-shadow: 0 6px 22px rgba(16, 185, 129, 0.65);
 }
 
+/* Semester Card (Neon Purple glow inspired by S7 card) */
+.cat-card.sem-card {
+    background: #14092b;
+    border-color: rgba(168, 85, 247, 0.35);
+    box-shadow: 0 10px 28px rgba(34, 9, 64, 0.45);
+}
+.cat-card.sem-card:hover {
+    border-color: rgba(192, 132, 252, 0.7);
+    box-shadow: 0 18px 38px rgba(147, 51, 234, 0.35), 0 0 0 1px rgba(192, 132, 252, 0.45);
+}
+.cat-card-arrow-btn.sem-arrow-btn,
+.cat-card.sem-card .cat-card-arrow-btn {
+    background: linear-gradient(135deg, #a855f7, #7c3aed);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 16px rgba(147, 51, 234, 0.55);
+}
+.cat-card.sem-card:hover .sem-arrow-btn,
+.cat-card.sem-card:hover .cat-card-arrow-btn,
+.cat-card-arrow-btn.sem-arrow-btn:hover {
+    background: linear-gradient(135deg, #c084fc, #9333ea);
+    box-shadow: 0 6px 24px rgba(168, 85, 247, 0.75);
+    transform: scale(1.12) translateX(2px);
+}
+
+/* Desktop Back Navigation */
+.desktop-back-nav,
+.cat-desktop-back-wrap {
+    display: none;
+    margin-bottom: 1.25rem;
+}
+@media (min-width: 769px) {
+    .desktop-back-nav,
+    .cat-desktop-back-wrap {
+        display: block;
+    }
+}
+.glass-back-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 1.15rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: all 0.25s ease;
+    cursor: pointer;
+}
+.glass-back-pill:hover {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: rgba(99, 102, 241, 0.45);
+    color: #a5b4fc;
+    transform: translateX(-3px);
+}
+
+/* Three-dot info button on note items (Clean Light Theme) */
+.cat-page-dots-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    color: #475569;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+    font-size: 0.85rem;
+    padding: 0;
+    outline: none;
+}
+.cat-page-dots-btn:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+    border-color: #cbd5e1;
+    transform: scale(1.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Important Questions PDF Banner (Clean Light Theme & Compact) */
+.cat-page-qpdf-card {
+    border-radius: 14px;
+    padding: 0.8rem 1.1rem;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    transition: all 0.25s ease;
+}
+.cat-page-qpdf-card:hover {
+    border-color: rgba(239, 68, 68, 0.4);
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.1);
+    transform: translateY(-2px);
+}
+.qpdf-icon-wrap {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: #fee2e2;
+    color: #dc2626;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+.qpdf-badge {
+    font-size: 0.65rem;
+    font-weight: 800;
+    background: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+    padding: 2px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+}
+.qpdf-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #0f172a;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.qpdf-view-btn {
+    padding: 0.45rem 0.85rem;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    font-weight: 700;
+    font-size: 0.8rem;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
+}
+.qpdf-view-btn:hover {
+    background: linear-gradient(135deg, #f87171, #ef4444);
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+    transform: translateY(-1px);
+}
+
+/* Note Information Modal & Backdrop (Clean Light Theme) */
+.note-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+.note-modal-backdrop.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+.note-info-dialog {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: scale(0.94) translateY(10px);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.note-modal-backdrop.active .note-info-dialog {
+    transform: scale(1) translateY(0);
+}
+.note-modal-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f8fafc;
+}
+.note-modal-header span {
+    color: #0f172a !important;
+}
+#modal-doc-title {
+    color: #0f172a !important;
+}
+#modal-sub-title {
+    color: #64748b !important;
+}
+#modal-topics-text {
+    color: #334155 !important;
+}
+#modal-file-path {
+    color: #4338ca !important;
+    background: #e0e7ff !important;
+    border: 1px solid #c7d2fe !important;
+}
+#modal-cancel-btn {
+    color: #334155 !important;
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+}
+.note-modal-body {
+    padding: 1.25rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: #ffffff;
+}
+.note-modal-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.65rem;
+}
+.note-meta-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 0.7rem 0.85rem;
+}
+.note-meta-label {
+    font-size: 0.68rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+.note-meta-val {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #0f172a;
+    word-break: break-word;
+}
+.note-modal-footer {
+    padding: 0.85rem 1.25rem;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    gap: 0.65rem;
+    background: #f8fafc;
+}
+
 /* ── CAT Full-Page Experience (Light Theme) ───────────────────── */
 .cat-page-body {
     min-height: 100vh;
@@ -2543,6 +2818,26 @@ iframe {
     margin: 0 auto;
     padding-top: 1rem;
     padding-bottom: 6rem;
+}
+
+/* Top S7 / CAT Exam Banner Card in cat_details.html */
+.cat-exam-banner-card {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    max-height: 250px;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+    background: #0f172a;
+    position: relative;
+    margin-bottom: 1.25rem;
+}
+.cat-exam-banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 /* Light Hero Card (No BG Image) */
@@ -2911,34 +3206,54 @@ iframe {
 }
 
 /* ── Minimal Mobile Optimization ────────────────────────────────── */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     /* Subject Details CAT Cards - Image-Only with Bottom-Right Arrow */
     .cat-prep-section {
         margin-bottom: 1.75rem;
     }
 
     .cat-cards-grid {
-        grid-template-columns: 1fr;
-        gap: 0.85rem;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.65rem;
     }
 
     .cat-card {
-        border-radius: 14px;
+        border-radius: 12px;
         aspect-ratio: 16 / 9;
     }
 
+    /* S7 Semester Card: prominently positioned at top spanning full width */
+    .cat-card.sem-card {
+        grid-column: 1 / -1;
+    }
+
     .cat-card-arrow-btn {
-        width: 38px;
-        height: 38px;
-        font-size: 0.9rem;
-        bottom: 10px;
-        right: 10px;
+        width: 30px;
+        height: 30px;
+        font-size: 0.75rem;
+        bottom: 7px;
+        right: 7px;
+    }
+
+    .cat-card.sem-card .cat-card-arrow-btn {
+        width: 34px;
+        height: 34px;
+        font-size: 0.85rem;
+        bottom: 9px;
+        right: 9px;
     }
 
     /* CAT Details Full Page - Minimal Mobile View */
     .cat-page-container {
         padding-top: 0.5rem;
         padding-bottom: 5.5rem;
+    }
+
+    .cat-exam-banner-card {
+        border-radius: 14px;
+        aspect-ratio: 16 / 9;
+        margin-bottom: 0.85rem;
     }
 
     .cat-page-hero-light {
@@ -3004,7 +3319,7 @@ iframe {
     }
 
     .cat-pane-desc {
-        font-size: 0.72rem;
+        display: none;
     }
 
     .cat-page-note-card {
@@ -3030,6 +3345,36 @@ iframe {
     .cat-unit-pill-badge {
         font-size: 0.62rem;
         padding: 1px 5px;
+    }
+
+    .cat-page-qpdf-card {
+        padding: 0.65rem 0.8rem;
+        border-radius: 12px;
+        gap: 0.55rem;
+        margin-bottom: 0.85rem;
+    }
+
+    .qpdf-icon-wrap {
+        width: 32px;
+        height: 32px;
+        font-size: 1.05rem;
+        border-radius: 8px;
+    }
+
+    .qpdf-title {
+        font-size: 0.84rem;
+    }
+
+    .qpdf-badge {
+        font-size: 0.6rem;
+        padding: 1px 5px;
+    }
+
+    .qpdf-view-btn {
+        padding: 0.38rem 0.65rem;
+        font-size: 0.74rem;
+        gap: 0.25rem;
+        border-radius: 7px;
     }
 
     .cat-page-qcard {

@@ -49,8 +49,21 @@
     </header>
 
     <div class="container cat-page-container">
+        <!-- Desktop Back Navigation -->
+        <div class="cat-desktop-back-wrap">
+            <a id="desktop-back-btn" href="home.html" class="glass-back-pill" title="Back to Subject">
+                <i class="fas fa-arrow-left"></i>
+                <span id="desktop-back-label">Back to Subject</span>
+            </a>
+        </div>
+
+        <!-- Top S7 / CAT Exam Banner Card -->
+        <div id="cat-banner-card" class="cat-exam-banner-card" style="display: none;">
+            <img id="cat-banner-img" src="" alt="Exam Pack Banner" class="cat-exam-banner-img">
+        </div>
+
         <!-- Hero Card (Clean Light Theme, Subject & Exam Only) -->
-        <div class="cat-page-hero-light glass">
+        <div class="cat-page-hero-light glass" id="cat-hero-card">
             <div class="cat-hero-text-block">
                 <div id="cat-hero-title" class="cat-exam-label">Continuous Assessment Test 1</div>
                 <h1 id="cat-subject-fullname" class="cat-page-title">Loading Subject...</h1>
@@ -70,10 +83,15 @@
                     <span>Important Questions</span>
                     <span id="count-questions" class="cat-tab-count">-</span>
                 </button>
+                <button type="button" class="cat-page-tab" data-tab="twomarks">
+                    <i class="fas fa-marker"></i>
+                    <span>2-Marks</span>
+                    <span id="count-twomarks" class="cat-tab-count">-</span>
+                </button>
                 <button type="button" class="cat-page-tab" data-tab="syllabus">
                     <i class="fas fa-list-ul"></i>
                     <span>Syllabus</span>
-                    <span id="count-syllabus" class="cat-tab-count">3 Units</span>
+                    <span id="count-syllabus" class="cat-tab-count">-</span>
                 </button>
             </div>
         </div>
@@ -83,7 +101,6 @@
             <div class="cat-pane-header">
                 <div>
                     <h3 class="cat-pane-title">Notes</h3>
-                    <p id="notes-portion-desc" class="cat-pane-desc">Targeted notes strictly for this exam portion.</p>
                 </div>
             </div>
             <div id="cat-notes-container" class="cat-notes-grid">
@@ -100,7 +117,6 @@
             <div class="cat-pane-header">
                 <div>
                     <h3 class="cat-pane-title">Curated Important Questions</h3>
-                    <p id="questions-portion-desc" class="cat-pane-desc">Important questions partitioned strictly for this assessment.</p>
                 </div>
             </div>
             <div id="cat-questions-container" class="cat-questions-column">
@@ -108,16 +124,89 @@
             </div>
         </div>
 
-        <!-- Tab 3: Syllabus Coverage -->
+        <!-- Tab 3: 2-Marks -->
+        <div id="pane-twomarks" class="cat-page-pane">
+            <div class="cat-pane-header">
+                <div>
+                    <h3 class="cat-pane-title">2-Mark Questions & Answers</h3>
+                </div>
+            </div>
+            <div id="cat-twomarks-container" class="cat-notes-grid">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+
+        <!-- Tab 4: Syllabus Coverage -->
         <div id="pane-syllabus" class="cat-page-pane">
             <div class="cat-pane-header">
                 <div>
                     <h3 class="cat-pane-title">Exam Syllabus Coverage</h3>
-                    <p id="syllabus-portion-desc" class="cat-pane-desc">Syllabus units tested in this assessment.</p>
                 </div>
             </div>
             <div id="cat-syllabus-container" class="cat-syllabus-column">
                 <!-- Dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Note Information Modal -->
+    <div id="note-info-modal-backdrop" class="note-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-doc-title">
+        <div class="note-info-dialog">
+            <div class="note-modal-header">
+                <div style="display: flex; align-items: center; gap: 0.65rem;">
+                    <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(99, 102, 241, 0.12); color: #6366f1; display: flex; align-items: center; justify-content: center; font-size: 0.95rem;">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <span style="font-family: 'Outfit'; font-weight: 700; font-size: 1.05rem; color: #0f172a;">Document Details</span>
+                </div>
+                <button id="modal-close-btn" type="button" aria-label="Close" style="background: none; border: none; color: #64748b; font-size: 1.3rem; cursor: pointer; padding: 0.2rem 0.5rem; transition: color 0.2s;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="note-modal-body">
+                <div>
+                    <span id="modal-badge" class="cat-unit-pill-badge" style="margin-bottom: 0.5rem; display: inline-block;">UNIT 1</span>
+                    <h3 id="modal-doc-title" style="font-family: 'Outfit'; font-weight: 800; font-size: 1.25rem; color: #0f172a; margin: 0 0 0.35rem 0; line-height: 1.3;">Note Title</h3>
+                    <p id="modal-sub-title" style="color: #64748b; font-size: 0.85rem; margin: 0;">Project Report Writing • OHS352</p>
+                </div>
+
+                <div class="note-modal-meta-grid">
+                    <div class="note-meta-card">
+                        <div class="note-meta-label"><i class="fas fa-layer-group"></i> Exam Pack</div>
+                        <div id="modal-exam-pack" class="note-meta-val">Semester Exam</div>
+                    </div>
+                    <div class="note-meta-card">
+                        <div class="note-meta-label"><i class="fas fa-file-pdf"></i> Format & Size</div>
+                        <div id="modal-file-size" class="note-meta-val">PDF • 1.48 MB</div>
+                    </div>
+                    <div class="note-meta-card">
+                        <div class="note-meta-label"><i class="fas fa-check-circle"></i> Status</div>
+                        <div id="modal-status" class="note-meta-val" style="color: #059669;">Verified & Ready</div>
+                    </div>
+                    <div class="note-meta-card">
+                        <div class="note-meta-label"><i class="fas fa-graduation-cap"></i> Regulation</div>
+                        <div class="note-meta-val">Anna Univ. R2021</div>
+                    </div>
+                </div>
+
+                <div class="note-meta-card" style="display: flex; flex-direction: column; gap: 0.4rem;">
+                    <div class="note-meta-label"><i class="fas fa-folder-open"></i> File Path</div>
+                    <code id="modal-file-path" style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #4338ca; word-break: break-all; background: #e0e7ff; padding: 0.45rem 0.65rem; border-radius: 6px; border: 1px solid #c7d2fe;">prw/notes/sem/PRW_unit_1.pdf</code>
+                </div>
+
+                <div class="note-meta-card" style="display: flex; flex-direction: column; gap: 0.4rem;">
+                    <div class="note-meta-label"><i class="fas fa-list-check"></i> Syllabus Topics Covered</div>
+                    <p id="modal-topics-text" style="font-size: 0.84rem; color: #334155; line-height: 1.5; margin: 0;">Topics description goes here...</p>
+                </div>
+            </div>
+            <div class="note-modal-footer">
+                <button id="modal-open-doc-btn" type="button" class="modal-btn-login" style="flex: 1; padding: 0.75rem; justify-content: center; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; border: none; cursor: pointer; background: linear-gradient(135deg, #10b981, #059669); color: white; border-radius: 12px; font-weight: 700;">
+                    <i class="fas fa-book-open"></i>
+                    <span>Open Note in Viewer</span>
+                </button>
+                <button id="modal-cancel-btn" type="button" style="padding: 0.75rem 1.25rem; border-radius: 12px; border: 1px solid #e2e8f0; color: #334155; background: #f1f5f9; cursor: pointer; font-weight: 600;">
+                    Close
+                </button>
             </div>
         </div>
     </div>
@@ -145,35 +234,71 @@
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const subject = urlParams.get('subject');
-            const catParam = (urlParams.get('cat') || '1').toString().replace(/[^0-9]/g, '');
-            const isCat1 = catParam !== '2';
-            const catNum = isCat1 ? 1 : 2;
+            const rawCat = (urlParams.get('cat') || '1').toString().trim().toLowerCase();
+            const isSem = rawCat === 'sem' || rawCat === 'semester';
+            const isCat2 = !isSem && (rawCat === '2' || rawCat.includes('2'));
+            const isCat1 = !isSem && !isCat2;
+            const catNum = isSem ? 'sem' : (isCat2 ? 2 : 1);
 
             // DOM Elements
             const backBtn = document.getElementById('mobile-back-btn');
+            const desktopBackBtn = document.getElementById('desktop-back-btn');
             const headerSubjectTitle = document.getElementById('header-subject-title');
             const headerCatSub = document.getElementById('header-cat-sub');
             const heroTitle = document.getElementById('cat-hero-title');
             const subjectFullName = document.getElementById('cat-subject-fullname');
             const countNotes = document.getElementById('count-notes');
             const countQuestions = document.getElementById('count-questions');
+            const countTwoMarks = document.getElementById('count-twomarks');
             const countSyllabus = document.getElementById('count-syllabus');
             const notesContainer = document.getElementById('cat-notes-container');
             const questionsContainer = document.getElementById('cat-questions-container');
+            const twoMarksContainer = document.getElementById('cat-twomarks-container');
             const syllabusContainer = document.getElementById('cat-syllabus-container');
             const notesPortionDesc = document.getElementById('notes-portion-desc');
             const questionsPortionDesc = document.getElementById('questions-portion-desc');
+            const twoMarksPortionDesc = document.getElementById('twomarks-portion-desc');
             const syllabusPortionDesc = document.getElementById('syllabus-portion-desc');
             const tabButtons = document.querySelectorAll('.cat-page-tab');
             const panes = {
                 notes: document.getElementById('pane-notes'),
                 questions: document.getElementById('pane-questions'),
+                twomarks: document.getElementById('pane-twomarks'),
                 syllabus: document.getElementById('pane-syllabus')
             };
 
-            // Back button configuration
+            // Modal Elements
+            const modalBackdrop = document.getElementById('note-info-modal-backdrop');
+            const modalDocTitle = document.getElementById('modal-doc-title');
+            const modalSubTitle = document.getElementById('modal-sub-title');
+            const modalBadge = document.getElementById('modal-badge');
+            const modalExamPack = document.getElementById('modal-exam-pack');
+            const modalFileSize = document.getElementById('modal-file-size');
+            const modalStatus = document.getElementById('modal-status');
+            const modalFilePath = document.getElementById('modal-file-path');
+            const modalTopicsText = document.getElementById('modal-topics-text');
+            const modalOpenBtn = document.getElementById('modal-open-doc-btn');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+            const modalCancelBtn = document.getElementById('modal-cancel-btn');
+
+            // Proper Back Button Navigation (both mobile & desktop)
             const backUrl = subject ? `subject_details.html?subject=${encodeURIComponent(subject)}` : 'home.html';
-            if (backBtn) backBtn.href = backUrl;
+            const handleBackNavigation = (e) => {
+                if (e) e.preventDefault();
+                if (window.history.length > 1 && document.referrer && document.referrer.includes('subject_details')) {
+                    window.history.back();
+                } else {
+                    window.location.href = backUrl;
+                }
+            };
+            if (backBtn) {
+                backBtn.href = backUrl;
+                backBtn.onclick = handleBackNavigation;
+            }
+            if (desktopBackBtn) {
+                desktopBackBtn.href = backUrl;
+                desktopBackBtn.onclick = handleBackNavigation;
+            }
 
             // Tab switching
             tabButtons.forEach(btn => {
@@ -230,21 +355,40 @@
 
             const subjectData = subjectMaterials[subject];
             const subjectShort = subjectData.shortName || subject.toUpperCase();
-            const portionText = isCat1 ? 'Units 1, 2 & 3 (1st Half)' : 'Units 3 (2nd Half), 4 & 5';
-            const catBadgeText = isCat1 ? 'CAT I STUDY PACK' : 'CAT II STUDY PACK';
-            const bannerSrc = isCat1 ? 'assets/cards/cat1_green.png' : 'assets/cards/cat2_green.png';
-            const targetUnits = isCat1 ? [1, 2, 3] : [3, 4, 5];
+            const portionText = isSem ? 'Complete Syllabus (Units 1 - 5)' : (isCat1 ? 'Units 1, 2 & 3 (1st Half)' : 'Units 3 (2nd Half), 4 & 5');
+            const catBadgeText = isSem ? 'SEMESTER STUDY PACK' : (isCat1 ? 'CAT I STUDY PACK' : 'CAT II STUDY PACK');
+            const heroExamLabel = isSem ? 'End Semester Examination' : `Continuous Assessment Test ${catNum}`;
+            const headerCatSubText = isSem ? 'Semester Exam Preparation' : portionText;
+            const targetUnits = isSem ? [1, 2, 3, 4, 5] : (isCat1 ? [1, 2, 3] : [3, 4, 5]);
 
             // Set Meta & Header Info
-            document.title = `${subjectShort} CAT ${catNum} - Cupcake Notes`;
-            if (headerSubjectTitle) headerSubjectTitle.textContent = `${subjectShort} • CAT ${catNum}`;
-            if (headerCatSub) headerCatSub.textContent = portionText;
-            if (heroTitle) heroTitle.textContent = `Continuous Assessment Test ${catNum}`;
+            document.title = `${subjectShort} ${isSem ? 'Semester Exam' : 'CAT ' + catNum} - Cupcake Notes`;
+            if (headerSubjectTitle) headerSubjectTitle.textContent = `${subjectShort} • ${isSem ? 'Semester Exam' : 'CAT ' + catNum}`;
+            if (headerCatSub) {
+                headerCatSub.textContent = headerCatSubText;
+                if (isSem) headerCatSub.style.color = '#a855f7';
+            }
+            if (heroTitle) heroTitle.textContent = heroExamLabel;
             if (subjectFullName) subjectFullName.textContent = subjectData.fullName || subjectShort;
 
-            if (notesPortionDesc) notesPortionDesc.textContent = `Targeted notes for ${portionText}.`;
-            if (questionsPortionDesc) questionsPortionDesc.textContent = `Partitioned questions for ${portionText}.`;
-            if (syllabusPortionDesc) syllabusPortionDesc.textContent = `Syllabus units for ${portionText}.`;
+            // S7 / CAT Exam Banner Card at top
+            const bannerCard = document.getElementById('cat-banner-card');
+            const bannerImg = document.getElementById('cat-banner-img');
+            if (bannerCard && bannerImg) {
+                if (isSem) {
+                    bannerImg.src = 'assets/cards/semester.png';
+                    bannerImg.alt = 'S7 Semester Exam Pack';
+                    bannerCard.style.display = 'block';
+                } else if (isCat2) {
+                    bannerImg.src = 'assets/cards/cat2_green.png';
+                    bannerImg.alt = 'CAT 2 Exam Pack';
+                    bannerCard.style.display = 'block';
+                } else {
+                    bannerImg.src = 'assets/cards/cat1_green.png';
+                    bannerImg.alt = 'CAT 1 Exam Pack';
+                    bannerCard.style.display = 'block';
+                }
+            }
 
             // Helper to parse unit number from string
             function detectUnitNum(name, file) {
@@ -257,18 +401,152 @@
                 return null;
             }
 
-            // 1. Populate Study Notes (Strictly for this CAT)
+            // Note Information Modal Logic
+            function openNoteInfoModal(item, currentPackName) {
+                const isAvailable = item.file && item.file !== '#';
+                const uNum = item.unitNum || detectUnitNum(item.name, item.file);
+                
+                // Find syllabus topic for this unit if available
+                let topicDesc = 'Standard curriculum topic coverage for ' + (item.name || 'study notes');
+                if (subjectData && subjectData.syllabus && uNum) {
+                    const sUnit = subjectData.syllabus.find((s, idx) => (idx + 1) === uNum || (s.unit && s.unit.toString().includes(uNum.toString())));
+                    if (sUnit && sUnit.topics) {
+                        topicDesc = sUnit.topics;
+                    }
+                } else if (item.isTwoMark) {
+                    topicDesc = 'High-yield 2-mark conceptual questions, short definitions, technical explanations, and exam answers.';
+                }
+
+                if (modalDocTitle) modalDocTitle.textContent = item.name || 'Study Document';
+                if (modalSubTitle) modalSubTitle.textContent = `${subjectData.fullName || subjectShort} • ${subjectData.courseCode || subjectShort}`;
+                if (modalBadge) modalBadge.textContent = uNum ? `UNIT ${uNum}` : (item.isTwoMark ? '2-MARKS' : currentPackName.toUpperCase());
+                if (modalExamPack) modalExamPack.textContent = currentPackName;
+                if (modalFileSize) modalFileSize.textContent = item.size ? `PDF • ${item.size}` : (item.file && item.file.endsWith('.pdf') ? 'PDF Document' : 'Study Resource');
+                if (modalStatus) {
+                    modalStatus.textContent = isAvailable ? 'Verified & Available' : 'Uploading Soon';
+                    modalStatus.style.color = isAvailable ? '#34d399' : '#fbbf24';
+                }
+                if (modalFilePath) modalFilePath.textContent = item.file || 'Document pending upload';
+                if (modalTopicsText) modalTopicsText.textContent = topicDesc;
+
+                if (modalOpenBtn) {
+                    if (isAvailable) {
+                        modalOpenBtn.style.display = 'inline-flex';
+                        modalOpenBtn.onclick = () => {
+                            location.href = `viewer.html?file=${encodeURIComponent(item.file)}&title=${encodeURIComponent(item.name)}&subject=${subject}&cat=${catNum}`;
+                        };
+                    } else {
+                        modalOpenBtn.style.display = 'none';
+                    }
+                }
+
+                if (modalBackdrop) modalBackdrop.classList.add('active');
+            }
+
+            function closeNoteInfoModal() {
+                if (modalBackdrop) modalBackdrop.classList.remove('active');
+            }
+
+            if (modalCloseBtn) modalCloseBtn.onclick = closeNoteInfoModal;
+            if (modalCancelBtn) modalCancelBtn.onclick = closeNoteInfoModal;
+            if (modalBackdrop) {
+                modalBackdrop.onclick = (e) => {
+                    if (e.target === modalBackdrop) closeNoteInfoModal();
+                };
+            }
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeNoteInfoModal();
+            });
+
+            // Factory to build note cards with interactive 3-dot info button
+            function createInteractiveNoteCard(item, badgeLabel, subLabel, currentPackName) {
+                const isAvailable = item.file && item.file !== '#';
+                const noteCard = document.createElement('div');
+                noteCard.className = 'cat-page-note-card glass';
+
+                if (!isAvailable) {
+                    noteCard.style.opacity = '0.65';
+                    noteCard.style.cursor = 'default';
+                } else {
+                    noteCard.onclick = () => {
+                        location.href = `viewer.html?file=${encodeURIComponent(item.file)}&title=${encodeURIComponent(item.name)}&subject=${subject}&cat=${catNum}`;
+                    };
+                }
+
+                const actionIndicator = isAvailable ? 
+                    `<div class="cat-page-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>` :
+                    `<span class="cat-page-soon-pill">UPLOADED SOON</span>`;
+
+                noteCard.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 0.85rem; overflow: hidden; flex: 1;">
+                        <div class="cat-page-note-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div style="overflow: hidden;">
+                            <h4 class="cat-page-note-name">${item.name}</h4>
+                            <span class="cat-page-note-sub">${subLabel}</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.65rem; flex-shrink: 0;">
+                        <span class="cat-unit-pill-badge">${badgeLabel}</span>
+                        <button type="button" class="cat-page-dots-btn" title="View Note Details" aria-label="View Note Details">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        ${actionIndicator}
+                    </div>
+                `;
+
+                // Wire up 3-dot info button
+                const dotsBtn = noteCard.querySelector('.cat-page-dots-btn');
+                if (dotsBtn) {
+                    dotsBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        openNoteInfoModal(item, currentPackName);
+                    };
+                }
+
+                return noteCard;
+            }
+
+            // 1. Populate Study Notes (Strictly for this CAT or Semester)
             notesContainer.innerHTML = '';
             let matchingNotes = [];
+            const packTitle = isSem ? 'Semester Exam' : `CAT ${catNum}`;
 
-            if (subject === 'ece') {
+            if (isSem) {
+                // Semester mode: prioritized semester notes
+                (subjectData.materials || []).forEach(item => {
+                    const isTwoMark = item.isTwoMark || (item.name && (item.name.toLowerCase().includes('2-mark') || item.name.toLowerCase().includes('2 mark'))) ||
+                                      (item.file && (item.file.toLowerCase().includes('2m') || item.file.toLowerCase().includes('2_mark') || item.file.toLowerCase().includes('2mark')));
+                    if (isTwoMark) return; // Keep 2-marks in dedicated 2-Marks tab
+
+                    if (item.cat === 'sem' || item.exam === 'sem') {
+                        const uNum = detectUnitNum(item.name, item.file);
+                        matchingNotes.push({ ...item, unitNum: uNum });
+                    }
+                });
+
+                // If no explicit cat='sem' materials, fallback to standard unit notes
+                if (matchingNotes.length === 0) {
+                    (subjectData.materials || []).forEach(item => {
+                        const isTwoMark = item.isTwoMark || (item.name && (item.name.toLowerCase().includes('2-mark') || item.name.toLowerCase().includes('2 mark'))) ||
+                                          (item.file && (item.file.toLowerCase().includes('2m') || item.file.toLowerCase().includes('2_mark') || item.file.toLowerCase().includes('2mark')));
+                        if (isTwoMark) return;
+                        const uNum = detectUnitNum(item.name, item.file);
+                        if (uNum && targetUnits.includes(uNum)) {
+                            matchingNotes.push({ ...item, unitNum: uNum });
+                        }
+                    });
+                }
+            } else if (subject === 'ece') {
                 (subjectData.materials || []).forEach(group => {
                     if (group.file) {
-                        // Respect cat filter for flat file entries
                         if (group.cat && group.cat !== catNum) return;
                         const isTwoMark = (group.name && (group.name.toLowerCase().includes('2-mark') || group.name.toLowerCase().includes('2 mark') || group.name.toLowerCase().includes('two mark') || group.name.toLowerCase().includes('two marks'))) ||
                                           (group.file && (group.file.toLowerCase().includes('2m') || group.file.toLowerCase().includes('2_mark') || group.file.toLowerCase().includes('2mark')));
-                        matchingNotes.push({ ...group, isTwoMark });
+                        if (!isTwoMark) matchingNotes.push(group);
                     } else if (group.unit && targetUnits.includes(group.unit)) {
                         if (group.topics) {
                             group.topics.forEach(t => matchingNotes.push({ ...t, unitNum: group.unit }));
@@ -277,15 +555,12 @@
                 });
             } else {
                 (subjectData.materials || []).forEach(item => {
-                    // If note has explicit CAT assignment (e.g. CAT 1 vs CAT 2), filter strictly
                     if (item.cat && item.cat !== catNum) {
                         return;
                     }
                     const isTwoMark = (item.name && (item.name.toLowerCase().includes('2-mark') || item.name.toLowerCase().includes('2 mark'))) ||
                                       (item.file && (item.file.toLowerCase().includes('2m') || item.file.toLowerCase().includes('2_mark') || item.file.toLowerCase().includes('2mark')));
-                    if (isTwoMark) {
-                        matchingNotes.push({ ...item, isTwoMark: true });
-                    } else {
+                    if (!isTwoMark) {
                         const uNum = detectUnitNum(item.name, item.file);
                         if (uNum && targetUnits.includes(uNum)) {
                             matchingNotes.push({ ...item, unitNum: uNum });
@@ -299,47 +574,15 @@
             if (matchingNotes.length > 0) {
                 matchingNotes.forEach(item => {
                     const isAvailable = item.file && item.file !== '#';
-                    const noteCard = document.createElement('div');
-                    noteCard.className = 'cat-page-note-card glass';
-
-                    if (!isAvailable) {
-                        noteCard.style.opacity = '0.65';
-                        noteCard.style.cursor = 'default';
-                    } else {
-                        noteCard.onclick = () => {
-                            location.href = `viewer.html?file=${encodeURIComponent(item.file)}&title=${encodeURIComponent(item.name)}&subject=${subject}&cat=${catNum}`;
-                        };
-                    }
-
-                    const badgeLabel = item.unitNum ? `UNIT ${item.unitNum}` : (item.isTwoMark ? '2-MARKS' : `CAT ${catNum}`);
+                    const badgeLabel = item.unitNum ? `UNIT ${item.unitNum}` : packTitle.toUpperCase();
                     const subLabel = !isAvailable ? 'Uploaded soon' :
-                                     (item.isTwoMark ? '2-Mark Question Bank' :
+                                     (item.size ? `PDF Document • ${item.size}` :
                                      (isCat1 && item.unitNum === 3 ? 'Unit 3 Notes (First Half Focus)' :
-                                     !isCat1 && item.unitNum === 3 ? 'Unit 3 Notes (Second Half Focus)' :
+                                     isCat2 && item.unitNum === 3 ? 'Unit 3 Notes (Second Half Focus)' :
                                      'PDF Document'));
 
-                    const actionIndicator = isAvailable ? 
-                        `<div class="cat-page-arrow">
-                            <i class="fas fa-chevron-right"></i>
-                        </div>` :
-                        `<span class="cat-page-soon-pill">UPLOADED SOON</span>`;
-
-                    noteCard.innerHTML = `
-                        <div style="display: flex; align-items: center; gap: 0.85rem; overflow: hidden; flex: 1;">
-                            <div class="cat-page-note-icon">
-                                <i class="fas fa-file-pdf"></i>
-                            </div>
-                            <div style="overflow: hidden;">
-                                <h4 class="cat-page-note-name">${item.name}</h4>
-                                <span class="cat-page-note-sub">${subLabel}</span>
-                            </div>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0;">
-                            <span class="cat-unit-pill-badge">${badgeLabel}</span>
-                            ${actionIndicator}
-                        </div>
-                    `;
-                    notesContainer.appendChild(noteCard);
+                    const card = createInteractiveNoteCard(item, badgeLabel, subLabel, packTitle);
+                    notesContainer.appendChild(card);
                 });
             } else {
                 notesContainer.innerHTML = `
@@ -351,8 +594,103 @@
                 `;
             }
 
-            // 2. Populate Important Questions (Strictly Partitioned)
+            // 2. Populate Important Questions (with PDF Question Bank Banner & Partitioned Questions)
             questionsContainer.innerHTML = '';
+
+            // If subject has Important Questions PDF (e.g. OHS352_Important_Questions.pdf), display top banner
+            if (subjectData.importantQuestionsPdf) {
+                const pdfCard = document.createElement('div');
+                pdfCard.className = 'cat-page-qpdf-card glass';
+                pdfCard.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 0.8rem; overflow: hidden; flex: 1; min-width: 0;">
+                        <div class="qpdf-icon-wrap">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div style="overflow: hidden; flex: 1; min-width: 0;">
+                            <div style="display: flex; align-items: center; gap: 0.45rem; margin-bottom: 0.2rem; flex-wrap: wrap;">
+                                <span class="qpdf-badge">QUESTION BANK</span>
+                                <span style="font-size: 0.72rem; color: #64748b; font-weight: 600;">920 KB • All Units</span>
+                            </div>
+                            <h4 class="qpdf-title">${subjectShort} Important Questions (PDF)</h4>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0;">
+                        <button type="button" class="cat-page-dots-btn" title="View Question Bank Details" aria-label="View Question Bank Details">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <a href="viewer.html?file=${encodeURIComponent(subjectData.importantQuestionsPdf)}&title=${encodeURIComponent(subjectShort + ' Important Questions')}&subject=${subject}&cat=${catNum}" class="qpdf-view-btn">
+                            <i class="fas fa-eye"></i>
+                            <span>View PDF</span>
+                        </a>
+                    </div>
+                `;
+
+                // Wire 3-dot info button for question bank PDF
+                const pdfDotsBtn = pdfCard.querySelector('.cat-page-dots-btn');
+                if (pdfDotsBtn) {
+                    pdfDotsBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        openNoteInfoModal({
+                            name: `${subjectShort} Important Questions & Question Bank PDF`,
+                            file: subjectData.importantQuestionsPdf,
+                            size: '920 KB',
+                            isTwoMark: false
+                        }, packTitle);
+                    };
+                }
+
+                questionsContainer.appendChild(pdfCard);
+            }
+
+            // If subject has Previous Year Question Papers (e.g. OHS352-Project-Report-Writing-Nov-Dec-2024-Question-Paper-Download.pdf)
+            const pyqList = subjectData.previousYearQuestions || [];
+            if (pyqList.length > 0) {
+                pyqList.forEach(pyq => {
+                    const qpCard = document.createElement('div');
+                    qpCard.className = 'cat-page-qpdf-card glass';
+                    const qpTitle = pyq.name || `${subjectShort} ${pyq.year} Question Paper (PDF)`;
+                    const qpSize = pyq.size || '979 KB';
+                    qpCard.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 0.8rem; overflow: hidden; flex: 1; min-width: 0;">
+                            <div class="qpdf-icon-wrap" style="background: #ede9fe; color: #7c3aed;">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div style="overflow: hidden; flex: 1; min-width: 0;">
+                                <div style="display: flex; align-items: center; gap: 0.45rem; margin-bottom: 0.2rem; flex-wrap: wrap;">
+                                    <span class="qpdf-badge" style="background: #ede9fe; color: #7c3aed; border-color: #ddd6fe;">QUESTION PAPER</span>
+                                    <span style="font-size: 0.72rem; color: #64748b; font-weight: 600;">${qpSize} • ${pyq.year || 'Anna Univ'}</span>
+                                </div>
+                                <h4 class="qpdf-title">${qpTitle}</h4>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0;">
+                            <button type="button" class="cat-page-dots-btn" title="View Question Paper Details" aria-label="View Question Paper Details">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <a href="viewer.html?file=${encodeURIComponent(pyq.file)}&title=${encodeURIComponent(qpTitle)}&subject=${subject}&cat=${catNum}" class="qpdf-view-btn" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); box-shadow: 0 2px 8px rgba(124, 58, 237, 0.25);">
+                                <i class="fas fa-eye"></i>
+                                <span>View PDF</span>
+                            </a>
+                        </div>
+                    `;
+
+                    const qpDotsBtn = qpCard.querySelector('.cat-page-dots-btn');
+                    if (qpDotsBtn) {
+                        qpDotsBtn.onclick = (e) => {
+                            e.stopPropagation();
+                            openNoteInfoModal({
+                                name: qpTitle,
+                                file: pyq.file,
+                                size: qpSize,
+                                isTwoMark: false
+                            }, packTitle);
+                        };
+                    }
+
+                    questionsContainer.appendChild(qpCard);
+                });
+            }
+
             const allIQ = subjectData.importantQuestions || [];
             let matchingQuestions = [];
 
@@ -361,7 +699,18 @@
                 const uNum = parseInt(uStr.replace(/[^0-9]/g, '')) || 
                              (uStr.toUpperCase().includes('I') ? (uStr.toUpperCase().includes('V') ? (uStr.toUpperCase().includes('IV') ? 4 : 5) : (uStr.toUpperCase().includes('III') ? 3 : (uStr.toUpperCase().includes('II') ? 2 : 1))) : null);
 
-                if (isCat1) {
+                if (isSem) {
+                    // Semester: Units 1 to 5 completely
+                    if (uNum && [1, 2, 3, 4, 5].includes(uNum)) {
+                        matchingQuestions.push({
+                            unitNum: uNum,
+                            title: `Unit ${uNum}`,
+                            firstHalf: item.firstHalf || [],
+                            secondHalf: item.secondHalf || [],
+                            questions: item.questions || []
+                        });
+                    }
+                } else if (isCat1) {
                     // CAT 1: Unit 1, Unit 2, Unit 3 (First Half ONLY)
                     if (uNum === 1 || uNum === 2) {
                         matchingQuestions.push({
@@ -400,7 +749,10 @@
                 }
             });
 
-            if (countQuestions) countQuestions.textContent = matchingQuestions.length.toString();
+            const totalQuestionsCount = matchingQuestions.length + 
+                                       (subjectData.importantQuestionsPdf ? 1 : 0) + 
+                                       pyqList.length;
+            if (countQuestions) countQuestions.textContent = totalQuestionsCount.toString();
 
             if (matchingQuestions.length > 0) {
                 matchingQuestions.forEach(qItem => {
@@ -441,7 +793,7 @@
                     } else if (qItem.questions && qItem.questions.length > 0) {
                         contentHTML = `
                             <ul class="cat-page-qlist">
-                                ${qItem.questions.map(q => `<li>${q}</li>`).join('')}
+                                ${(qItem.questions || []).map(q => `<li>${q}</li>`).join('')}
                             </ul>
                         `;
                     }
@@ -452,13 +804,13 @@
                                 <i class="fas fa-star" style="color: #fbbf24; font-size: 0.9rem;"></i>
                                 <h4 class="cat-page-qcard-title">${qItem.title}</h4>
                             </div>
-                            <span class="cat-unit-pill-badge">${qItem.isFirstHalfOnly ? 'CAT 1 Portion' : (qItem.isSecondHalfOnly ? 'CAT 2 Portion' : `Unit ${qItem.unitNum}`)}</span>
+                            <span class="cat-unit-pill-badge">${isSem ? 'Semester Portion' : (qItem.isFirstHalfOnly ? 'CAT 1 Portion' : (qItem.isSecondHalfOnly ? 'CAT 2 Portion' : `Unit ${qItem.unitNum}`))}</span>
                         </div>
                         <div>${contentHTML}</div>
                     `;
                     questionsContainer.appendChild(qCard);
                 });
-            } else {
+            } else if (!subjectData.importantQuestionsPdf && pyqList.length === 0) {
                 questionsContainer.innerHTML = `
                     <div class="cat-empty-state glass">
                         <i class="fas fa-lightbulb" style="color: #fbbf24;"></i>
@@ -468,14 +820,49 @@
                 `;
             }
 
-            // 3. Populate Syllabus
+            // 3. Populate 2-Marks Tab
+            twoMarksContainer.innerHTML = '';
+            let matchingTwoMarks = [];
+
+            (subjectData.materials || []).forEach(item => {
+                const isTwoMark = item.isTwoMark || (item.name && (item.name.toLowerCase().includes('2-mark') || item.name.toLowerCase().includes('2 mark'))) ||
+                                  (item.file && (item.file.toLowerCase().includes('2m') || item.file.toLowerCase().includes('2_mark') || item.file.toLowerCase().includes('2mark')));
+                if (isTwoMark) {
+                    if (isSem || !item.cat || item.cat === catNum || item.cat === 'sem') {
+                        matchingTwoMarks.push(item);
+                    }
+                }
+            });
+
+            if (countTwoMarks) countTwoMarks.textContent = matchingTwoMarks.length.toString();
+
+            if (matchingTwoMarks.length > 0) {
+                matchingTwoMarks.forEach(item => {
+                    const isAvailable = item.file && item.file !== '#';
+                    const subLabel = !isAvailable ? 'Uploaded soon' : (item.size ? `2-Mark Question Bank • ${item.size}` : '2-Mark Question Bank PDF');
+                    const card = createInteractiveNoteCard(item, '2-MARKS', subLabel, packTitle);
+                    twoMarksContainer.appendChild(card);
+                });
+            } else {
+                twoMarksContainer.innerHTML = `
+                    <div class="cat-empty-state glass">
+                        <i class="fas fa-marker" style="color: var(--primary-light);"></i>
+                        <h4>2-Mark Notes Being Curated</h4>
+                        <p>${subjectData.twoMarksMsg || `2-Mark short questions and answers for ${subjectShort} will be uploaded soon.`}</p>
+                    </div>
+                `;
+            }
+
+            // 4. Populate Syllabus Tab
             syllabusContainer.innerHTML = '';
             const allSyllabus = subjectData.syllabus || [];
             let filteredSyllabus = [];
 
             allSyllabus.forEach((u, idx) => {
                 const unitIdx = idx + 1;
-                if (isCat1 && [1, 2, 3].includes(unitIdx)) {
+                if (isSem && [1, 2, 3, 4, 5].includes(unitIdx)) {
+                    filteredSyllabus.push({ ...u, unitNum: unitIdx });
+                } else if (isCat1 && [1, 2, 3].includes(unitIdx)) {
                     filteredSyllabus.push({ ...u, unitNum: unitIdx, isUnit3: unitIdx === 3 });
                 } else if (!isCat1 && [3, 4, 5].includes(unitIdx)) {
                     filteredSyllabus.push({ ...u, unitNum: unitIdx, isUnit3: unitIdx === 3 });
@@ -490,10 +877,12 @@
                     sCard.className = 'cat-page-qcard glass';
                     
                     let noteBadge = '';
-                    if (u.isUnit3) {
+                    if (u.isUnit3 && !isSem) {
                         noteBadge = isCat1 ? 
                             `<span class="cat-unit-pill-badge" style="background: rgba(16, 185, 129, 0.25); color: #d1fae5;">Focus: 1st Half</span>` :
                             `<span class="cat-unit-pill-badge" style="background: rgba(16, 185, 129, 0.25); color: #d1fae5;">Focus: 2nd Half</span>`;
+                    } else if (isSem) {
+                        noteBadge = `<span class="cat-unit-pill-badge" style="background: rgba(168, 85, 247, 0.2); color: #e9d5ff;">Semester Full Unit</span>`;
                     }
 
                     sCard.innerHTML = `

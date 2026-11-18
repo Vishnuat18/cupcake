@@ -649,6 +649,9 @@
             <div id="page-indicator" class="glass" style="padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700;">
                 <span id="page-num">1</span> / <span id="page-count">-</span>
             </div>
+            <div id="viewer-info-btn" class="eye-btn" title="Document Information" style="cursor: pointer;">
+                <i class="fas fa-ellipsis-v"></i>
+            </div>
             <div id="full-screen-toggle" class="eye-btn" title="Full Screen">
                 <i class="fas fa-expand"></i>
             </div>
@@ -697,6 +700,8 @@
         </div>
     </div>
 
+
+
     <!-- Toast -->
     <div id="cg-toast"></div>
 
@@ -729,6 +734,8 @@
             </div>
         </div>
     </div>
+
+
 
     <!-- Download Verification Challenge Modal -->
     <div id="download-game-modal" class="dl-game-backdrop">
@@ -884,6 +891,66 @@
             </div>
         </div>
     </div>
+
+    <!-- Note Information Modal -->
+    <div id="note-info-modal-backdrop" class="note-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-doc-title">
+        <div class="note-info-dialog">
+            <div class="note-modal-header">
+                <div style="display: flex; align-items: center; gap: 0.65rem;">
+                    <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(99, 102, 241, 0.12); color: #6366f1; display: flex; align-items: center; justify-content: center; font-size: 0.95rem;">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <span style="font-family: 'Outfit'; font-weight: 700; font-size: 1.05rem; color: #0f172a;">Document Details</span>
+                </div>
+                <button id="modal-close-btn" type="button" aria-label="Close" style="background: none; border: none; color: #64748b; font-size: 1.3rem; cursor: pointer; padding: 0.2rem 0.5rem; transition: color 0.2s;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="note-modal-body">
+                <div>
+                    <span id="modal-badge" class="cat-unit-pill-badge" style="margin-bottom: 0.5rem; display: inline-block;">STUDY NOTE</span>
+                    <h3 id="modal-doc-title" style="font-family: 'Outfit'; font-weight: 800; font-size: 1.25rem; color: #0f172a; margin: 0 0 0.35rem 0; line-height: 1.3;">Note Title</h3>
+                    <p id="modal-sub-title" style="color: #64748b; font-size: 0.85rem; margin: 0;">Subject Materials</p>
+                </div>
+
+                <div class="note-modal-meta-grid">
+                    <div class="note-meta-card">
+                        <div class="note-meta-label"><i class="fas fa-layer-group"></i> Exam / Pack</div>
+                        <div id="modal-exam-pack" class="note-meta-val">Semester / CAT</div>
+                    </div>
+                    <div class="note-meta-card">
+                        <div class="note-meta-label"><i class="fas fa-file-pdf"></i> Format & Size</div>
+                        <div id="modal-file-size" class="note-meta-val">PDF Document</div>
+                    </div>
+                    <div class="note-meta-card">
+                        <div class="note-meta-label"><i class="fas fa-check-circle"></i> Status</div>
+                        <div id="modal-status" class="note-meta-val" style="color: #059669;">Active Viewing</div>
+                    </div>
+                    <div class="note-meta-card">
+                        <div class="note-meta-label"><i class="fas fa-graduation-cap"></i> Regulation</div>
+                        <div class="note-meta-val">Anna Univ. R2021</div>
+                    </div>
+                </div>
+
+                <div class="note-meta-card" style="display: flex; flex-direction: column; gap: 0.4rem;">
+                    <div class="note-meta-label"><i class="fas fa-folder-open"></i> File Source</div>
+                    <code id="modal-file-path" style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #4338ca; word-break: break-all; background: #e0e7ff; padding: 0.45rem 0.65rem; border-radius: 6px; border: 1px solid #c7d2fe;">filepath</code>
+                </div>
+
+                <div class="note-meta-card" style="display: flex; flex-direction: column; gap: 0.4rem;">
+                    <div class="note-meta-label"><i class="fas fa-list-check"></i> Curriculum Syllabus Coverage</div>
+                    <p id="modal-topics-text" style="font-size: 0.84rem; color: #334155; line-height: 1.5; margin: 0;">Topics description goes here...</p>
+                </div>
+            </div>
+            <div class="note-modal-footer">
+                <button id="modal-cancel-btn" type="button" style="flex: 1; padding: 0.75rem; border-radius: 12px; border: 1px solid #e2e8f0; color: #334155; background: #f1f5f9; cursor: pointer; font-weight: 600; text-align: center;">
+                    Close Details
+                </button>
+            </div>
+        </div>
+    </div>
+
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script type="module">
@@ -2168,14 +2235,73 @@
                 // Pass file info to the captcha module
                 if (window.__setCaptchaFile) window.__setCaptchaFile(url, decodedTitle);
                 const catParam = urlParams.get('cat');
-                const defaultBackUrl = catParam ? `cat_details.html?subject=${subject}&cat=${catParam}` : (subject ? `subject_details.html?subject=${subject}` : 'home.html');
+                const isSem = catParam && (catParam.toLowerCase() === 'sem' || catParam.toLowerCase() === 'semester');
+                const effectiveCat = isSem ? 'sem' : catParam;
+                const defaultBackUrl = effectiveCat ? `cat_details.html?subject=${encodeURIComponent(subject)}&cat=${encodeURIComponent(effectiveCat)}` : (subject ? `subject_details.html?subject=${encodeURIComponent(subject)}` : 'home.html');
                 backLink.href = defaultBackUrl;
                 backLink.onclick = (e) => {
-                    if (window.history.length > 1) {
-                        e.preventDefault();
+                    e.preventDefault();
+                    if (window.history.length > 1 && document.referrer && (document.referrer.includes('cat_details') || document.referrer.includes('subject_details'))) {
                         window.history.back();
+                    } else {
+                        window.location.href = defaultBackUrl;
                     }
                 };
+
+                // Setup Note Info Modal in Viewer
+                const viewerInfoBtn = document.getElementById('viewer-info-btn');
+                const modalBackdrop = document.getElementById('note-info-modal-backdrop');
+                const modalDocTitle = document.getElementById('modal-doc-title');
+                const modalSubTitle = document.getElementById('modal-sub-title');
+                const modalBadge = document.getElementById('modal-badge');
+                const modalExamPack = document.getElementById('modal-exam-pack');
+                const modalFileSize = document.getElementById('modal-file-size');
+                const modalStatus = document.getElementById('modal-status');
+                const modalFilePath = document.getElementById('modal-file-path');
+                const modalTopicsText = document.getElementById('modal-topics-text');
+                const modalCloseBtn = document.getElementById('modal-close-btn');
+                const modalCancelBtn = document.getElementById('modal-cancel-btn');
+
+                if (viewerInfoBtn) {
+                    viewerInfoBtn.onclick = () => {
+                        const subjectData = subject && subjectMaterials ? subjectMaterials[subject] : null;
+                        const uMatch = (decodedTitle || '').match(/unit\s*([0-9ivx]+)/i);
+                        const uNum = uMatch ? uMatch[1] : null;
+                        
+                        let topicDesc = 'Standard curriculum topic coverage for ' + decodedTitle;
+                        if (subjectData && subjectData.syllabus && uNum) {
+                            const sUnit = subjectData.syllabus.find((s, idx) => (idx + 1).toString() === uNum.toString() || (s.unit && s.unit.toString().toLowerCase().includes(uNum.toString().toLowerCase())));
+                            if (sUnit && sUnit.topics) {
+                                topicDesc = sUnit.topics;
+                            }
+                        }
+
+                        if (modalDocTitle) modalDocTitle.textContent = decodedTitle;
+                        if (modalSubTitle) modalSubTitle.textContent = subjectData ? `${subjectData.fullName} • ${subjectData.courseCode || subject.toUpperCase()}` : (subject ? subject.toUpperCase() : 'Study Material');
+                        if (modalBadge) modalBadge.textContent = uNum ? `UNIT ${uNum.toUpperCase()}` : (isSem ? 'SEMESTER' : (effectiveCat ? `CAT ${effectiveCat}` : 'RESOURCE'));
+                        if (modalExamPack) modalExamPack.textContent = isSem ? 'Semester Examination Pack' : (effectiveCat ? `CAT ${effectiveCat} Exam Pack` : 'Subject Notes');
+                        if (modalFileSize) modalFileSize.textContent = url.endsWith('.pdf') ? 'PDF Document' : 'Resource Document';
+                        if (modalStatus) modalStatus.textContent = 'Active in Viewer';
+                        if (modalFilePath) modalFilePath.textContent = url;
+                        if (modalTopicsText) modalTopicsText.textContent = topicDesc;
+
+                        if (modalBackdrop) modalBackdrop.classList.add('active');
+                    };
+                }
+
+                function closeViewerModal() {
+                    if (modalBackdrop) modalBackdrop.classList.remove('active');
+                }
+                if (modalCloseBtn) modalCloseBtn.onclick = closeViewerModal;
+                if (modalCancelBtn) modalCancelBtn.onclick = closeViewerModal;
+                if (modalBackdrop) {
+                    modalBackdrop.onclick = (e) => {
+                        if (e.target === modalBackdrop) closeViewerModal();
+                    };
+                }
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') closeViewerModal();
+                });
 
                 const loadingStatus = document.getElementById('loading-status');
                 const startTime = Date.now();
