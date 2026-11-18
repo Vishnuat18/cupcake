@@ -560,10 +560,14 @@
                         genericMaterials = allMaterials;
                     } else {
                         twoMarkFiles = allMaterials.filter(m => 
-                            m.file && (m.file.toLowerCase().includes('2m') || 
+                            m.isTwoMark ||
+                            (m.file && (m.file.toLowerCase().includes('2m') || 
                             m.file.toLowerCase().includes('2mark') ||
+                            m.file.toLowerCase().includes('two_mark') ||
+                            m.file.toLowerCase().includes('two-mark') ||
                             m.name.toLowerCase().includes('2-mark') ||
-                            m.name.toLowerCase().includes('2 mark'))
+                            m.name.toLowerCase().includes('2 mark') ||
+                            m.name.toLowerCase().includes('two mark')))
                         );
                         genericMaterials = allMaterials.filter(m => !twoMarkFiles.includes(m));
                     }

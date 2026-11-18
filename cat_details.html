@@ -823,8 +823,8 @@
             let matchingTwoMarks = [];
 
             (subjectData.materials || []).forEach(item => {
-                const isTwoMark = item.isTwoMark || (item.name && (item.name.toLowerCase().includes('2-mark') || item.name.toLowerCase().includes('2 mark'))) ||
-                                  (item.file && (item.file.toLowerCase().includes('2m') || item.file.toLowerCase().includes('2_mark') || item.file.toLowerCase().includes('2mark')));
+                const isTwoMark = item.isTwoMark || (item.name && (item.name.toLowerCase().includes('2-mark') || item.name.toLowerCase().includes('2 mark') || item.name.toLowerCase().includes('two mark') || item.name.toLowerCase().includes('two-mark'))) ||
+                                  (item.file && (item.file.toLowerCase().includes('2m') || item.file.toLowerCase().includes('2_mark') || item.file.toLowerCase().includes('2mark') || item.file.toLowerCase().includes('two_mark') || item.file.toLowerCase().includes('two-mark')));
                 if (isTwoMark) {
                     if (isSem || !item.cat || item.cat === catNum || item.cat === 'sem') {
                         matchingTwoMarks.push(item);

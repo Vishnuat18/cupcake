@@ -764,7 +764,7 @@ export const subjectMaterials = {
         hasSemesterPack: true,
         semCardImage: 'assets/cards/semester.png',
         importantQuestionsPdf: 'prw/notes/OHS352_Important_Questions.pdf',
-        twoMarksMsg: '2-Mark Question Bank available via OHS352 Important Questions PDF.',
+        twoMarksMsg: '2-Mark Question Bank available for Project Report Writing (OHS352).',
         syllabus: [
             {
                 unit: 'UNIT I',
@@ -805,8 +805,8 @@ export const subjectMaterials = {
             { name: 'Unit 3: Structure of the Report', file: 'prw/notes/sem/PRW_unit_3.pdf', cat: 'sem', isUpdated: true, size: '4.70 MB' },
             { name: 'Unit 4: Structure of the Report (Part 2)', file: 'prw/notes/sem/PRW_Unit 4.pdf', cat: 'sem', isUpdated: true, size: '8.68 MB' },
             { name: 'Unit 5: Proof Reading and Presentation', file: 'prw/notes/sem/PRW_Unit 5.pdf', cat: 'sem', isUpdated: true, size: '7.66 MB' },
-            // 2-Marks & Important Questions Bank
-            { name: 'OHS352 2-Mark Questions & Answers Bank', file: 'prw/notes/OHS352_Important_Questions.pdf', cat: 'sem', isTwoMark: true, isUpdated: true, size: '920 KB' }
+            // 2-Marks Question Bank
+            { name: 'OHS352 2-Mark Questions & Answers Bank', file: 'prw/notes/sem/Project_Report_Writing_Two_Mark_Questions.pdf', cat: 'sem', isTwoMark: true, isUpdated: true, size: '268 KB' }
         ],
         previousYearQuestions: [
             {
