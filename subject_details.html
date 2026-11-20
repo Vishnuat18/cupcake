@@ -317,8 +317,9 @@
                         importantSection.style.display = 'block';
                         importantList.innerHTML = '';
 
-                        // If official Question Bank PDF exists (e.g. OHS352_Important_Questions.pdf), display top banner
+                        // If official Question Bank PDF exists (e.g. OHS352_Important_Questions.pdf, AI3021_Important_Questions.pdf), display top banner
                         if (subjectData.importantQuestionsPdf) {
+                            const iqPdfSize = subjectData.importantQuestionsPdfSize || (subject === 'itas' ? '907 KB' : '920 KB');
                             const pdfCard = document.createElement('div');
                             pdfCard.className = 'cat-page-qpdf-card glass';
                             pdfCard.innerHTML = `
@@ -329,7 +330,7 @@
                                     <div style="overflow: hidden; flex: 1; min-width: 0;">
                                         <div style="display: flex; align-items: center; gap: 0.45rem; margin-bottom: 0.2rem; flex-wrap: wrap;">
                                             <span class="qpdf-badge">QUESTION BANK</span>
-                                            <span style="font-size: 0.72rem; color: #64748b; font-weight: 600;">920 KB • All Units</span>
+                                            <span style="font-size: 0.72rem; color: #64748b; font-weight: 600;">${iqPdfSize} • All Units</span>
                                         </div>
                                         <h4 class="qpdf-title">${(subjectData.shortName || subject.toUpperCase())} Important Questions (PDF)</h4>
                                     </div>
@@ -352,9 +353,9 @@
                                     openNoteInfoModal({
                                         name: `${(subjectData.shortName || subject.toUpperCase())} Important Questions & Question Bank PDF`,
                                         file: subjectData.importantQuestionsPdf,
-                                        size: '920 KB',
+                                        size: iqPdfSize,
                                         isTwoMark: false
-                                    }, 'Question Bank');
+                                    }, subjectData, 'Question Bank');
                                 };
                             }
 
@@ -514,8 +515,9 @@
                         
                         if (subjectData.previousYearQuestionsMsg && !hasPrevQn) {
                             prevYearList.innerHTML = `
-                                <div class="glass" style="padding: 1.5rem; text-align: center; color: var(--text-muted); grid-column: 1/-1; border: 1px dashed rgba(255,255,255,0.1);">
-                                    <i class="fas fa-history" style="font-size: 1.5rem; margin-bottom: 0.5rem; display: block; color: var(--accent); opacity: 0.5;"></i>
+                                <div class="cat-empty-state glass" style="grid-column: 1/-1;">
+                                    <i class="fas fa-cookie-bite"></i>
+                                    <h4>Baking soon...</h4>
                                     <p>${subjectData.previousYearQuestionsMsg}</p>
                                 </div>
                             `;
@@ -583,8 +585,9 @@
                         
                         if (subjectData.twoMarksMsg && !hasTwoMarks) {
                             twoMarksList.innerHTML = `
-                                <div class="glass" style="padding: 1.5rem; text-align: center; color: var(--text-muted); grid-column: 1/-1; border: 1px dashed rgba(255,255,255,0.1);">
-                                    <i class="fas fa-clock" style="font-size: 1.5rem; margin-bottom: 0.5rem; display: block; color: var(--primary-light); opacity: 0.5;"></i>
+                                <div class="cat-empty-state glass" style="grid-column: 1/-1;">
+                                    <i class="fas fa-cookie-bite"></i>
+                                    <h4>Baking soon...</h4>
                                     <p>${subjectData.twoMarksMsg}</p>
                                 </div>
                             `;

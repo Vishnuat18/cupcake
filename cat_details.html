@@ -525,19 +525,6 @@
                         matchingNotes.push({ ...item, unitNum: uNum });
                     }
                 });
-
-                // If no explicit cat='sem' materials, fallback to standard unit notes
-                if (matchingNotes.length === 0) {
-                    (subjectData.materials || []).forEach(item => {
-                        const isTwoMark = item.isTwoMark || (item.name && (item.name.toLowerCase().includes('2-mark') || item.name.toLowerCase().includes('2 mark'))) ||
-                                          (item.file && (item.file.toLowerCase().includes('2m') || item.file.toLowerCase().includes('2_mark') || item.file.toLowerCase().includes('2mark')));
-                        if (isTwoMark) return;
-                        const uNum = detectUnitNum(item.name, item.file);
-                        if (uNum && targetUnits.includes(uNum)) {
-                            matchingNotes.push({ ...item, unitNum: uNum });
-                        }
-                    });
-                }
             } else if (subject === 'ece') {
                 (subjectData.materials || []).forEach(group => {
                     if (group.file) {
@@ -585,9 +572,9 @@
             } else {
                 notesContainer.innerHTML = `
                     <div class="cat-empty-state glass">
-                        <i class="fas fa-clock"></i>
-                        <h4>Notes Uploading Soon</h4>
-                        <p>Study notes for this exam portion are being curated by our academic team.</p>
+                        <i class="fas fa-cookie-bite"></i>
+                        <h4>Baking soon...</h4>
+                        <p>Study notes for this exam portion are currently being prepared.</p>
                     </div>
                 `;
             }
@@ -595,8 +582,9 @@
             // 2. Populate Important Questions (with PDF Question Bank Banner & Partitioned Questions)
             questionsContainer.innerHTML = '';
 
-            // If subject has Important Questions PDF (e.g. OHS352_Important_Questions.pdf), display top banner
+            // If subject has Important Questions PDF (e.g. OHS352_Important_Questions.pdf, AI3021_Important_Questions.pdf), display top banner
             if (subjectData.importantQuestionsPdf) {
+                const iqPdfSize = subjectData.importantQuestionsPdfSize || (subject === 'itas' ? '907 KB' : '920 KB');
                 const pdfCard = document.createElement('div');
                 pdfCard.className = 'cat-page-qpdf-card glass';
                 pdfCard.innerHTML = `
@@ -607,7 +595,7 @@
                         <div style="overflow: hidden; flex: 1; min-width: 0;">
                             <div style="display: flex; align-items: center; gap: 0.45rem; margin-bottom: 0.2rem; flex-wrap: wrap;">
                                 <span class="qpdf-badge">QUESTION BANK</span>
-                                <span style="font-size: 0.72rem; color: #64748b; font-weight: 600;">920 KB • All Units</span>
+                                <span style="font-size: 0.72rem; color: #64748b; font-weight: 600;">${iqPdfSize} • All Units</span>
                             </div>
                             <h4 class="qpdf-title">${subjectShort} Important Questions (PDF)</h4>
                         </div>
@@ -631,7 +619,7 @@
                         openNoteInfoModal({
                             name: `${subjectShort} Important Questions & Question Bank PDF`,
                             file: subjectData.importantQuestionsPdf,
-                            size: '920 KB',
+                            size: iqPdfSize,
                             isTwoMark: false
                         }, packTitle);
                     };
@@ -811,9 +799,9 @@
             } else if (!subjectData.importantQuestionsPdf && pyqList.length === 0) {
                 questionsContainer.innerHTML = `
                     <div class="cat-empty-state glass">
-                        <i class="fas fa-lightbulb" style="color: #fbbf24;"></i>
-                        <h4>Questions Being Curated</h4>
-                        <p>Important questions for ${subjectShort} are currently being prepared for the upcoming exam.</p>
+                        <i class="fas fa-cookie-bite"></i>
+                        <h4>Baking soon...</h4>
+                        <p>Important questions for ${subjectShort} are currently being prepared.</p>
                     </div>
                 `;
             }
@@ -826,7 +814,11 @@
                 const isTwoMark = item.isTwoMark || (item.name && (item.name.toLowerCase().includes('2-mark') || item.name.toLowerCase().includes('2 mark') || item.name.toLowerCase().includes('two mark') || item.name.toLowerCase().includes('two-mark'))) ||
                                   (item.file && (item.file.toLowerCase().includes('2m') || item.file.toLowerCase().includes('2_mark') || item.file.toLowerCase().includes('2mark') || item.file.toLowerCase().includes('two_mark') || item.file.toLowerCase().includes('two-mark')));
                 if (isTwoMark) {
-                    if (isSem || !item.cat || item.cat === catNum || item.cat === 'sem') {
+                    if (isSem) {
+                        if (item.cat === 'sem' || item.exam === 'sem') {
+                            matchingTwoMarks.push(item);
+                        }
+                    } else if (!item.cat || item.cat === catNum) {
                         matchingTwoMarks.push(item);
                     }
                 }
@@ -844,8 +836,8 @@
             } else {
                 twoMarksContainer.innerHTML = `
                     <div class="cat-empty-state glass">
-                        <i class="fas fa-marker" style="color: var(--primary-light);"></i>
-                        <h4>2-Mark Notes Being Curated</h4>
+                        <i class="fas fa-cookie-bite"></i>
+                        <h4>Baking soon...</h4>
                         <p>${subjectData.twoMarksMsg || `2-Mark short questions and answers for ${subjectShort} will be uploaded soon.`}</p>
                     </div>
                 `;

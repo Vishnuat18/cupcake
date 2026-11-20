@@ -764,6 +764,7 @@ export const subjectMaterials = {
         hasSemesterPack: true,
         semCardImage: 'assets/cards/semester.png',
         importantQuestionsPdf: 'prw/notes/OHS352_Important_Questions.pdf',
+        importantQuestionsPdfSize: '920 KB',
         twoMarksMsg: '2-Mark Question Bank available for Project Report Writing (OHS352).',
         syllabus: [
             {
@@ -827,6 +828,12 @@ export const subjectMaterials = {
         coverLandscape: 'assets/cover/sem7/itas_landscape.png',
         coverPortrait: 'assets/cover/sem7/itas_portrait.png',
         semester: 7,
+        hasSemesterPack: true,
+        semCardImage: 'assets/cards/semester.png',
+        importantQuestionsPdf: 'itas/notes/sem/AI3021_Important_Questions.pdf',
+        importantQuestionsPdfSize: '907 KB',
+        twoMarksMsg: 'Baking soon...',
+        previousYearQuestionsMsg: 'Baking soon...',
         syllabus: [
             {
                 unit: 'UNIT I',
