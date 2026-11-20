@@ -1084,24 +1084,30 @@
         // ── Record download in Firestore for Admin tracking
         async function recordDownloadInFirestore() {
             try {
-                const user = auth.currentUser;
+                const user = auth.currentUser || currentAuthUser;
                 let userName = 'Student';
                 let userEmail = 'student@cupcake.internal';
 
                 if (user) {
                     userEmail = user.email || 'N/A';
-                    userName = user.displayName || user.email.split('@')[0];
+                    userName = user.displayName || (user.email ? user.email.split('@')[0] : 'Student');
                     try {
                         const userDoc = await getDoc(doc(fs, "users", user.uid));
-                        if (userDoc.exists() && userDoc.data().name) {
-                            userName = userDoc.data().name;
+                        if (userDoc.exists()) {
+                            const uData = userDoc.data();
+                            if (uData.name) userName = uData.name;
+                            if (uData.email) userEmail = uData.email;
                         }
                     } catch (e) {}
                 }
 
+                const docTitle = (fileTitle && fileTitle !== 'Material Document' && fileTitle !== 'Material')
+                    ? fileTitle
+                    : (fileUrl ? fileUrl.split('/').pop().replace(/\.pdf$/i, '').replace(/[-_]/g, ' ') : 'Material Document');
+
                 await addDoc(collection(fs, "file_downloads"), {
                     fileUrl: fileUrl,
-                    fileTitle: fileTitle || 'Material Document',
+                    fileTitle: docTitle,
                     subject: currentSubject,
                     userId: user ? user.uid : 'member',
                     userName: userName,
@@ -1937,7 +1943,9 @@
         }
 
         // ── Auth state — track login
+        let currentAuthUser = null;
         auth.onAuthStateChanged((user) => {
+            currentAuthUser = user;
             isLoggedIn = !!user;
         });
 
