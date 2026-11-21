@@ -870,7 +870,13 @@ export const subjectMaterials = {
             { name: 'Unit 3: Agricultural Systems Management (Second Half)', file: 'itas/notes/cat2/ITAS_Unit 3.pdf', cat: 2, isUpdated: true },
             { name: 'Unit 4: Weather Prediction Models', file: 'itas/notes/cat2/ITAS_Unit 4.pdf', cat: 2, isUpdated: true },
             { name: 'Unit 5: E-Governance in Agricultural Systems', file: 'itas/notes/cat2/ITAS_Unit 5.pdf', cat: 2, isUpdated: true },
-            { name: '2-Mark Questions (Units 3, 4 & 5)', file: 'itas/notes/cat2/ITAS_2Marks.pdf', cat: 2, isUpdated: true }
+            { name: '2-Mark Questions (Units 3, 4 & 5)', file: 'itas/notes/cat2/ITAS_2Marks.pdf', cat: 2, isUpdated: true },
+            // Semester Notes (Full Semester Study Pack - itas/notes/sem)
+            { name: 'Unit 1: Precision Farming', file: 'itas/notes/sem/ITAS_unit_1.pdf', cat: 'sem', isUpdated: true, size: '2.37 MB' },
+            { name: 'Unit 2: Environment Control Systems', file: 'itas/notes/sem/ITAS_unit_2.pdf', cat: 'sem', isUpdated: true, size: '14.84 MB' },
+            { name: 'Unit 3: Agricultural Systems Management', file: 'itas/notes/sem/ITAS_Unit 3.pdf', cat: 'sem', isUpdated: true, size: '12.50 MB' },
+            { name: 'Unit 4: Weather Prediction Models', file: 'itas/notes/sem/ITAS_Unit 4.pdf', cat: 'sem', isUpdated: true, size: '7.23 MB' },
+            { name: 'Unit 5: E-Governance in Agricultural Systems', file: 'itas/notes/sem/ITAS_Unit 5.pdf', cat: 'sem', isUpdated: true, size: '10.10 MB' }
         ],
         previousYearQuestions: [],
         importantQuestions: []
